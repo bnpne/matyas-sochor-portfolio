@@ -1,0 +1,12 @@
+{
+  "name": "benpaine-verson-two",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Ben Paine Portfolio 2024",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm --stream -r run dev"
+  },
+  "author": "",
+  "license": "ISC"
+}
