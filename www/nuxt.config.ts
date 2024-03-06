@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   sanity: {
     projectId: process.env.SANITY_PROJECT_ID,
     useCdn: true,
+    apiVersion: '2021-10-18',
   },
   vite: {
     css: {
