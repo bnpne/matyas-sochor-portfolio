@@ -4,7 +4,12 @@ export const deskStructure = S =>
     .items([
       S.listItem()
         .title('Home & Nav Sidebar')
-        .child(S.document().schemaType('nav').documentId('nav')),
+        .child(
+          S.document()
+            .title('Home & Nav Sidebar')
+            .schemaType('home')
+            .documentId('home'),
+        ),
       S.listItem()
         .title('About')
         .child(

@@ -1,5 +1,5 @@
 import Lenis from '@studio-freight/lenis'
-import R from '@/utils/R'
+import R from '~/utils/R'
 
 export default defineNuxtPlugin(() => {
   const scroll = useScroll()
