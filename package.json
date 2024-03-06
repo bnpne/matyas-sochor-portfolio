@@ -8,5 +8,8 @@
     "dev": "pnpm --stream -r run dev"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@sanity/client": "^6.15.1"
+  }
 }
