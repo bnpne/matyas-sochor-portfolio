@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'right_grotesk';
+  src: url('/fonts/pp_grotesk.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'right_serif';
+  src: url('/fonts/pp_serif.otf') format('opentype');
+}
+
+@mixin bodyType {
+  font-family: 'right_grotesk', sans-serif;
+  font-size: desktop-vw(20px);
+  text-transform: uppercase;
+  line-height: 115%;
+}
+
+@mixin serifType {
+  font-family: 'right_serif', serif;
+  font-size: desktop-vw(20px);
+  text-transform: uppercase;
+  line-height: 115%;
+}
