@@ -16,9 +16,11 @@
     "@sanity/types": "^3.31.0",
     "@studio-freight/lenis": "^1.0.39",
     "gsap": "^3.12.5",
-    "nuxt": "^3.10.3",
     "sass": "^1.71.1",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "nuxt": "^3.10.3"
   }
 }
