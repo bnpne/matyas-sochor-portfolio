@@ -48,3 +48,26 @@
     @content;
   }
 }
+
+@mixin rounded-border {
+  border: 1px rgba(30, 30, 30, 0.1) solid;
+  border-radius: desktop-vw(12px);
+}
+
+@mixin body-type {
+  font-family: 'a-mono';
+  font-size: desktop-vw(15px);
+  line-height: desktop-vw(20px);
+}
+
+@mixin sans-serif-medium {
+  font-family: 'a-medium';
+  font-size: desktop-vw(15px);
+  line-height: desktop-vw(22px);
+}
+
+@mixin sans-serif-regular {
+  font-family: 'a-regular';
+  font-size: desktop-vw(15px);
+  line-height: desktop-vw(22px);
+}

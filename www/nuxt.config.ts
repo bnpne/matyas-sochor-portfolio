@@ -2,21 +2,20 @@
 export default defineNuxtConfig({
   devtools: {enabled: false},
   pages: true,
-  modules: ['@nuxtjs/sanity'],
+  modules: ['@nuxtjs/sanity', '@pinia/nuxt'],
   build: {
-    transpile: ['sanity'],
+    transpile: ['sanity', 'rxjs', 'lenis'],
   },
-  css: ['~/assets/styles/globals.scss'],
+  // css: ['~/assets/styles/globals.scss'],
   sanity: {
     projectId: process.env.SANITY_PROJECT_ID,
-    useCdn: true,
     apiVersion: '2023-03-03',
   },
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "@/assets/styles/_functions.scss" as *;',
+          additionalData: `@import "@/assets/styles/globals.scss";`,
         },
       },
     },

@@ -1,12 +1,14 @@
 <script setup lang='ts'>
-const query = groq`*[_type=="home"]`
-const { data, refresh } = useSanityQuery(query)
 </script>
 
 <template>
-  <div>
-    <NuxtLayout>
-      <div>Home</div>
-    </NuxtLayout>
-  </div>
+  <NuxtLayout name='page' class='home'>
+    <div>home</div>
+  </NuxtLayout>
 </template>
+
+<style lang='scss'>
+.home {
+  position: relative;
+}
+</style>

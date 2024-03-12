@@ -11,6 +11,11 @@ export default defineField({
       type: 'string',
     }),
     defineField({
+      title: 'Avatar',
+      name: 'avatar',
+      type: 'image',
+    }),
+    defineField({
       title: 'Email Form',
       name: 'emailForm',
       type: 'emailForm',

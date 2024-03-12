@@ -16,7 +16,10 @@ export default defineType({
       name: 'emailUrl',
       type: 'text',
       rows: 1,
-      validation: rule => rule.required().email(true),
+      validation: Rule =>
+        Rule.uri({
+          scheme: ['http', 'https', 'mailto', 'tel'],
+        }).required(),
     }),
   ],
 })

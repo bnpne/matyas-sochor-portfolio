@@ -6,21 +6,21 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "preview": "nuxt preview"
   },
   "dependencies": {
     "@nuxtjs/sanity": "^1.8.3",
+    "@pinia/nuxt": "^0.5.1",
     "@sanity/client": "^6.15.1",
     "@sanity/image-url": "^1.0.2",
     "@sanity/types": "^3.31.0",
     "@studio-freight/lenis": "^1.0.39",
     "gsap": "^3.12.5",
+    "nuxt": "^3.10.3",
+    "pinia": "^2.1.7",
+    "rxjs": "^7.8.1",
     "sass": "^1.71.1",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
-  },
-  "devDependencies": {
-    "nuxt": "^3.10.3"
   }
 }

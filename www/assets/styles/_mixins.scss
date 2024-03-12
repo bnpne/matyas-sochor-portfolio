@@ -1,0 +1,4 @@
+@mixin roundedBorder {
+  border: 1px $black10 solid;
+  border-radius: desktop-vw(12px);
+}

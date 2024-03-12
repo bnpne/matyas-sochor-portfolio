@@ -1,9 +1,11 @@
-@use 'sass:color';
+$white: rgba(255, 255, 255, 1);
+$white50: rgba(255, 255, 255, 0.5);
+$black: rgba(30, 30, 30, 1);
+$black10: rgba(30, 30, 30, 0.1);
+$black50: rgba(30, 30, 30, 0.5);
+$black75: rgba(30, 30, 30, 0.75);
+$gray: rgba(198, 198, 198, 1);
+$gray30: rgba(198, 198, 198, 0.3);
 
-:root {
-  @each $name, $color in getColors() {
-    // --#{$name}: #{$color};
-    // // for safari use case: https://ambientimpact.com/web/snippets/safari-bug-with-gradients-that-fade-to-transparent
-    // --#{$name}-transparent: #{color.change($color, $alpha: 0)};
-  }
-}
+$mainText: $black;
+$mainBackground: $white;
