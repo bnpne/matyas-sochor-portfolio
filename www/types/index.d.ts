@@ -7,6 +7,8 @@ import {
   type DateRule,
   type BlockAnnotationDefinition,
   type PortableTextBlock,
+  type ReferenceSchemaType,
+  type Reference,
 } from '@sanity/types'
 
 export {}
@@ -33,5 +35,6 @@ declare global {
       postLocation: string
       postText: PortableTextBlock
     }
+    selectedProjects?: Reference
   }
 }

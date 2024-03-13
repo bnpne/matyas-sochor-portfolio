@@ -9,7 +9,7 @@ const wrapper = ref()
 const container = ref()
 
 onMounted(() => {
-  // console.log(toRaw(data.value))
+  console.log(toRaw(data.value))
   const lenis = new Lenis({
     wrapper: wrapper.value!,
     content: container.value!
@@ -43,6 +43,7 @@ onMounted(() => {
         </div>
       </div>
       <SocialPost v-if='data.socialPost' :post='data.socialPost' />
+      <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
     </div>
   </section>
 </template>

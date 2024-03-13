@@ -28,16 +28,16 @@ export default defineField({
     defineField({
       title: 'Selected Projects',
       name: 'selectedProjects',
-      type: 'reference',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'projects'}]}],
       description: 'Selected Projects to appear on the homepage',
-      to: [{type: 'projects'}],
     }),
     defineField({
       title: 'Selected Experiments',
       name: 'selectedExperiments',
-      type: 'reference',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'projects'}]}],
       description: 'Selected Experiments to appear on the homepage',
-      to: [{type: 'projects'}],
     }),
   ],
 })
