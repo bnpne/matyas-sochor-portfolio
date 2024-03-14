@@ -28,69 +28,22 @@ body {
 // Buttons
 .btn {
   &-default-w {
-    padding: desktop-vw(11px) desktop-vw(15px);
-    border-radius: desktop-vw(26px);
-    transition: background ease-out 300ms;
-    background: $white;
-    color: $black;
-
-    &:hover {
-      background: $white50;
-    }
+    @include button-default-white();
   }
 
   &-default-b {
-    padding: desktop-vw(11px) desktop-vw(15px);
-    border-radius: desktop-vw(26px);
-    transition: background ease-out 300ms;
-    background: $black;
-    color: $white;
-
-    &:hover {
-      background: $black75;
-    }
+    @include button-default-black();
   }
 
   &-second-w {
-    padding: desktop-vw(11px) desktop-vw(15px);
-    border-radius: desktop-vw(26px);
-    transition: background ease-out 300ms;
-    background: $gray30;
-    color: $white;
-
-    &:hover {
-      background: $white;
-      color: $black;
-    }
+    @include button-second-white();
   }
 
   &-second-b {
-    padding: desktop-vw(11px) desktop-vw(15px);
-    border-radius: desktop-vw(26px);
-    transition: background ease-out 300ms;
-    background: $gray30;
-    color: $black;
-
-    &:hover {
-      background: $black;
-      color: $white;
-    }
+    @include button-second-black();
   }
 
   &-third {
-    padding: desktop-vw(10px) desktop-vw(14px);
-    border-radius: desktop-vw(26px);
-    transition: background ease-out 300ms;
-    transition: color ease-out 300ms;
-    transition: border ease-out 300ms;
-    border: 1px $black10 solid;
-    background: transparent;
-    color: $black;
-
-    &:hover {
-      background: $black;
-      color: $white;
-      border: 1px $black solid;
-    }
+    @include button-third();
   }
 }

@@ -1,4 +1,7 @@
 <script setup lang='ts'>
+useHead({
+  title: 'Matyas Sochor | Digital Graphic Designer'
+})
 </script>
 
 <template>

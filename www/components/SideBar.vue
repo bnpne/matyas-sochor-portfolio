@@ -2,14 +2,14 @@
 import Lenis from '@studio-freight/lenis'
 import R from '~/utils/R'
 
-const query = groq`*[_type=="home"][0]`
+const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
 const { data } = useSanityQuery<HomeData>(query)
 
 const wrapper = ref()
 const container = ref()
 
 onMounted(() => {
-  console.log(toRaw(data.value))
+  // console.log(toRaw(data.value))
   const lenis = new Lenis({
     wrapper: wrapper.value!,
     content: container.value!
@@ -24,8 +24,8 @@ onMounted(() => {
 
 <template>
   <section ref="wrapper" class='sidebar'>
-    <div v-if='data' ref='container' class='sidebar-container'>
-      <div class='sidebar-avatar'>
+    <div v-if='data' class='sidebar-avatar'>
+      <div class='sidebar-avatar-container'>
         <div class='sidebar-avatar-info'>
           <div v-if='data.avatar' class='sidebar-avatar-info-img'>
             <SanityImage :asset-id="data.avatar?.asset?._ref" auto='format' w='80' />
@@ -42,8 +42,12 @@ onMounted(() => {
           <NuxtLink to="/about" class='btn btn-third'>About Me</NuxtLink>
         </div>
       </div>
+      <div class='sidebar-avatar-gradient'></div>
+    </div>
+    <div v-if='data' ref='container' class='sidebar-container'>
       <SocialPost v-if='data.socialPost' :post='data.socialPost' />
       <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
+      <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments' />
     </div>
   </section>
 </template>
@@ -63,7 +67,7 @@ onMounted(() => {
 
   &-container {
     width: 100%;
-    padding: desktop-vw(24px);
+    padding: 0 desktop-vw(24px) desktop-vw(24px);
     position: sticky;
     top: 0;
     display: flex;
@@ -72,9 +76,23 @@ onMounted(() => {
   }
 
   &-avatar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+
+    &-container {
+      padding: desktop-vw(24px) desktop-vw(24px) 0;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &-gradient {
+      height: desktop-vw(24px);
+      width: 100%;
+      background: linear-gradient(180deg, #FFFFFF 32.76%, rgba(115, 115, 115, 0) 100%);
+    }
 
     &-info {
       display: flex;

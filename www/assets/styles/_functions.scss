@@ -71,3 +71,105 @@
   font-size: desktop-vw(15px);
   line-height: desktop-vw(22px);
 }
+
+@mixin small-type {
+  font-size: desktop-vw(13px);
+  line-height: desktop-vw(20px);
+}
+
+@mixin tag {
+  font-size: desktop-vw(12px);
+  line-height: 0.7;
+  padding: desktop-vw(7px) desktop-vw(7px);
+  background: #f0f1f1;
+  color: $black50;
+  border-radius: 100px;
+}
+
+@mixin image-default {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+@mixin button-default-white {
+  display: inline-block;
+  width: auto;
+  padding: desktop-vw(11px) desktop-vw(15px);
+  border-radius: desktop-vw(26px);
+  transition: background ease-out 300ms;
+  background: $white;
+  color: $black;
+  cursor: pointer;
+
+  &:hover {
+    background: $white50;
+  }
+}
+
+@mixin button-default-black {
+  display: inline-block;
+  width: auto;
+  padding: desktop-vw(11px) desktop-vw(15px);
+  border-radius: desktop-vw(26px);
+  transition: background ease-out 300ms;
+  background: $black;
+  color: $white;
+  cursor: pointer;
+
+  &:hover {
+    background: $black75;
+  }
+}
+
+@mixin button-second-white {
+  display: inline-block;
+  width: auto;
+  padding: desktop-vw(11px) desktop-vw(15px);
+  border-radius: desktop-vw(26px);
+  transition: background ease-out 300ms;
+  background: $gray30;
+  color: $white;
+  cursor: pointer;
+
+  &:hover {
+    background: $white;
+    color: $black;
+  }
+}
+
+@mixin button-second-black {
+  display: inline-block;
+  width: auto;
+  padding: desktop-vw(11px) desktop-vw(15px);
+  border-radius: desktop-vw(26px);
+  transition: background ease-out 300ms;
+  background: $gray30;
+  color: $black;
+  cursor: pointer;
+
+  &:hover {
+    background: $black;
+    color: $white;
+  }
+}
+
+@mixin button-third {
+  display: inline-block;
+  width: auto;
+  padding: desktop-vw(10px) desktop-vw(14px);
+  border-radius: desktop-vw(26px);
+  transition: background ease-out 300ms;
+  transition: color ease-out 300ms;
+  transition: border ease-out 300ms;
+  border: 1px $black10 solid;
+  background: transparent;
+  color: $black;
+  cursor: pointer;
+
+  &:hover {
+    background: $black;
+    color: $white;
+    border: 1px $black solid;
+  }
+}

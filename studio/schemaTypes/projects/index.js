@@ -12,6 +12,14 @@ export default defineType({
       validation: rule => rule.required(),
     }),
     defineField({
+      title: 'Project Slug',
+      name: 'projectSlug',
+      type: 'slug',
+      description:
+        'The slug is the url extension. Please hyphenate and leave no spaces. For example "pebble-life" will appear as "example.com/pebble-life"',
+      validation: rule => rule.required(),
+    }),
+    defineField({
       title: 'Project Type',
       name: 'projectType',
       type: 'string',

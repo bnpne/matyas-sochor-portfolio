@@ -1,4 +1,5 @@
 import type {
+  SanityImageObject,
   SanityImageSource,
   SanityImageWithAssetStub,
 } from '@sanity/image-url/lib/types/types'
@@ -9,6 +10,11 @@ import {
   type PortableTextBlock,
   type ReferenceSchemaType,
   type Reference,
+  type Slug,
+  type ArraySchemaType,
+  type ObjectField,
+  type BooleanSchemaType,
+  type ObjectSchemaType,
 } from '@sanity/types'
 
 export {}
@@ -36,5 +42,24 @@ declare global {
       postText: PortableTextBlock
     }
     selectedProjects?: Reference
+    selectedExperiments?: Reference
+  }
+
+  interface Project {
+    _id: string
+    _type: string
+    _createdAt: string
+    _rev: string
+    projectHeroText: PortableTextBlock
+    projectCardImage: SanityImageObject
+    projectSections: ArraySchemaType
+    projectDetails: ObjectField
+    projectSnippet: string
+    projectFilters: ObjectSchemaType
+    projectSlug: Slug
+    projectType: BooleanSchemaType
+    projectTitle: string
+    projectCredits: ObjectSchemaType
+    projectCaseImage: SanityImageObject
   }
 }
