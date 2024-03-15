@@ -80,6 +80,10 @@ onMounted(() => {
     top: 0;
     z-index: 3;
 
+    &-about {
+      @include small-type();
+    }
+
     &-container {
       padding: desktop-vw(24px) desktop-vw(24px) 0;
       background: white;
