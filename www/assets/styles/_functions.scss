@@ -75,6 +75,14 @@
 @mixin small-type {
   font-size: desktop-vw(13px);
   line-height: desktop-vw(20px);
+  font-weight: 400;
+}
+
+@mixin large-heading {
+  @include sans-serif-regular();
+  font-size: desktop-vw(32px);
+  line-height: desktop-vw(52px);
+  font-weight: 400;
 }
 
 @mixin tag {

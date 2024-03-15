@@ -30,6 +30,12 @@
 
     &-more {
       @include button-default-black();
+      border-radius: 50%;
+      height: desktop-vw(42px);
+      width: desktop-vw(42px);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
   }
 

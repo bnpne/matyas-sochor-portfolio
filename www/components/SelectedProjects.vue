@@ -1,6 +1,9 @@
 <script setup lang='ts'>
 defineProps(['projects'])
 
+const store = useStore()
+const { activeProject } = storeToRefs(store)
+
 onMounted(() => {
 })
 </script>
@@ -17,7 +20,8 @@ onMounted(() => {
         </svg>
       </NuxtLink>
     </div>
-    <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for='project in projects' class='sidebar-projects-card'>
+    <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for='project, index in projects'
+      class="sidebar-projects-card" :class="{ active: activeProject == index }">
       <div class='sidebar-projects-card-img'>
         <SanityImage :asset-id='project.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
       </div>
@@ -63,15 +67,27 @@ onMounted(() => {
     }
   }
 
+  &:hover {
+    &>.sidebar-projects-card {
+      opacity: .5;
+    }
+  }
+
   &-card {
     display: flex;
     cursor: pointer;
     align-items: center;
     width: 100%;
     gap: desktop-vw(12px);
+    transition: opacity 400ms ease-out;
+
+    &.router-link-active,
+    &.active {
+      opacity: .5;
+    }
 
     &:hover {
-      opacity: .5;
+      opacity: 1 !important;
     }
 
     &-heading {

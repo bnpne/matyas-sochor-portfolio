@@ -63,7 +63,7 @@ onMounted(() => {
   gap: desktop-vw(16px);
 
   &-text {
-    @include sans-serif-medium();
+    @include sans-serif-regular();
   }
 
   &-footer {

@@ -2,16 +2,37 @@
 const query = groq`*[_type == 'home']{selectedProjects[]->{...,"filters":projectFilters.filter[]->}}[0].selectedProjects`
 const { data } = useSanityQuery<Project>(query)
 
+const projects = ref([])
+
+const store = useStore()
+
 onMounted(() => {
-  console.log(toRaw(data.value))
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          store.setActiveProject(entry.target.dataset.index)
+        }
+      });
+    },
+    {
+      threshold: 0.5,
+    }
+  );
+
+  if (projects) {
+    projects.value.forEach(p => {
+      observer.observe(p)
+    })
+  }
 })
 </script>
 
 <template>
   <NuxtLayout name='page' class='home'>
     <div v-if='data' class='home-container'>
-      <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project in data" class='home-project'>
-        <div class='home-project-img'>
+      <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project, index in data" class='home-project'>
+        <div ref='projects' class='home-project-img' :data-index='index'>
           <div class='home-project-img-overlay'></div>
           <SanityImage :asset-id="project.projectCaseImage?.asset?._ref" auto="format" />
         </div>

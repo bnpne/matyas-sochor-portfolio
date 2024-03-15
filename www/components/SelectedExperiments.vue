@@ -61,15 +61,26 @@ defineProps(['experiments'])
     }
   }
 
+  &:hover {
+    &>.sidebar-experiments-card {
+      opacity: .5;
+    }
+  }
+
   &-card {
     display: flex;
     cursor: pointer;
     align-items: center;
     width: 100%;
     gap: desktop-vw(12px);
+    transition: opacity 400ms ease-out;
+
+    &.router-link-active {
+      opacity: .5;
+    }
 
     &:hover {
-      opacity: .5;
+      opacity: 1 !important;
     }
 
     &-heading {
