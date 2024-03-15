@@ -87,7 +87,7 @@ onMounted(() => {
 
 <style lang='scss'>
 .page {
-  padding: desktop-vw(10px);
+  padding: desktop-vw(10px) 0;
   position: relative;
 
   &-nav {
