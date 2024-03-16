@@ -54,6 +54,10 @@
   border-radius: desktop-vw(12px);
 }
 
+@mixin rounded() {
+  border-radius: desktop-vw(12px);
+}
+
 @mixin body-type {
   font-family: 'a-mono';
   font-size: desktop-vw(15px);
@@ -75,6 +79,13 @@
 @mixin small-type {
   font-size: desktop-vw(13px);
   line-height: desktop-vw(20px);
+  font-weight: 400;
+}
+
+@mixin medium-type {
+  @include sans-serif-regular();
+  font-size: desktop-vw(28px);
+  line-height: desktop-vw(44px);
   font-weight: 400;
 }
 

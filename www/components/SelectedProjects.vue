@@ -122,6 +122,7 @@ onMounted(() => {
 
     &-snippet {
       color: $black50;
+      @include sans-serif-regular();
       @include small-type();
     }
 

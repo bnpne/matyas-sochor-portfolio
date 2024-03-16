@@ -32,7 +32,7 @@ onMounted(() => {
             </div>
             <div class='work-hero-details-info'>
               <div class='work-hero-details-info-section' v-if='work.projectDetails?.projectYear &&
-                work.projectDetails?.projectType'>
+      work.projectDetails?.projectType'>
                 <p>Type/Year</p>
                 <p v-for='type in work.projectDetails?.projectType'>{{ type }}</p>
               </div>
@@ -55,6 +55,18 @@ onMounted(() => {
       <div v-if='work.projectHeroText' class='work-intro'>
         <SanityContent :blocks='work.projectHeroText' />
       </div>
+      <div v-if='work.projectSections' class='work-sections'>
+        <template v-for='section in work.projectSections.sections'>
+          <ImageGrid v-if='section._type == "imageGrid"' :data='section' />
+          <FullWidthImage v-else-if='section._type == "fullWidthImage"' :data='section' />
+          <ProjectText v-else-if='section._type == "projectText"' :data='section' />
+          <PlainText v-else-if='section._type == "projectPlainText"' :data='section' />
+        </template>
+      </div>
+      <div v-if='work.projectCredits' class='work-credits'>
+        <ProjectCredits :data='work.projectCredits' />
+      </div>
+      <ProjectFooter />
     </div>
   </NuxtLayout>
 </template>
@@ -167,16 +179,24 @@ onMounted(() => {
         }
       }
     }
-    }
-
-    &-intro {
-      margin-top: desktop-vw(30px);
-      margin-bottom: desktop-vw(30px);
-    @include large-heading();
-    max-width: 72%;
-  & strong {
-    color: $black50;
   }
+
+  &-intro {
+    margin-top: desktop-vw(300px);
+    margin-bottom: desktop-vw(30px);
+    @include large-heading();
+    max-width: 75%;
+
+    & strong {
+      color: $black50;
     }
+  }
+
+  &-sections {
+    display: flex;
+    flex-direction: column;
+    gap: desktop-vw(10px);
+
+  }
 }
 </style>

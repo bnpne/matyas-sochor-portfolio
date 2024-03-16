@@ -4,7 +4,7 @@ import R from '~/utils/R'
 export default defineNuxtPlugin(() => {
   const scroll = useScroll()
 
-  const lenis = new Lenis()
+  const lenis = new Lenis({lerp: 0.075})
 
   // @ts-ignore
   R.add(time => {

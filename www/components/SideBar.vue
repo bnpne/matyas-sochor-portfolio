@@ -27,9 +27,9 @@ onMounted(() => {
     <div v-if='data' class='sidebar-avatar'>
       <div class='sidebar-avatar-container'>
         <div class='sidebar-avatar-info'>
-          <div v-if='data.avatar' class='sidebar-avatar-info-img'>
+          <NuxtLink to='/' v-if='data.avatar' class='sidebar-avatar-info-img'>
             <SanityImage :asset-id="data.avatar?.asset?._ref" auto='format' w='80' />
-          </div>
+          </NuxtLink>
           <div class='sidebar-avatar-info-email'>
             <p v-if='data.name' class='sidebar-avatar-info-email-text'>{{ data.name }}</p>
             <NuxtLink v-if='data.emailForm' class='sidebar-avatar-info-email-link' target='_blank'
