@@ -111,7 +111,6 @@ onMounted(() => {
     &-info {
       display: flex;
       flex-direction: column;
-      gap: desktop-vw(3px);
       width: 100%;
     }
 

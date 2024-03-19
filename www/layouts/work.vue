@@ -1,3 +1,7 @@
+<!--
+todo: have page notifications
+-->
+
 <template>
   <div id='page' class='page'>
     <nav class='page-nav'>
@@ -22,6 +26,7 @@
     display: flex;
     gap: desktop-vw(4px);
     z-index: 2;
+    @include small-type();
 
 
     &-archive {

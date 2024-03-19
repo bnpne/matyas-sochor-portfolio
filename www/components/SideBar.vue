@@ -114,6 +114,7 @@ onMounted(() => {
       }
 
       &-email {
+        @include small-type();
 
         &-link {
           color: rgba(30, 30, 30, .5);

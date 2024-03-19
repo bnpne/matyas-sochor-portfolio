@@ -5,7 +5,13 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-full-width'>
     <div class='section-full-width-image'>
-      <SanityImage :asset-id="data.asset?._ref" auto="format" />
+      <SanityImage v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" />
+      <!-- todo fix video -->
+      <SanityFile v-else-if='data.video' :asset-id="data.video.asset?._ref">
+        <template #default="{ src }">
+          <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+        </template>
+      </SanityFile>
     </div>
   </section>
 </template>
@@ -27,6 +33,13 @@ defineProps(['data'])
     flex: 1;
 
     &>img {
+      height: 100%;
+      width: 100%;
+      vertical-align: top;
+      object-fit: contain;
+    }
+
+    &>video {
       height: 100%;
       width: 100%;
       vertical-align: top;

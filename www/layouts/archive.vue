@@ -22,6 +22,7 @@
     display: flex;
     gap: desktop-vw(4px);
     z-index: 2;
+    @include small-type();
 
     &-home {
       @include button-second-black();

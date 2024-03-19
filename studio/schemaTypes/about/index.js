@@ -44,6 +44,11 @@ export default defineType({
                   validation: rule => rule.required(),
                 }),
                 defineField({
+                  title: 'School Link',
+                  name: 'schoolLink',
+                  type: 'url',
+                }),
+                defineField({
                   title: 'School Location',
                   name: 'schoolLocation',
                   type: 'string',
@@ -53,6 +58,7 @@ export default defineType({
                   title: 'Currently Attending',
                   name: 'currentlyAttending',
                   type: 'boolean',
+                  initialValue: false,
                   validation: rule => rule.required(),
                 }),
                 defineField({
@@ -64,7 +70,6 @@ export default defineType({
                   options: {
                     dateFormat: 'YYYY',
                   },
-                  validation: rule => rule.required(),
                 }),
               ],
             }),
@@ -114,6 +119,7 @@ export default defineType({
                   title: 'Current Job',
                   name: 'currentJob',
                   type: 'boolean',
+                  initialValue: false,
                   validation: rule => rule.required(),
                 }),
                 defineField({
@@ -125,7 +131,6 @@ export default defineType({
                     dateFormat: 'YYYY',
                     calendarTodayLabel: 'Present',
                   },
-                  validation: rule => rule.required(),
                 }),
               ],
             }),

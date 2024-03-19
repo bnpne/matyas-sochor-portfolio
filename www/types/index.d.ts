@@ -62,4 +62,11 @@ declare global {
     projectCredits: ObjectSchemaType
     projectCaseImage: SanityImageObject
   }
+
+  interface About {
+    _id: string
+    _type: string
+    _createdAt: string
+    _rev: string
+  }
 }

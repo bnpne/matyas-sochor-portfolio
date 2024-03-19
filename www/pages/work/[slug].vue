@@ -10,7 +10,6 @@ useHead({
 })
 
 onMounted(() => {
-  console.log(toRaw(work.value))
 })
 </script>
 

@@ -2,11 +2,10 @@
 export default defineNuxtConfig({
   devtools: {enabled: false},
   pages: true,
-  modules: ['@nuxtjs/sanity', '@pinia/nuxt'],
+  modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper'],
   build: {
-    transpile: ['sanity', 'rxjs', 'lenis'],
+    transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper'],
   },
-  // css: ['~/assets/styles/globals.scss'],
   sanity: {
     projectId: process.env.SANITY_PROJECT_ID,
     apiVersion: '2023-03-03',

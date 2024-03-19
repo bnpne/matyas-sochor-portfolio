@@ -13,7 +13,34 @@ export default defineType({
         defineArrayMember({
           title: 'Full Width Image',
           name: 'fullWidthImage',
-          type: 'image',
+          type: 'object',
+          fields: [
+            defineField({
+              title: 'Image or Video',
+              type: 'string',
+              name: 'selection',
+              initialValue: {title: 'Image', value: 'image'},
+              options: {
+                layout: 'radio',
+                list: [
+                  {title: 'Image', value: 'image'},
+                  {title: 'Video', value: 'video'},
+                ],
+              },
+            }),
+            defineField({
+              title: 'Image',
+              type: 'image',
+              name: 'image',
+              hidden: ({parent}) => parent?.selection !== 'image',
+            }),
+            defineField({
+              title: 'Video',
+              type: 'file',
+              name: 'video',
+              hidden: ({parent}) => parent?.selection !== 'video',
+            }),
+          ],
           validation: rule => rule.required(),
         }),
         defineArrayMember({
@@ -25,7 +52,10 @@ export default defineType({
               title: 'Grid Image',
               name: 'gridImage',
               type: 'array',
-              of: [{type: 'image'}],
+              of: [
+                {type: 'image', name: 'image'},
+                {type: 'file', name: 'video'},
+              ],
               validation: rule => rule.required(),
             }),
           ],

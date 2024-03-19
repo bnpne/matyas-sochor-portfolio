@@ -98,6 +98,7 @@ onMounted(() => {
     display: flex;
     gap: desktop-vw(4px);
     z-index: 2;
+    @include small-type();
 
     &-archive {
       @include button-second-white();
