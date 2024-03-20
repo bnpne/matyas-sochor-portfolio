@@ -32,6 +32,9 @@ onMounted(() => {
         </div>
         <ImageCarousel v-if='about.imageCarousel' containerClass='about-info-carousel'
           slideClass='about-info-carousel-image' :images='about.imageCarousel' />
+        <div v-if='about.resume' class='about-info-resume'>
+          <EducationItem v-if='about.resume.educationList' :data='about.resume.educationList' />
+        </div>
       </div>
     </div>
   </NuxtLayout>
@@ -45,21 +48,24 @@ onMounted(() => {
   &-container {
     display: flex;
     gap: desktop-vw(24px);
+    position: relative;
   }
 
   &-avatar {
-    padding: desktop-vw(24px) 0;
+    padding: desktop-vw(14px) 0;
     max-width: desktop-vw(300px);
     flex: 0 0 desktop-vw(300px);
+    position: sticky;
+    top: desktop-vw(14px);
 
     &-list {
       color: $black50;
     }
 
     &-image {
-      position: sticky;
+      position: relative;
       top: 50%;
-      transform: translateY(50%);
+      transform: translateY(-50%);
       @include rounded();
       overflow: hidden;
 
@@ -92,7 +98,6 @@ onMounted(() => {
       width: 100%;
       display: flex;
       gap: desktop-vw(10px);
-      margin-left: -24px;
 
       &-image {
         @include rounded();
@@ -107,6 +112,15 @@ onMounted(() => {
           max-height: desktop-vw(560px);
         }
       }
+    }
+
+    &-resume {
+      @include small-type();
+      max-width: desktop-vw(640px);
+      display: flex;
+      flex-direction: column;
+      gap: desktop-vw(32px);
+
     }
   }
 }

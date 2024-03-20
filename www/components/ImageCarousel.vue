@@ -4,9 +4,7 @@ defineProps(['images', 'containerClass', 'slideClass'])
 
 <template>
   <Swiper class='swiper-container' :modules='[SwiperFreeMode]' :class='containerClass' v-if='images'
-    :slides-offset-before='24' :slides-per-view='"auto"' :space-between='10' :centered-slides='false' :free-mode='true'
-    :slide-class='slideClass'>
-    <div class='swiper-fade-start'></div>
+    :slides-per-view='"auto"' :space-between='10' :centered-slides='false' :free-mode='true' :slide-class='slideClass'>
     <SwiperSlide :class='slideClass' v-for='image in images'>
       <SanityImage class='swiper-image' :asset-id='image.asset?._ref' auto='format' />
     </SwiperSlide>
@@ -24,19 +22,6 @@ defineProps(['images', 'containerClass', 'slideClass'])
 
   &>img {
     @include image-default();
-  }
-}
-
-.swiper-fade {
-
-  &-start {
-    height: 100%;
-    position: absolute;
-    z-index: 3;
-    width: 32px;
-    top: 0;
-    left: 0;
-    background: linear-gradient(90deg, #FFFFFF 41%, rgba(115, 115, 115, 0) 100%);
   }
 }
 </style>

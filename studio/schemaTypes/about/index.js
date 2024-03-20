@@ -29,7 +29,7 @@ export default defineType({
       fields: [
         defineField({
           title: 'Education List',
-          name: 'eductionList',
+          name: 'educationList',
           type: 'array',
           of: [
             defineArrayMember({
