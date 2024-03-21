@@ -209,7 +209,7 @@ export default defineType({
                   name: 'projectType',
                   type: 'string',
                   options: {
-                    list: ['project', 'collaboration'],
+                    list: ['Project', 'Collaboration'],
                   },
                   validation: rule => rule.required(),
                 }),
@@ -227,6 +227,11 @@ export default defineType({
           ],
         }),
       ],
+    }),
+    defineField({
+      title: 'Footer Image',
+      name: 'footerImage',
+      type: 'image',
     }),
   ],
 })

@@ -3,18 +3,17 @@ defineProps(['data'])
 </script>
 
 <template>
-  <div v-if='data' class='list-section'>
-    <div class='list-section-header'>
-      <p>Education</p>
-      <div class='list-section-header-divider'></div>
+  <div v-if='data' class='recognition-list-section'>
+    <div class='recognition-list-section-header'>
+      <p>Recognition</p>
+      <div class='recognition-list-section-header-divider'></div>
     </div>
-    <div class='list-section-info'>
-      <div v-for='info in data' class='list-section-info-line'>
-        <p>{{ info.school }}</p>
-        <div class='list-section-info-line-right'>
-          <p>{{ info.schoolLocation }}</p>
-          <p v-if='!info.currentlyAttending'>{{ info.schoolDate.split('-')[0] }}</p>
-          <p v-else>Current</p>
+    <div class='recognition-list-section-info'>
+      <div v-for='info in data' class='recognition-list-section-info-line'>
+        <p v-if='!info.awardLink'>{{ info.award }}</p>
+        <NuxtLink v-else :to='info.awardLink' target='_blank'>{{ info.award }}</NuxtLink>
+        <div class='recognition-list-section-info-line-right'>
+          <p>{{ info.awardDate.split('-')[0] }}</p>
         </div>
       </div>
     </div>
@@ -22,7 +21,7 @@ defineProps(['data'])
 </template>
 
 <style lang='scss'>
-.list-section {
+.recognition-list-section {
   @include small-type();
   display: flex;
   flex-direction: column;
@@ -52,8 +51,7 @@ defineProps(['data'])
       &-right {
         color: $black50;
         display: flex;
-        justify-content: space-between;
-        width: desktop-vw(150px);
+        gap: desktop-vw(40px);
       }
     }
   }

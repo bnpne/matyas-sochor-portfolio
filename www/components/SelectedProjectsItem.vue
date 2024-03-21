@@ -3,18 +3,17 @@ defineProps(['data'])
 </script>
 
 <template>
-  <div v-if='data' class='list-section'>
-    <div class='list-section-header'>
-      <p>Education</p>
-      <div class='list-section-header-divider'></div>
+  <div v-if='data' class='sc-list-section'>
+    <div class='sc-list-section-header'>
+      <p>Selected Projects & Collaborations</p>
+      <div class='sc-list-section-header-divider'></div>
     </div>
-    <div class='list-section-info'>
-      <div v-for='info in data' class='list-section-info-line'>
-        <p>{{ info.school }}</p>
-        <div class='list-section-info-line-right'>
-          <p>{{ info.schoolLocation }}</p>
-          <p v-if='!info.currentlyAttending'>{{ info.schoolDate.split('-')[0] }}</p>
-          <p v-else>Current</p>
+    <div class='sc-list-section-info'>
+      <div v-for='info in data' class='sc-list-section-info-line'>
+        <p>{{ info.projectTitle }}</p>
+        <div class='sc-list-section-info-line-right'>
+          <p>{{ info.projectType }}</p>
+          <p>{{ info.projectDate.split('-')[0] }}</p>
         </div>
       </div>
     </div>
@@ -22,7 +21,7 @@ defineProps(['data'])
 </template>
 
 <style lang='scss'>
-.list-section {
+.sc-list-section {
   @include small-type();
   display: flex;
   flex-direction: column;
@@ -53,7 +52,7 @@ defineProps(['data'])
         color: $black50;
         display: flex;
         justify-content: space-between;
-        width: desktop-vw(150px);
+        width: desktop-vw(175px);
       }
     }
   }

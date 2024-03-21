@@ -12,7 +12,8 @@
 
 <style lang='scss'>
 .archive-layout {
-  padding: desktop-vw(10px);
+  padding: desktop-vw(10px) 0;
+  padding-right: desktop-vw(10px);
 
   &-nav {
     position: fixed;

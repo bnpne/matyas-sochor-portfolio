@@ -3,20 +3,21 @@ todo: have page notifications
 -->
 
 <template>
-  <div id='page' class='page'>
-    <nav class='page-nav'>
-      <NuxtLink to='/archive' class='page-nav-archive'>Archive</NuxtLink>
-      <NuxtLink to='/' class='page-nav-more'>X</NuxtLink>
+  <div id='page' class='work-layout'>
+    <nav class='work-layout-nav'>
+      <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
+      <NuxtLink to='/' class='work-layout-nav-more'>X</NuxtLink>
     </nav>
-    <div class='page-container'>
+    <div class='work-layout-container'>
       <slot />
     </div>
   </div>
 </template>
 
 <style lang='scss'>
-.page {
-  padding: desktop-vw(10px);
+.work-layout {
+  padding: desktop-vw(10px) 0;
+  padding-right: desktop-vw(10px);
 
   &-nav {
     position: fixed;

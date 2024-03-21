@@ -56,25 +56,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id='page' class='page'>
-    <nav class='page-nav'>
-      <NuxtLink to='/archive' class='page-nav-archive'>Archive</NuxtLink>
-      <div v-if='!notificationActive.isActive' @click='toggleNotification' class='page-nav-notifications'>{{
+  <div id='page' class='page-layout'>
+    <nav class='page-layout-nav'>
+      <NuxtLink to='/archive' class='page-layout-nav-archive'>Archive</NuxtLink>
+      <div v-if='!notificationActive.isActive' @click='toggleNotification' class='page-layout-nav-notifications'>{{
         notifications.list.length }}</div>
-      <div v-else @click='toggleNotification' class='page-nav-notifications-active'>X</div>
+      <div v-else @click='toggleNotification' class='page-layout-nav-notifications-active'>X</div>
     </nav>
-    <div class='page-container'>
-      <div class='page-notification-container'>
+    <div class='page-layout-container'>
+      <div class='page-layout-notification-container'>
         <NuxtLink :to="`/work/${notificationsLink.list[index].current}`" v-for='no, index in notifications.list'
-          class='page-notification'>
-          <div class='page-notification-img'>
+          class='page-layout-notification'>
+          <div class='page-layout-notification-img'>
             <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
           </div>
-          <div class='page-notification-info'>
-            <div class="page-notification-heading">
-              <p class='page-notification-title'>{{ no.notificationTitle }}</p>
+          <div class='page-layout-notification-info'>
+            <div class="page-layout-notification-heading">
+              <p class='page-layout-notification-title'>{{ no.notificationTitle }}</p>
             </div>
-            <div class='page-notification-snippet'>
+            <div class='page-layout-notification-snippet'>
               <SanityContent :blocks='no.notificationDesc'></SanityContent>
             </div>
           </div>
@@ -86,8 +86,10 @@ onMounted(() => {
 </template>
 
 <style lang='scss'>
-.page {
+.page-layout {
   padding: desktop-vw(10px) 0;
+  padding-right: desktop-vw(10px);
+
   position: relative;
 
   &-nav {

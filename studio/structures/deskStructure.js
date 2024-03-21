@@ -20,6 +20,14 @@ export const deskStructure = S =>
         .child(
           S.document().title('Links').schemaType('links').documentId('links'),
         ),
+      S.listItem()
+        .title('Articles')
+        .child(
+          S.document()
+            .title('Articles')
+            .schemaType('articles')
+            .documentId('articles'),
+        ),
       ...S.documentTypeListItems().filter(
         listItem =>
           ![
@@ -35,6 +43,7 @@ export const deskStructure = S =>
             'links',
             'tags',
             'about',
+            'articles',
           ].includes(listItem.getId()),
       ),
     ])

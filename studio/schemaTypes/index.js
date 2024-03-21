@@ -12,6 +12,8 @@ import credits from './projects/credits'
 import tags from './filters/tags'
 import about from './about'
 import home from './home'
+import articles from './articles'
+import article from './articles/article'
 
 export const schemaTypes = [
   home,
@@ -28,4 +30,6 @@ export const schemaTypes = [
   credits,
   tags,
   about,
+  articles,
+  article,
 ]
