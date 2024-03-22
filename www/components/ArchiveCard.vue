@@ -1,7 +1,11 @@
 <script setup lang='ts'>
-defineProps(['card'])
+const props = defineProps(['card'])
+
+const store = useStore()
+const { activeFilters } = storeToRefs(store)
 
 const article = ref()
+const active = reactive({ isActive: true })
 
 const resizeGridItem = (item) => {
   const grid = document.querySelector(".archive-container");
@@ -11,6 +15,31 @@ const resizeGridItem = (item) => {
   item.style.gridRowEnd = "span " + rowSpan;
 }
 
+
+watch(activeFilters.value, () => {
+  if (activeFilters.value.length === 0) {
+    active.isActive = true
+  } else {
+    let trigger = false
+    activeFilters.value.forEach(f => {
+      let html = f.children[0].innerHTML
+      let t = props.card.articleType[0]?.showTagTitle
+      if (props.card.articleType[0]?.showTagTitle === 'Selected Project') t = 'Project'
+
+      if (t === html) {
+        trigger = true
+      }
+    })
+
+    if (trigger === true) {
+      active.isActive = true
+    } else {
+      active.isActive = false
+    }
+  }
+
+})
+
 onMounted(() => {
   window.onload = resizeGridItem(article.value)
   window.addEventListener('resize', resizeGridItem(article.value))
@@ -18,7 +47,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if='card' ref='article' class='card' :class='{ project: card.isProject, base: !card.isProject }'>
+  <div v-if='card' ref='article' class='card'
+    :class='{ project: card.isProject, base: !card.isProject, active: active.isActive }'>
     <div class='card-heading'>
       <p class='card-type'>{{ card.articleType[0]?.showTagTitle }}</p>
       <div v-if='card.project?.projectFilters?.filter' class='card-tag'>{{
@@ -80,6 +110,11 @@ onMounted(() => {
   flex-direction: column;
   gap: desktop-vw(12px);
   height: fit-content;
+  display: none;
+
+  &.active {
+    display: block;
+  }
 
   &-heading {
     display: flex;

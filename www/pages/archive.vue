@@ -14,7 +14,7 @@ onMounted(() => {
 
 <template>
   <NuxtLayout name='archive' class='archive'>
-    <div v-if='archive.articleList' ref='grid' class='archive-container'>
+    <div v-if='archive?.articleList' ref='grid' class='archive-container'>
       <ArchiveCard v-for='card in archive.articleList' :card='card' />
     </div>
   </NuxtLayout>

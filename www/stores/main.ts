@@ -3,6 +3,7 @@ type Store = {
   activeProject: number | null
   showFilters: string[] | []
   showFilterLengths: number[] | []
+  activeFilters: HTMLElement[] | []
 }
 
 export const useStore = defineStore('main', {
@@ -11,6 +12,7 @@ export const useStore = defineStore('main', {
     activeProject: null,
     showFilters: [],
     showFilterLengths: [],
+    activeFilters: [],
   }),
   actions: {
     incrementPostLikes() {
@@ -30,6 +32,20 @@ export const useStore = defineStore('main', {
         let index = this.showFilters.indexOf(filter)
         this.showFilterLengths[index] = this.showFilterLengths[index] += 1
       }
+    },
+    clearFilters() {
+      this.showFilters = []
+      this.showFilterLengths = []
+    },
+    addActiveFilter(filter: HTMLElement) {
+      this.activeFilters.push(filter)
+    },
+    removeActiveFilter(filter: HTMLElement) {
+      let index = this.activeFilters.indexOf(filter)
+      this.activeFilters.splice(index, 1)
+    },
+    clearActiveFilters() {
+      this.activeFilters.length = 0
     },
   },
 })

@@ -3,18 +3,18 @@ const query = groq`*[_type == 'articles'][0]{'filters':articleList[].articleType
 const { data: filters } = useSanityQuery(query)
 
 const store = useStore()
-const { showFilters, showFilterLengths } = storeToRefs(store)
-const activeFilters = reactive({ filters: [] })
+const { showFilters, showFilterLengths, activeFilters } = storeToRefs(store)
+// const activeFilters = reactive({ filters: [] })
 
 const reset = ref(false)
 
-const resetfilters = (event) => {
+const resetFilter = (event) => {
   event.preventDefault()
-  console.log('here')
-  activeFilters.filters.forEach(f => {
+  activeFilters.value.forEach((f, i) => {
     f.classList.toggle('active')
   })
-  activeFilters.filters = []
+  store.clearActiveFilters()
+  reset.value = false
 }
 
 const selectFilter = (event) => {
@@ -22,31 +22,32 @@ const selectFilter = (event) => {
   event.target.classList.toggle('active')
 
   if (event.target.classList.contains('active')) {
-    activeFilters.filters.push(event.target)
+    store.addActiveFilter(event.target)
+
+    if (activeFilters.value.length > 0) {
+      reset.value = true
+    }
   } else {
-    let index = activeFilters.filters.indexOf(event.target)
-    activeFilters.filters.splice(index, 1)
+    store.removeActiveFilter(event.target)
+    if (activeFilters.value.length === 0) {
+      reset.value = false
+    }
   }
 }
 
-watch(activeFilters.filters, () => {
-  if (activeFilters.filters.length > 0) {
-    reset.value = true
-  } else {
-    reset.value = false
-  }
-})
-
-onBeforeMount(() => {
-})
-
 onMounted(() => {
   // These are the filters of each article on the archive page
-  if (filters.value?.filters) {
-    toRaw(filters.value.filters).forEach(f => {
-      store.addShowFilter(f.title)
-    })
-  }
+  watch(filters, () => {
+    if (filters.value?.filters) {
+      toRaw(filters.value.filters).forEach(f => {
+        store.addShowFilter(f.title)
+      })
+    }
+  })
+})
+
+onUnmounted(() => {
+  store.clearFilters()
 })
 </script>
 
@@ -54,7 +55,7 @@ onMounted(() => {
   <div class='filters filters-show'>
     <div class='filters-heading'>
       <p>Show</p>
-      <div @click='resetFilters' v-if='reset == true' class='filters-reset'>Reset</div>
+      <div @click='resetFilter' v-if='reset == true' class='filters-reset'>Reset</div>
       <div v-else class='filters-caret'>
         <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"

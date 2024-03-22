@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   devtools: {enabled: false},
   pages: true,
+  routeRules: {
+    '/': {prerender: true},
+    '/archive': {prerender: true},
+  },
   modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper'],
   build: {
     transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper'],
