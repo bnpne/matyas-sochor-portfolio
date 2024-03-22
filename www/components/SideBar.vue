@@ -7,9 +7,9 @@ const { data } = useSanityQuery<HomeData>(query)
 
 const wrapper = ref()
 const container = ref()
+const route = useRoute()
 
 onMounted(() => {
-  // console.log(toRaw(data.value))
   const lenis = new Lenis({
     wrapper: wrapper.value!,
     content: container.value!
@@ -45,9 +45,14 @@ onMounted(() => {
       <div class='sidebar-avatar-gradient'></div>
     </div>
     <div v-if='data' ref='container' class='sidebar-container'>
-      <SocialPost v-if='data.socialPost' :post='data.socialPost' />
-      <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
-      <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments' />
+      <template v-if='route.path !== "/archive"'>
+        <SocialPost v-if='data.socialPost' :post='data.socialPost' />
+        <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
+        <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments' />
+      </template>
+      <template v-else>
+        <ArchiveShowFilters />
+      </template>
     </div>
   </section>
 </template>

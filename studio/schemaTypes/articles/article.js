@@ -6,9 +6,9 @@ export default defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'articleType',
-      title: 'Article Type',
-      type: 'string',
+      title: 'Article Type Filters',
+      name: 'articleTypeFilters',
+      type: 'showFilters',
       validation: rule => rule.required(),
     }),
     defineField({

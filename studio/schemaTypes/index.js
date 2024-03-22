@@ -10,10 +10,12 @@ import links from './links'
 import projectSections from './projects/projectSections'
 import credits from './projects/credits'
 import tags from './filters/tags'
+import showTags from './filters/showTags'
 import about from './about'
 import home from './home'
 import articles from './articles'
 import article from './articles/article'
+import showFilters from './filters/showFilters'
 
 export const schemaTypes = [
   home,
@@ -32,4 +34,6 @@ export const schemaTypes = [
   about,
   articles,
   article,
+  showFilters,
+  showTags,
 ]

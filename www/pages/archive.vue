@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-const query = groq`*[_type == 'articles'][0]`
+const query = groq`*[_type == 'articles'][0]{..., articleList[]{..., project->{projectSlug, projectType, projectFilters{filter[]->}},'articleType':articleTypeFilters.showFilter[]->}}`
 const { data: archive } = useSanityQuery(query)
 
 useHead({
@@ -9,7 +9,6 @@ useHead({
 const grid = ref()
 
 onMounted(() => {
-  console.log(toRaw(archive.value))
 })
 </script>
 
@@ -28,8 +27,9 @@ onMounted(() => {
   &-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 24px;
-    gap: 24px;
+    grid-auto-rows: desktop-vw(24px);
+    column-gap: desktop-vw(24px);
+    grid-gap: 24px;
     padding: desktop-vw(90px) 0 0;
   }
 }
