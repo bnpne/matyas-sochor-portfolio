@@ -42,6 +42,7 @@ defineProps(['data'])
 
   &-title {
     color: $black50;
+    @include small-type();
   }
 
   &-credit {
@@ -50,13 +51,14 @@ defineProps(['data'])
     flex-direction: column;
     gap: desktop-vw(16px);
     margin-bottom: desktop-vw(16px);
+    margin-right: desktop-vw(14px);
 
     &-text {
       @include small-type();
     }
 
     &-divider {
-      border: 1px solid $black10;
+      border: .5px solid $black10;
     }
   }
 

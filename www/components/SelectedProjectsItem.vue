@@ -34,7 +34,7 @@ defineProps(['data'])
     color: $black50;
 
     &-divider {
-      border: 1px solid $black10;
+      border: .5px solid $black10;
     }
   }
 

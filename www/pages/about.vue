@@ -91,7 +91,7 @@ onMounted(() => {
     max-width: desktop-vw(300px);
     flex: 0 0 desktop-vw(300px);
     position: sticky;
-    top: desktop-vw(14px);
+    bottom: desktop-vw(100px);
 
     &-list {
       color: $black50;
@@ -102,7 +102,7 @@ onMounted(() => {
     &-image {
       position: sticky;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(desktop-vw(-100px));
       @include rounded();
       overflow: hidden;
 
@@ -165,14 +165,18 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(24px);
+    margin-right: desktop-vw(14px);
 
     &-image {
       position: relative;
       @include rounded();
       overflow: hidden;
+      min-height: 100vh;
 
       &>img {
         @include image-default();
+        object-fit: cover;
+        min-height: 100vh;
       }
 
       &-overlay {

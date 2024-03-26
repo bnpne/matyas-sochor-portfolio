@@ -27,12 +27,14 @@
 
   &-button {
     @include button-default-black();
+    @include small-type();
     width: auto;
     margin-bottom: desktop-vw(76px);
+    padding: desktop-vw(12px) desktop-vw(25px);
   }
 
   &-divider {
-    border: solid 1px $black10;
+    border: solid .5px $black10;
     margin-bottom: desktop-vw(96px);
   }
 }

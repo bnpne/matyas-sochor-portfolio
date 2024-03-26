@@ -10,11 +10,12 @@ useHead({
 })
 
 onMounted(() => {
+  // console.log(toRaw(work.value))
 })
 </script>
 
 <template>
-  <NuxtLayout name='work' class='work'>
+  <NuxtLayout name='work' class='work' :data='work'>
     <div v-if='work' class='work-container'>
       <div class='work-hero'>
         <div class='work-hero-img'>
@@ -31,7 +32,7 @@ onMounted(() => {
             </div>
             <div class='work-hero-details-info'>
               <div class='work-hero-details-info-section' v-if='work.projectDetails?.projectYear &&
-      work.projectDetails?.projectType'>
+    work.projectDetails?.projectType'>
                 <p>Type/Year</p>
                 <p v-for='type in work.projectDetails?.projectType'>{{ type }}</p>
               </div>
@@ -52,6 +53,7 @@ onMounted(() => {
         </div>
       </div>
       <div v-if='work.projectHeroText' class='work-intro'>
+        <p class='work-intro-header'>Introduction</p>
         <SanityContent :blocks='work.projectHeroText' />
       </div>
       <div v-if='work.projectSections' class='work-sections'>
@@ -82,7 +84,7 @@ onMounted(() => {
 
   &-hero {
     position: relative;
-    min-height: desktop-vw(866px);
+    min-height: calc(100vh - desktop-vw(20px));
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -119,7 +121,7 @@ onMounted(() => {
       left: 0;
       background: $white10;
       backdrop-filter: blur(10px);
-      padding: desktop-vw(18px) desktop-vw(24px) desktop-vw(28px);
+      padding: desktop-vw(18px) desktop-vw(14px) desktop-vw(28px);
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -181,7 +183,14 @@ onMounted(() => {
   }
 
   &-intro {
-    margin-top: desktop-vw(300px);
+
+    &-header {
+      @include body-type();
+      @include small-type();
+      color: #00000040;
+      margin-bottom: desktop-vw(320px);
+    }
+
     margin-bottom: desktop-vw(30px);
     @include large-heading();
     max-width: 75%;

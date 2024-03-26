@@ -38,7 +38,8 @@ defineProps(['data'])
 
   &-body {
     @include medium-type();
-    max-width: 50%;
+    max-width: desktop-vw(655px);
+    margin-right: desktop-vw(14px);
 
     strong {
       color: $black50;

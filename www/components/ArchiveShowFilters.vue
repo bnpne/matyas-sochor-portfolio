@@ -11,39 +11,80 @@ const reset = ref(false)
 const resetFilter = (event) => {
   event.preventDefault()
   activeFilters.value.forEach((f, i) => {
-    f.classList.toggle('active')
+    if (f.type === 'show') {
+      f.classList.toggle('active')
+    }
   })
-  store.clearActiveFilters()
+  store.clearActiveShowFilters()
   reset.value = false
 }
 
+// const selectFilter = (event) => {
+//   event.preventDefault()
+//   event.target.classList.toggle('active')
+//
+//   if (event.target.classList.contains('active')) {
+//     store.addActiveFilter(event.target)
+//
+//     if (activeFilters.value.length > 0) {
+//       reset.value = true
+//     }
+//   } else {
+//     store.removeActiveFilter(event.target)
+//     if (activeFilters.value.length === 0) {
+//       reset.value = false
+//     }
+//   }
+// }
 const selectFilter = (event) => {
   event.preventDefault()
   event.target.classList.toggle('active')
 
   if (event.target.classList.contains('active')) {
-    store.addActiveFilter(event.target)
+    store.addActiveFilter({ type: 'show', el: event.target })
 
     if (activeFilters.value.length > 0) {
-      reset.value = true
+      let t = true
+      activeFilters.value.forEach(a => {
+        if (a.type === 'show') {
+          t = true
+        } else {
+          t = false
+        }
+      })
+      if (t === false) {
+        reset.value = false
+      }
     }
   } else {
-    store.removeActiveFilter(event.target)
+    store.removeActiveFilter({ type: 'show', el: event.target })
     if (activeFilters.value.length === 0) {
-      reset.value = false
+      let t = true
+      activeFilters.value.forEach(a => {
+        if (a.type === 'show') {
+          t = true
+        } else {
+          t = false
+        }
+      })
+      if (t === false) {
+        reset.value = false
+      }
     }
   }
 }
 
+watch(filters, () => {
+  if (filters.value?.filters) {
+    toRaw(filters.value.filters).forEach(f => {
+      store.addShowFilter(f.title)
+    })
+  }
+})
+
+
 onMounted(() => {
   // These are the filters of each article on the archive page
-  watch(filters, () => {
-    if (filters.value?.filters) {
-      toRaw(filters.value.filters).forEach(f => {
-        store.addShowFilter(f.title)
-      })
-    }
-  })
 })
 
 onUnmounted(() => {

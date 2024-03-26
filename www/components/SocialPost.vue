@@ -11,9 +11,13 @@ const number = Math.floor(Math.random() * (3000 - 1000 + 1) + 1000)
 
 // like the post
 const likePost = () => {
-  store.incrementPostLikes()
-  postLiked = true
-  like.value?.classList.add('liked')
+  if (!postLiked) {
+    store.incrementPostLikes()
+    postLiked = true
+  } else {
+    store.decrementPostLikes()
+    postLiked = false
+  }
 }
 
 onMounted(() => {
@@ -28,8 +32,9 @@ onMounted(() => {
     </div>
     <div class='sidebar-post-footer'>
       <!-- todo: Add counter -->
-      <div ref='like' class='sidebar-post-footer-likes' @click='!postLiked && likePost()'>
-        <svg v-if='!postLiked' width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div ref='like' class='sidebar-post-footer-likes' @click='likePost'>
+        <svg v-if='!postLiked' width="16" height="15" viewBox="0 0 16 15" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
           <path
             d="M11.4454 1.04336H11.4455C11.9198 1.04336 12.3895 1.13679 12.8278 1.31831L13.056 0.767377L12.8278 1.31831C13.266 1.49984 13.6642 1.76591 13.9996 2.10132C14.335 2.43674 14.6011 2.83493 14.7826 3.27317C14.9641 3.71142 15.0576 4.18112 15.0576 4.65547C15.0576 6.6176 13.9376 8.47367 12.3962 10.115C10.9902 11.612 9.30134 12.8591 7.9992 13.7666C6.69705 12.8591 5.00816 11.612 3.60221 10.115C2.06078 8.47367 0.94082 6.6176 0.94082 4.65547C0.94082 3.69748 1.32138 2.77872 1.99878 2.10132C2.67618 1.42392 3.59494 1.04336 4.55293 1.04336H4.55302C5.13296 1.04327 5.70436 1.18313 6.2187 1.45104C6.73305 1.71896 7.17515 2.10703 7.50748 2.58231L7.9992 3.28553L8.49091 2.58231C8.82325 2.10703 9.26535 1.71896 9.7797 1.45104C10.294 1.18313 10.8654 1.04327 11.4454 1.04336Z"
             stroke="black" stroke-opacity="0.5" stroke-width="1.2" />
@@ -80,9 +85,6 @@ onMounted(() => {
       cursor: pointer;
       pointer-events: auto;
 
-      &.liked {
-        pointer-events: none;
-      }
     }
 
     &-location {

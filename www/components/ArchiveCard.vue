@@ -2,7 +2,7 @@
 const props = defineProps(['card'])
 
 const store = useStore()
-const { activeFilters } = storeToRefs(store)
+const { activeFilters, activeProjectFilters } = storeToRefs(store)
 
 const article = ref()
 const active = reactive({ isActive: true })
@@ -21,13 +21,30 @@ watch(activeFilters.value, () => {
     active.isActive = true
   } else {
     let trigger = false
+    console.log(toRaw(activeFilters.value))
     activeFilters.value.forEach(f => {
-      let html = f.children[0].innerHTML
-      let t = props.card.articleType[0]?.showTagTitle
-      if (props.card.articleType[0]?.showTagTitle === 'Selected Project') t = 'Project'
+      if (f.type === 'show') {
+        let html = f.el.children[0].innerHTML
+        let t = props.card.articleType[0]?.showTagTitle
+        if (props.card.articleType[0]?.showTagTitle === 'Selected Project') t = 'Project'
 
-      if (t === html) {
-        trigger = true
+        if (t === html) {
+          trigger = true
+        }
+      }
+      else if (f.type === 'project' || f.type === 'experiement') {
+        let html = f.el.children[0].innerHTML
+        let t = props.card.project !== null || undefined ? props.card.project?.projectFilters?.filter : null
+
+        if (t !== null) {
+          t.forEach(p => {
+            if (p.tagTitle === html) {
+              trigger = true
+            }
+          })
+        } else {
+          trigger = false
+        }
       }
     })
 
@@ -37,7 +54,6 @@ watch(activeFilters.value, () => {
       active.isActive = false
     }
   }
-
 })
 
 onMounted(() => {
@@ -113,7 +129,7 @@ onMounted(() => {
   display: none;
 
   &.active {
-    display: block;
+    display: flex;
   }
 
   &-heading {

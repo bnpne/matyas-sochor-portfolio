@@ -107,11 +107,12 @@ onMounted(() => {
         display: flex;
         flex-direction: row;
         gap: desktop-vw(4px);
+        color: $white50;
       }
 
       &-snippet {
         padding: desktop-vw(2px) desktop-vw(4px);
-        border: $white 1px solid;
+        border: $white50 1px solid;
         border-radius: 100px;
         max-width: desktop-vw(245px);
         overflow: hidden;

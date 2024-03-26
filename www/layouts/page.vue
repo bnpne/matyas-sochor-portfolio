@@ -18,7 +18,7 @@ const toggleNotification = () => {
 onMounted(() => {
   watch(() => notificationActive.isActive, () => {
     if (notificationActive.isActive === true) {
-      gsap.to('.page-notification', {
+      gsap.to('.page-layout-notification', {
         x: '0%',
         ease: 'expo.out',
         stagger: {
@@ -27,7 +27,7 @@ onMounted(() => {
         duration: 1.2,
       })
     } else {
-      gsap.to('.page-notification', {
+      gsap.to('.page-layout-notification', {
         x: '110%',
         ease: 'expo.out',
         stagger: {
