@@ -1,5 +1,9 @@
 <script setup lang='ts'>
 defineProps(['experiments'])
+
+
+const store = useStore()
+const { activeProject } = storeToRefs(store)
 </script>
 
 <template>
@@ -14,8 +18,8 @@ defineProps(['experiments'])
         </svg>
       </NuxtLink>
     </div>
-    <NuxtLink :to="`/experiments/${experiment.projectSlug?.current}`" v-for='experiment in experiments'
-      class='sidebar-experiments-card'>
+    <NuxtLink :to="`/experiments/${experiment.projectSlug?.current}`" v-for='experiment, index in experiments'
+      class='sidebar-experiments-card' :class="{ active: activeProject == index && $device.isDesktop }">
       <div class='sidebar-experiments-card-img'>
         <SanityImage :asset-id='experiment.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
       </div>
@@ -47,6 +51,11 @@ defineProps(['experiments'])
   flex-direction: column;
   gap: desktop-vw(16px);
 
+  @include mobile() {
+    gap: mobile-vw(16px);
+    padding: mobile-vw(12px);
+  }
+
   &-heading {
     display: flex;
     justify-content: space-between;
@@ -58,12 +67,18 @@ defineProps(['experiments'])
       gap: desktop-vw(8px);
       color: $black50;
       align-items: center;
+
+      @include mobile() {
+        gap: mobile-vw(8px);
+      }
     }
   }
 
-  &:hover {
-    &>.sidebar-experiments-card {
-      opacity: .5;
+  @include desktop() {
+    &:hover {
+      &>.sidebar-projects-card {
+        opacity: .5;
+      }
     }
   }
 
@@ -75,7 +90,12 @@ defineProps(['experiments'])
     gap: desktop-vw(12px);
     transition: opacity 400ms ease-out;
 
-    &.router-link-active {
+    @include mobile() {
+      gap: mobile-vw(12px);
+    }
+
+    &.router-link-active,
+    &.active {
       opacity: .5;
     }
 
@@ -95,6 +115,11 @@ defineProps(['experiments'])
       aspect-ratio: 1/1;
       border-radius: desktop-vw(8px);
       overflow: hidden;
+
+      @include mobile() {
+        min-width: mobile-vw(56px);
+        border-radius: mobile-vw(8px);
+      }
 
       img {
         @include image-default();
@@ -121,6 +146,10 @@ defineProps(['experiments'])
     &-tags {
       display: flex;
       gap: desktop-vw(2px);
+
+      @include mobile() {
+        gap: mobile-vw(2px);
+      }
     }
 
     &-tag {

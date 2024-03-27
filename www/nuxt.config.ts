@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     '/': {prerender: true},
     '/archive': {prerender: true},
   },
-  modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper'],
+  modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper', '@nuxtjs/device'],
   build: {
     transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper'],
   },

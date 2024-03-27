@@ -2,6 +2,8 @@
 const query = groq`*[_type == 'about'][0]`
 const { data: about } = useSanityQuery(query)
 
+const { isMobile } = useDevice()
+
 useHead({
   title: 'About | Matyas Sochor'
 })
@@ -14,7 +16,7 @@ onMounted(() => {
   <NuxtLayout v-if='about' name='work' class='about'>
     <div class='about-container'>
       <div class='about-container-flex'>
-        <div class='about-avatar'>
+        <div v-if='!isMobile' class='about-avatar'>
           <ul class='about-avatar-list'>
             <li>Website</li>
             <li>Identity</li>
@@ -30,8 +32,22 @@ onMounted(() => {
           <div v-if='about.bio' class='about-info-bio'>
             <SanityContent :blocks='about.bio' />
           </div>
-          <ImageCarousel v-if='about.imageCarousel' containerClass='about-info-carousel'
-            slideClass='about-info-carousel-image' :images='about.imageCarousel' />
+          <div v-if='isMobile' class='about-avatar'>
+            <ul class='about-avatar-list'>
+              <li>Website</li>
+              <li>Identity</li>
+              <li>Branding</li>
+              <li>Motion</li>
+              <li>Print</li>
+            </ul>
+            <div v-if='about.bioImage' class='about-avatar-image'>
+              <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' />
+            </div>
+          </div>
+          <template v-if='!isMobile'>
+            <ImageCarousel v-if='about.imageCarousel' containerClass='about-info-carousel'
+              slideClass='about-info-carousel-image' :images='about.imageCarousel' />
+          </template>
           <div v-if='about.resume' class='about-info-resume'>
             <EducationItem v-if='about.resume.eductionList' :data='about.resume.eductionList' />
             <ExperienceItem v-if='about.resume.experienceList' :data='about.resume.experienceList' />
@@ -78,11 +94,20 @@ onMounted(() => {
     flex-direction: column;
     gap: desktop-vw(40px);
 
+    @include mobile() {
+      gap: mobile-vw(40px);
+      //padding: mobile-vw(14px);
+    }
+
     &-flex {
       position: relative;
       display: flex;
       gap: desktop-vw(24px);
       position: relative;
+
+      @include mobile() {
+        gap: mobile-vw(24px);
+      }
     }
   }
 
@@ -93,10 +118,28 @@ onMounted(() => {
     position: sticky;
     bottom: desktop-vw(100px);
 
+    @include mobile() {
+      padding: 0;
+      padding: 0 mobile-vw(14px);
+      position: relative;
+      max-width: 100%;
+      flex: 1;
+      bottom: auto;
+      display: flex;
+      flex-direction: column;
+      gap: mobile-vw(20px);
+    }
+
     &-list {
       color: $black50;
       // position: sticky;
       // top: desktop-vw(24px);
+
+      @include mobile() {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+      }
     }
 
     &-image {
@@ -105,6 +148,10 @@ onMounted(() => {
       transform: translateY(desktop-vw(-100px));
       @include rounded();
       overflow: hidden;
+
+      @include mobile() {
+        transform: none;
+      }
 
       &>img {
         @include image-default();
@@ -119,12 +166,25 @@ onMounted(() => {
     flex-direction: column;
     gap: desktop-vw(40px);
 
+    @include mobile() {
+      gap: mobile-vw(40px);
+    }
+
     &-bio {
       @include medium-type();
       font-size: desktop-vw(20px);
       line-height: desktop-vw(34px);
       max-width: desktop-vw(725px);
       margin-bottom: desktop-vw(120px);
+
+      @include mobile() {
+        padding: 0 mobile-vw(14px);
+        margin-top: mobile-vw(84px);
+        font-size: mobile-vw(18px);
+        line-height: mobile-vw(28px);
+        max-width: 100%;
+        margin-bottom: mobile-vw(40px);
+      }
 
       strong {
         font-weight: 500;
@@ -158,6 +218,12 @@ onMounted(() => {
       flex-direction: column;
       gap: desktop-vw(32px);
       margin-bottom: desktop-vw(40px);
+
+      @include mobile() {
+        max-width: mobile-vw(640px);
+        gap: mobile-vw(32px);
+        margin-bottom: mobile-vw(40px);
+      }
     }
   }
 
@@ -166,6 +232,11 @@ onMounted(() => {
     flex-direction: column;
     gap: desktop-vw(24px);
     margin-right: desktop-vw(14px);
+
+    @include mobile() {
+      gap: mobile-vw(24px);
+      margin-right: 0;
+    }
 
     &-image {
       position: relative;
@@ -196,6 +267,14 @@ onMounted(() => {
         flex-direction: column;
         gap: desktop-vw(20px);
 
+        @include mobile() {
+          bottom: mobile-vw(24px);
+          left: mobile-vw(14px);
+          max-width: mobile-vw(300px);
+          gap: mobile-vw(20px);
+
+        }
+
         &>p {
           @include medium-type();
           color: $white;
@@ -206,6 +285,10 @@ onMounted(() => {
           @include button-default-white();
           width: fit-content;
           padding: desktop-vw(11px) desktop-vw(20px);
+
+          @include mobile() {
+            padding: mobile-vw(11px) mobile-vw(20px);
+          }
         }
       }
     }
@@ -215,16 +298,24 @@ onMounted(() => {
       justify-content: space-between;
       margin-bottom: desktop-vw(40px);
 
+      @include mobile() {
+        margin-bottom: mobile-vw(40px);
+      }
+
       &-link,
       &-copyright {
         min-width: desktop-vw(180px);
 
-      }
+        @include mobile() {
+          min-width: mobile-vw(180px);
 
-      &-copyright {
-        display: flex;
-        justify-content: flex-end;
-        color: $black50;
+        }
+
+        &-copyright {
+          display: flex;
+          justify-content: flex-end;
+          color: $black50;
+        }
       }
     }
   }

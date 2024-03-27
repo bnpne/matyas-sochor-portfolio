@@ -21,7 +21,7 @@ onMounted(() => {
       </NuxtLink>
     </div>
     <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for='project, index in projects'
-      class="sidebar-projects-card" :class="{ active: activeProject == index }">
+      class="sidebar-projects-card" :class="{ active: activeProject == index && $device.isDesktop }">
       <div class='sidebar-projects-card-img'>
         <SanityImage :asset-id='project.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
       </div>
@@ -53,6 +53,11 @@ onMounted(() => {
   flex-direction: column;
   gap: desktop-vw(16px);
 
+  @include mobile() {
+    gap: mobile-vw(16px);
+    padding: mobile-vw(12px);
+  }
+
   &-heading {
     display: flex;
     justify-content: space-between;
@@ -64,12 +69,18 @@ onMounted(() => {
       gap: desktop-vw(8px);
       color: $black50;
       align-items: center;
+
+      @include mobile() {
+        gap: mobile-vw(8px);
+      }
     }
   }
 
-  &:hover {
-    &>.sidebar-projects-card {
-      opacity: .5;
+  @include desktop() {
+    &:hover {
+      &>.sidebar-projects-card {
+        opacity: .5;
+      }
     }
   }
 
@@ -80,6 +91,10 @@ onMounted(() => {
     width: 100%;
     gap: desktop-vw(12px);
     transition: opacity 400ms ease-out;
+
+    @include mobile() {
+      gap: mobile-vw(12px);
+    }
 
     &.router-link-active,
     &.active {
@@ -102,6 +117,11 @@ onMounted(() => {
       aspect-ratio: 1/1;
       border-radius: desktop-vw(8px);
       overflow: hidden;
+
+      @include mobile() {
+        min-width: mobile-vw(56px);
+        border-radius: mobile-vw(8px);
+      }
 
       img {
         @include image-default();
@@ -128,6 +148,10 @@ onMounted(() => {
     &-tags {
       display: flex;
       gap: desktop-vw(2px);
+
+      @include mobile() {
+        gap: mobile-vw(2px);
+      }
     }
 
     &-tag {

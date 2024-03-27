@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 defineProps(['data'])
+const { isMobile } = useDevice()
 </script>
 
 <template>
@@ -13,8 +14,8 @@ defineProps(['data'])
         <p v-if='!info.jobLink'>{{ info.job }}</p>
         <NuxtLink v-else :to='info.jobLink' target='_blank'>{{ info.job }}</NuxtLink>
         <div class='experience-list-section-info-line-right'>
-          <p>{{ info.jobRole }}</p>
-          <p>{{ info.jobLocation }}</p>
+          <p v-if='!isMobile'>{{ info.jobRole }}</p>
+          <p v-if='!isMobile'>{{ info.jobLocation }}</p>
           <p>{{ info.jobStartDate.split('-')[0] }} - Current</p>
         </div>
       </div>
@@ -29,11 +30,20 @@ defineProps(['data'])
   flex-direction: column;
   gap: desktop-vw(12px);
 
+  @include mobile() {
+    gap: mobile-vw(12px);
+    padding: 0 mobile-vw(14px);
+  }
+
   &-header {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(12px);
     color: $black50;
+
+    @include mobile() {
+      gap: mobile-vw(12px);
+    }
 
     &-divider {
       border: .5px solid $black10;
@@ -45,6 +55,10 @@ defineProps(['data'])
     flex-direction: column;
     gap: desktop-vw(8px);
 
+    @include mobile() {
+      gap: mobile-vw(8px);
+    }
+
     &-line {
       display: flex;
       align-content: center;
@@ -54,6 +68,10 @@ defineProps(['data'])
         color: $black50;
         display: flex;
         gap: desktop-vw(40px);
+
+        @include mobile() {
+          gap: mobile-vw(40px);
+        }
       }
     }
   }

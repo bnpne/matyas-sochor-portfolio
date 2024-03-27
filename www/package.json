@@ -23,5 +23,8 @@
     "sass": "^1.71.1",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/device": "^3.1.1"
   }
 }

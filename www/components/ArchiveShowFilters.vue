@@ -127,6 +127,11 @@ onUnmounted(() => {
   flex-direction: column;
   gap: desktop-vw(12px);
 
+  @include mobile() {
+    gap: mobile-vw(12px);
+    padding: mobile-vw(12px);
+  }
+
   &-heading {
     display: flex;
     justify-content: space-between;
@@ -139,6 +144,10 @@ onUnmounted(() => {
     &::before {
       content: url('~/assets/svg/reset-x.svg');
       margin-right: desktop-vw(4px);
+
+      @include mobile() {
+        margin-right: mobile-vw(4px);
+      }
     }
   }
 
@@ -147,6 +156,10 @@ onUnmounted(() => {
     flex-direction: row;
     flex-wrap: wrap;
     gap: desktop-vw(8px);
+
+    @include mobile() {
+      gap: mobile-vw(8px);
+    }
   }
 
   &-filter {
@@ -155,6 +168,11 @@ onUnmounted(() => {
     display: flex;
     flex-direction: row;
     gap: desktop-vw(4px);
+
+    @include mobile() {
+      padding: mobile-vw(10px) mobile-vw(12px);
+      gap: mobile-vw(4px);
+    }
 
     &.active {
       background: $black;

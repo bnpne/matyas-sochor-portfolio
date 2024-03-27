@@ -6,7 +6,18 @@ useHead({
   title: 'Archive | Matyas Sochor'
 })
 
+const { isMobile } = useDevice()
+const filtersIsOpen = reactive({ isOpen: false })
+
 const grid = ref()
+
+const toggleFilter = () => {
+  if (filtersIsOpen.isOpen) {
+    filtersIsOpen.isOpen = false
+  } else {
+    filtersIsOpen.isOpen = true
+  }
+}
 
 onMounted(() => {
 })
@@ -16,6 +27,21 @@ onMounted(() => {
   <NuxtLayout name='archive' class='archive'>
     <div v-if='archive?.articleList' ref='grid' class='archive-container'>
       <ArchiveCard v-for='card in archive.articleList' :card='card' />
+    </div>
+    <div v-if='isMobile' class='archive-mobile'>
+      <div @click='toggleFilter' v-if='!filtersIsOpen.isOpen' class="archive-mobile-pill">
+        Filter
+      </div>
+      <div @click='toggleFilter' v-else class="archive-mobile-pill-close">
+        Close
+      </div>
+    </div>
+    <div v-if='isMobile' class='archive-overlay' :class='{ open: filtersIsOpen.isOpen }'>
+      <ClientOnly>
+        <ArchiveShowFilters />
+        <ArchiveProjectFilters />
+        <ArchiveExperimentFilters />
+      </ClientOnly>
     </div>
   </NuxtLayout>
 </template>
@@ -31,6 +57,55 @@ onMounted(() => {
     column-gap: desktop-vw(24px);
     grid-gap: 24px;
     padding: desktop-vw(90px) 0 0;
+
+    @include mobile() {
+      display: flex;
+      flex-direction: column;
+      gap: mobile-vw(20px);
+      padding: mobile-vw(84px) mobile-vw(20px);
+    }
+  }
+
+  &-mobile {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    z-index: 8;
+    bottom: mobile-vw(24px);
+    left: 0;
+    width: 100%;
+
+    @include small-type();
+
+    &-pill {
+      @include button-default-white();
+      padding: mobile-vw(12px) mobile-vw(24px);
+      box-shadow: 0px 2px 12px 0px #0000001F;
+
+      &-close {
+        @include button-default-black();
+        padding: mobile-vw(12px) mobile-vw(24px);
+        box-shadow: 0px 2px 12px 0px #0000001F;
+      }
+    }
+  }
+
+  &-overlay {
+    background: $white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 6;
+    display: none;
+    flex-direction: column;
+    padding: mobile-vw(76px) mobile-vw(20px);
+    gap: mobile-vw(20px);
+
+    &.open {
+      display: flex;
+    }
   }
 }
 </style>

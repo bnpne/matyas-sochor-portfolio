@@ -1,6 +1,20 @@
+<script setup lang='ts'>
+const route = useRoute()
+const { isMobile } = useDevice()
+
+onMounted(() => {
+  console.log(route.path)
+})
+</script>
+
 <template>
   <main id='main'>
-    <SideBar />
+    <template v-if='isMobile'>
+      <SideBar v-if='route.path === "/"' />
+    </template>
+    <template v-else>
+      <SideBar />
+    </template>
     <slot />
   </main>
 </template>

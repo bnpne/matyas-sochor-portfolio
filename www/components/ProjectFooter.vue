@@ -20,9 +20,18 @@
   flex-direction: column;
   gap: desktop-vw(20px);
 
+  @include mobile() {
+    gap: mobile-vw(20px);
+    padding: 0 mobile-vw(14px);
+  }
+
   &-text {
     @include medium-type();
     width: 40%;
+
+    @include mobile() {
+      width: 100%;
+    }
   }
 
   &-button {
@@ -31,11 +40,20 @@
     width: auto;
     margin-bottom: desktop-vw(76px);
     padding: desktop-vw(12px) desktop-vw(25px);
+
+    @include mobile() {
+      margin-bottom: mobile-vw(76px);
+      padding: mobile-vw(12px) mobile-vw(25px);
+    }
   }
 
   &-divider {
     border: solid .5px $black10;
     margin-bottom: desktop-vw(96px);
+
+    @include mobile() {
+      margin-bottom: mobile-vw(96px);
+    }
   }
 }
 </style>

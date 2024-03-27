@@ -52,10 +52,18 @@
 @mixin rounded-border {
   border: 1px rgba(30, 30, 30, 0.1) solid;
   border-radius: desktop-vw(12px);
+
+  @include mobile() {
+    border-radius: mobile-vw(12px);
+  }
 }
 
 @mixin rounded() {
   border-radius: desktop-vw(12px);
+
+  @include mobile() {
+    border-radius: mobile-vw(12px);
+  }
 }
 
 @mixin body-type {
@@ -63,12 +71,22 @@
   font-size: desktop-vw(15px);
   line-height: desktop-vw(20px);
   font-weight: 400;
+
+  @include mobile() {
+    font-size: mobile-vw(15px);
+    line-height: mobile-vw(20px);
+  }
 }
 
 @mixin sans-serif-medium {
   font-family: 'a-medium';
   font-size: desktop-vw(15px);
   line-height: desktop-vw(22px);
+
+  @include mobile() {
+    font-size: mobile-vw(15px);
+    line-height: mobile-vw(22px);
+  }
 }
 
 @mixin sans-serif-regular {
@@ -76,12 +94,22 @@
   font-size: desktop-vw(15px);
   line-height: desktop-vw(22px);
   font-weight: 400;
+
+  @include mobile() {
+    font-size: mobile-vw(15px);
+    line-height: mobile-vw(22px);
+  }
 }
 
 @mixin small-type {
   font-size: desktop-vw(13px);
   line-height: desktop-vw(20px);
   font-weight: 400;
+
+  @include mobile() {
+    font-size: mobile-vw(13px);
+    line-height: mobile-vw(20px);
+  }
 }
 
 @mixin medium-type {
@@ -89,6 +117,11 @@
   font-size: desktop-vw(28px);
   line-height: desktop-vw(44px);
   font-weight: 400;
+
+  @include mobile() {
+    font-size: mobile-vw(18px);
+    line-height: mobile-vw(30px);
+  }
 }
 
 @mixin large-heading {
@@ -96,6 +129,11 @@
   font-size: desktop-vw(32px);
   line-height: desktop-vw(52px);
   font-weight: 400;
+
+  @include mobile() {
+    font-size: mobile-vw(24px);
+    line-height: mobile-vw(36px);
+  }
 }
 
 @mixin tag {
@@ -105,6 +143,12 @@
   background: #f0f1f1;
   color: $black50;
   border-radius: 100px;
+
+  @include mobile() {
+    font-size: mobile-vw(12px);
+    padding: mobile-vw(7px) mobile-vw(7px);
+    border-radius: mobile-vw(100px);
+  }
 }
 
 @mixin image-default {
@@ -127,6 +171,11 @@
   &:hover {
     background: $white50;
   }
+
+  @include mobile() {
+    padding: mobile-vw(11px) mobile-vw(15px);
+    border-radius: mobile-vw(26px);
+  }
 }
 
 @mixin button-default-black {
@@ -141,6 +190,11 @@
 
   &:hover {
     background: $black75;
+  }
+
+  @include mobile() {
+    padding: mobile-vw(11px) mobile-vw(15px);
+    border-radius: mobile-vw(26px);
   }
 }
 
@@ -159,6 +213,11 @@
     background: $white;
     color: $black;
   }
+
+  @include mobile() {
+    padding: mobile-vw(11px) mobile-vw(15px);
+    border-radius: mobile-vw(26px);
+  }
 }
 
 @mixin button-second-black {
@@ -175,6 +234,11 @@
   &:hover {
     background: $black;
     color: $white;
+  }
+
+  @include mobile() {
+    padding: mobile-vw(11px) mobile-vw(15px);
+    border-radius: mobile-vw(26px);
   }
 }
 
@@ -195,5 +259,10 @@
     background: $black;
     color: $white;
     border: 1px $black solid;
+  }
+
+  @include mobile() {
+    padding: mobile-vw(11px) mobile-vw(15px);
+    border-radius: mobile-vw(26px);
   }
 }

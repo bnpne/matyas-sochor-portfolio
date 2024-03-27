@@ -67,6 +67,11 @@ onMounted(() => {
   flex-direction: column;
   gap: desktop-vw(16px);
 
+  @include mobile() {
+    padding: mobile-vw(12px);
+    gap: mobile-vw(16px);
+  }
+
   &-text {
     @include sans-serif-regular();
   }
@@ -77,20 +82,32 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
 
+    @include mobile() {
+      font-size: mobile-vw(13px);
+    }
+
     &-likes {
       display: flex;
       flex-direction: row;
       gap: desktop-vw(5px);
+
       align-items: center;
       cursor: pointer;
       pointer-events: auto;
 
+      @include mobile() {
+        gap: mobile-vw(5px);
+      }
     }
 
     &-location {
       display: flex;
       align-items: center;
       gap: desktop-vw(4px);
+
+      @include mobile() {
+        gap: mobile-vw(4px);
+      }
     }
   }
 }

@@ -33,11 +33,22 @@ defineProps(['data'])
   margin-top: desktop-vw(30px);
   margin-bottom: desktop-vw(100px);
 
+  @include mobile() {
+    margin-top: mobile-vw(30px);
+    margin-bottom: mobile-vw(100px);
+    padding: 0 mobile-vw(14px);
+  }
+
   &-container {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(40px);
     width: 50%;
+
+    @include mobile() {
+      gap: mobile-vw(40px);
+      width: 100%;
+    }
   }
 
   &-title {
@@ -52,6 +63,12 @@ defineProps(['data'])
     gap: desktop-vw(16px);
     margin-bottom: desktop-vw(16px);
     margin-right: desktop-vw(14px);
+
+    @include mobile() {
+      gap: mobile-vw(16px);
+      margin-bottom: mobile-vw(16px);
+      margin-right: mobile-vw(14px);
+    }
 
     &-text {
       @include small-type();

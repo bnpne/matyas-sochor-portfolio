@@ -19,12 +19,21 @@ defineProps(['data'])
   gap: desktop-vw(10px);
   width: 100%;
 
+  @include mobile {
+    gap: mobile-vw(6px);
+    flex-direction: column;
+  }
+
   &-image {
     @include rounded();
     overflow: hidden;
     width: 100%;
     height: 100%;
     flex: 0 0 calc(50% - desktop-vw(5px));
+
+    @include mobile {
+      flex: 1;
+    }
 
     &>img {
       height: 100%;

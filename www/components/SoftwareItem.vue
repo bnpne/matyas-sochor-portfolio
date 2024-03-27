@@ -24,11 +24,20 @@ defineProps(['data'])
   flex-direction: column;
   gap: desktop-vw(12px);
 
+  @include mobile() {
+    padding: 0 mobile-vw(14px);
+    gap: mobile-vw(12px);
+  }
+
   &-header {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(12px);
     color: $black50;
+
+    @include mobile() {
+      gap: mobile-vw(12px);
+    }
 
     &-divider {
       border: .5px solid $black10;

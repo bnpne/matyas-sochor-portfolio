@@ -3,6 +3,7 @@ const props = defineProps(['card'])
 
 const store = useStore()
 const { activeFilters, activeProjectFilters } = storeToRefs(store)
+const { isMobile } = useDevice();
 
 const article = ref()
 const active = reactive({ isActive: true })
@@ -57,8 +58,10 @@ watch(activeFilters.value, () => {
 })
 
 onMounted(() => {
-  window.onload = resizeGridItem(article.value)
-  window.addEventListener('resize', resizeGridItem(article.value))
+  if (!isMobile) {
+    window.onload = resizeGridItem(article.value)
+    window.addEventListener('resize', resizeGridItem(article.value))
+  }
 })
 </script>
 
@@ -115,6 +118,10 @@ onMounted(() => {
       @include button-default-white();
       min-width: desktop-vw(80px);
       text-align: center;
+
+      @include mobile() {
+        min-width: mobile-vw(80px);
+      }
     }
   }
 }
@@ -127,6 +134,11 @@ onMounted(() => {
   gap: desktop-vw(12px);
   height: fit-content;
   display: none;
+
+  @include mobile() {
+    gap: mobile-vw(12px);
+    padding: mobile-vw(12px);
+  }
 
   &.active {
     display: flex;
@@ -148,6 +160,11 @@ onMounted(() => {
 
   &-title {
     @include sans-serif-regular();
+
+    @include mobile() {
+      font-size: mobile-vw(15px);
+      line-height: mobile-vw(20px);
+    }
   }
 
   &-desc {

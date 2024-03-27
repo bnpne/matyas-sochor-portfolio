@@ -56,6 +56,11 @@ onMounted(() => {
 .home {
   position: relative;
 
+  @include mobile() {
+    display: none;
+    visibility: hidden;
+  }
+
   &-container {
     display: flex;
     flex-direction: column;

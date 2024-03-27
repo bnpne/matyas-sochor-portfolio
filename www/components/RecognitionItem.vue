@@ -27,11 +27,20 @@ defineProps(['data'])
   flex-direction: column;
   gap: desktop-vw(12px);
 
+  @include mobile() {
+    gap: mobile-vw(12px);
+    padding: 0 mobile-vw(14px);
+  }
+
   &-header {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(12px);
     color: $black50;
+
+    @include mobile() {
+      gap: mobile-vw(12px);
+    }
 
     &-divider {
       border: .5px solid $black10;
@@ -43,6 +52,10 @@ defineProps(['data'])
     flex-direction: column;
     gap: desktop-vw(8px);
 
+    @include mobile() {
+      gap: mobile-vw(8px);
+    }
+
     &-line {
       display: flex;
       align-content: center;
@@ -52,6 +65,10 @@ defineProps(['data'])
         color: $black50;
         display: flex;
         gap: desktop-vw(40px);
+
+        @include mobile() {
+          gap: mobile-vw(40px);
+        }
       }
     }
   }

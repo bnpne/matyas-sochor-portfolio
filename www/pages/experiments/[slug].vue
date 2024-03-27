@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <NuxtLayout name='work' class='experiment'>
+  <NuxtLayout name='work' class='experiment' :data='experiment'>
     <div v-if='experiment' class='experiment-container'>
       <div class='experiment-hero'>
         <div class='experiment-hero-img'>
@@ -31,7 +31,7 @@ onMounted(() => {
             </div>
             <div class='experiment-hero-details-info'>
               <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.projectYear &&
-      experiment.projectDetails?.projectType'>
+    experiment.projectDetails?.projectType'>
                 <p>Type/Year</p>
                 <p v-for='type in experiment.projectDetails?.projectType'>{{ type }}</p>
               </div>
@@ -52,6 +52,7 @@ onMounted(() => {
         </div>
       </div>
       <div v-if='experiment.projectHeroText' class='experiment-intro'>
+        <p class='experiment-intro-header'>Introduction</p>
         <SanityContent :blocks='experiment.projectHeroText' />
       </div>
       <div v-if='experiment.projectSections' class='experiment-sections'>
@@ -70,6 +71,7 @@ onMounted(() => {
   </NuxtLayout>
 </template>
 
+
 <style lang='scss'>
 .experiment {
   position: relative;
@@ -78,15 +80,23 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(10px);
+
+    @include mobile() {
+      gap: mobile-vw(10px);
+    }
   }
 
   &-hero {
     position: relative;
-    min-height: desktop-vw(866px);
+    min-height: calc(100vh - desktop-vw(20px));
     overflow: hidden;
     display: flex;
     flex-direction: column;
     @include rounded-border();
+
+    @include mobile() {
+      min-height: calc(100vh - mobile-vw(20px));
+    }
 
     &-img {
       display: block;
@@ -119,11 +129,16 @@ onMounted(() => {
       left: 0;
       background: $white10;
       backdrop-filter: blur(10px);
-      padding: desktop-vw(18px) desktop-vw(24px) desktop-vw(28px);
+      padding: desktop-vw(18px) desktop-vw(14px) desktop-vw(28px);
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-content: flex-start;
+
+      @include mobile() {
+        min-height: mobile-vw(125px);
+        padding: mobile-vw(18px) mobile-vw(14px) mobile-vw(28px);
+      }
 
       &-client {
         display: flex;
@@ -133,11 +148,20 @@ onMounted(() => {
         line-height: desktop-vw(14px);
         color: #FFFFFF66;
 
+        @include mobile() {
+          gap: mobile-vw(6px);
+          line-height: mobile-vw(14px);
+        }
+
         &-link {
           color: $white;
           display: flex;
           gap: desktop-vw(4px);
           align-content: center;
+
+          @include mobile() {
+            gap: mobile-vw(4px);
+          }
 
           &::after {
             content: url('~/assets/svg/link-arrow.svg');
@@ -148,6 +172,11 @@ onMounted(() => {
             margin-top: 2px;
             margin-bottom: -2px;
             overflow: hidden;
+
+            @include mobile() {
+              width: mobile-vw(13px);
+              height: mobile-vw(13px);
+            }
           }
         }
 
@@ -162,6 +191,10 @@ onMounted(() => {
         gap: desktop-vw(130px);
         align-content: flex-start;
 
+        @include mobile() {
+          gap: mobile-vw(130px);
+        }
+
         &-section {
           @include small-type();
           line-height: desktop-vw(14px);
@@ -169,6 +202,11 @@ onMounted(() => {
           flex-direction: column;
           gap: desktop-vw(6px);
           color: $white;
+
+          @include mobile() {
+            gap: mobile-vw(6px);
+            line-height: mobile-vw(14px);
+          }
 
           &>p {
             &:first-child {
@@ -181,10 +219,29 @@ onMounted(() => {
   }
 
   &-intro {
-    margin-top: desktop-vw(300px);
+
+    &-header {
+      margin-top: desktop-vw(30px);
+      @include body-type();
+      @include small-type();
+      color: #00000040;
+      margin-bottom: desktop-vw(320px);
+
+      @include mobile() {
+        margin-bottom: mobile-vw(114px);
+        margin-top: mobile-vw(30px);
+      }
+    }
+
     margin-bottom: desktop-vw(30px);
     @include large-heading();
     max-width: 75%;
+
+    @include mobile() {
+      padding: 0 mobile-vw(14px);
+      margin-bottom: mobile-vw(30px);
+      max-width: 100%;
+    }
 
     & strong {
       color: $black50;
@@ -195,6 +252,10 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(10px);
+
+    @include mobile() {
+      gap: mobile-vw(10px);
+    }
 
   }
 }

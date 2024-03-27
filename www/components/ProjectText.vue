@@ -28,6 +28,15 @@ defineProps(['data'])
   margin-top: desktop-vw(30px);
   margin-bottom: desktop-vw(165px);
 
+  @include mobile() {
+    padding: 0 mobile-vw(14px);
+    margin-top: mobile-vw(30px);
+    margin-bottom: mobile-vw(58px);
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: mobile-vw(32px);
+  }
+
   &-heading {
     @include small-type();
 
@@ -40,6 +49,11 @@ defineProps(['data'])
     @include medium-type();
     max-width: desktop-vw(655px);
     margin-right: desktop-vw(14px);
+
+    @include mobile() {
+      max-width: 100%;
+      margin-right: 0;
+    }
 
     strong {
       color: $black50;
