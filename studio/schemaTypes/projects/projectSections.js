@@ -18,8 +18,7 @@ export default defineType({
             defineField({
               title: 'Image or Video',
               type: 'string',
-              name: 'selection',
-              initialValue: {title: 'Image', value: 'image'},
+              name: 'fullWidthSelection',
               options: {
                 layout: 'radio',
                 list: [
@@ -32,13 +31,13 @@ export default defineType({
               title: 'Image',
               type: 'image',
               name: 'image',
-              hidden: ({parent}) => parent?.selection !== 'image',
+              hidden: ({parent}) => parent?.fullWidthSelection !== 'image',
             }),
             defineField({
               title: 'Video',
               type: 'file',
               name: 'video',
-              hidden: ({parent}) => parent?.selection !== 'video',
+              hidden: ({parent}) => parent?.fullWidthSelection !== 'video',
             }),
           ],
           validation: rule => rule.required(),

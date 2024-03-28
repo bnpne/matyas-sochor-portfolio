@@ -143,9 +143,8 @@ onMounted(() => {
     }
 
     &-image {
-      position: sticky;
-      top: 50%;
-      transform: translateY(desktop-vw(-100px));
+      position: relative;
+      top: desktop-vw(200px);
       @include rounded();
       overflow: hidden;
 

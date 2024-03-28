@@ -16,7 +16,8 @@ const toggle = ref()
 let isOpen = false
 const toggleIsOpen = reactive({ isOpen: false })
 const route = useRoute()
-const { isMobile } = useDevice()
+const { isMobile, isDesktop } = useDevice()
+const device = useDevice()
 
 const openToggle = () => {
   if (toggleIsOpen.isOpen) {
@@ -76,7 +77,7 @@ onMounted(() => {
           </div>
         </div>
         <div class='sidebar-avatar-about'>
-          <NuxtLink v-if='!isMobile' to="/about" class='btn btn-third'>About Me</NuxtLink>
+          <NuxtLink v-if='isDesktop' to="/about" class='btn btn-third'>About Me</NuxtLink>
           <div ref='toggler' @click='openToggle' v-else class='sidebar-toggle'>
             <div class='sidebar-toggle-hamburger'>
               <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">

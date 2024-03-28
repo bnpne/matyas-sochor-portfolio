@@ -3,7 +3,6 @@ const route = useRoute()
 const { isMobile } = useDevice()
 
 onMounted(() => {
-  console.log(route.path)
 })
 </script>
 
