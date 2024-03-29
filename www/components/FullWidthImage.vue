@@ -5,7 +5,7 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-full-width'>
     <div class='section-full-width-image'>
-      <SanityImage v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" />
+      <SanityImage v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" w='1000' fit='clip' />
       <!-- todo fix video -->
       <SanityFile v-else-if='data.video' :asset-id="data.video.asset?._ref">
         <template #default="{ src }">

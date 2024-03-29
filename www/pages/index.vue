@@ -1,10 +1,7 @@
 <script setup lang='ts'>
-const query = groq`*[_type == 'home']{selectedProjects[]->{...,"filters":projectFilters.filter[]->}}[0].selectedProjects`
-const { data } = useSanityQuery<Project>(query)
-
 const projects = ref([])
-
 const store = useStore()
+const { allProjects } = storeToRefs(store)
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -30,11 +27,21 @@ onMounted(() => {
 
 <template>
   <NuxtLayout name='page' class='home'>
-    <div v-if='data' class='home-container'>
-      <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project, index in data" class='home-project'>
+    <div v-if='allProjects' class='home-container'>
+      <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project, index in allProjects"
+        class='home-project'>
         <div ref='projects' class='home-project-img' :data-index='index'>
           <div class='home-project-img-overlay'></div>
-          <SanityImage :asset-id="project.projectCaseImage?.asset?._ref" auto="format" />
+          <template v-if='project.projectCaseImage?.projectCaseSelection === "image"'>
+            <SanityImage :asset-id="project.projectCaseImage?.image.asset?._ref" auto="format" w='1000' fit='clip' />
+          </template>
+          <template v-else-if="project.projectCaseImage?.projectCaseSelection === 'video'">
+            <SanityFile :asset-id="project.projectCaseImage?.video.asset?._ref">
+              <template #default="{ src }">
+                <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+              </template>
+            </SanityFile>
+          </template>
         </div>
         <div v-if='project.projectDetails' class='home-project-details'>
           <div class='home-project-details-info'>
@@ -89,6 +96,14 @@ onMounted(() => {
         width: 100%;
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%),
           linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%);
+      }
+
+      video {
+        flex-grow: 1;
+        height: 100%;
+        width: 100%;
+        vertical-align: top;
+        object-fit: cover;
       }
 
       img {

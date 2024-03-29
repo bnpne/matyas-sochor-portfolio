@@ -16,6 +16,9 @@ const toggleIsOpen = reactive({ isOpen: false })
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
+const isNotif = computed(() => {
+  return notifications.list.length > 0
+})
 
 const toggleNotification = () => {
   notificationActive.isActive =
@@ -48,7 +51,6 @@ const openDropdown = () => {
 }
 
 onMounted(() => {
-  // console.log(toRaw(data.data))
   watch(() => notificationActive.isActive, () => {
     if (notificationActive.isActive === true) {
       gsap.to('.work-layout-notification', {
@@ -71,13 +73,15 @@ onMounted(() => {
     }
   })
 
-  setTimeout(() => {
-    toggleNotification()
-  }, 2000)
+  watch(isNotif, () => {
+    setTimeout(() => {
+      toggleNotification()
+    }, 2000)
+  })
 
-  if (data.data) {
-    if (data.data.notifications !== null) {
-      data.data.notifications.forEach((no: any) => {
+  if (data.data?.notifications !== undefined || data.data?.notifications !== null) {
+    if (data.data?.notifications !== null) {
+      data.data?.notifications?.forEach((no: any) => {
         notifications.list.push(no)
       })
     }

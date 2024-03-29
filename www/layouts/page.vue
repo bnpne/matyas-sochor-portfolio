@@ -43,7 +43,7 @@ onMounted(() => {
   }, 2000)
 
   if (data) {
-    toRaw(data.value).forEach((n: any) => {
+    toRaw(data.value)?.forEach((n: any) => {
       if (n.notifications !== null) {
         n.notifications.forEach((no: any) => {
           notifications.list.push(no)

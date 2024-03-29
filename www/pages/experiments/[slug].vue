@@ -19,7 +19,7 @@ onMounted(() => {
       <div class='experiment-hero'>
         <div class='experiment-hero-img'>
           <div class='experiment-hero-img-overlay'></div>
-          <SanityImage :asset-id="experiment.projectCaseImage?.asset?._ref" auto="format" />
+          <SanityImage :asset-id="experiment.projectCaseImage?.asset?._ref" auto="format" w='1000' fit='clip' />
           <div v-if='experiment.projectDetails' class='experiment-hero-details'>
             <div class='experiment-hero-details-client'>
               <p>Client</p>
@@ -66,7 +66,6 @@ onMounted(() => {
       <div v-if='experiment.projectCredits' class='experiment-credits'>
         <ProjectCredits :data='experiment.projectCredits' />
       </div>
-      <ProjectFooter />
     </div>
   </NuxtLayout>
 </template>

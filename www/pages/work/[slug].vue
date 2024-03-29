@@ -1,16 +1,89 @@
 <!-- WORK PAGE -->
-
 <script setup lang='ts'>
+import gsap from 'gsap'
+
+const app = useNuxtApp()
+const router = useRouter()
+const ellipse = ref()
+const progress = reactive({ value: 0 })
+const lenisProgress = reactive({ value: 0 })
+
+const testProgress = () => {
+  progress.value += 25
+}
+
+const da = computed(() => {
+  const c = 2 * Math.PI * 21.5
+  const p = c * (1 - progress.value / 100)
+  return { c, p }
+})
+
 const route = useRoute()
 const query = groq`*[_type == 'projects' && projectSlug.current == "${route.params.slug}"][0]`
-const { data: work } = useSanityQuery<Project>(query)
+const { data: work } = useSanityQuery(query)
 
-useHead({
-  title: `${work.value?.projectTitle} | Matyas Sochor`
+const store = useStore()
+const { allProjects } = storeToRefs(store)
+
+// Get next index
+const nextIndex = reactive({ value: null })
+const isNext = computed(() => {
+  return nextIndex.value
+})
+async function getIndex() {
+  if (work.value) {
+    toRaw(allProjects.value).forEach((a, i) => {
+      if (a?._id === work.value?._id) {
+        if (i === allProjects.value.length - 1) {
+          nextIndex.value = 0
+        } else {
+          nextIndex.value = i + 1
+        }
+      }
+    })
+  }
+  await nextTick()
+}
+
+onUpdated(() => {
+  app.$scrollStart()
 })
 
 onMounted(() => {
-  // console.log(toRaw(work.value))
+  app.$scrollToTop()
+  watch(work, () => {
+    getIndex()
+    useHead({
+      title: `${work.value?.projectTitle} | Matyas Sochor`
+    })
+    // console.log(isNext.value)
+  })
+  app.$lenis.on('scroll', (e) => {
+    lenisProgress.value = e.progress
+  })
+
+
+  let t = 0
+  window.addEventListener('wheel', async (e) => {
+    if (lenisProgress.value === 1) {
+
+      t += e.deltaY / 20
+      t = Math.min(Math.max(t, 0), 100)
+      gsap.to(progress, { value: t, ease: 'circ.out' })
+
+      if (t === 100) {
+        console.log(allProjects.value[isNext.value].projectSlug.current)
+        await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`)
+      }
+    } else {
+      t = 0
+      gsap.to(progress, { value: 0, ease: 'circ.out' })
+    }
+  })
+})
+
+onUnmounted(() => {
+  app.$scrollStop()
 })
 </script>
 
@@ -20,7 +93,16 @@ onMounted(() => {
       <div class='work-hero'>
         <div class='work-hero-img'>
           <div class='work-hero-img-overlay'></div>
-          <SanityImage :asset-id="work.projectCaseImage?.asset?._ref" auto="format" />
+          <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
+            <SanityImage :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format" w='1000' fit='clip' />
+          </template>
+          <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
+            <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
+              <template #default="{ src }">
+                <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+              </template>
+            </SanityFile>
+          </template>
           <div v-if='work.projectDetails' class='work-hero-details'>
             <div class='work-hero-details-client'>
               <p>Client</p>
@@ -67,7 +149,52 @@ onMounted(() => {
       <div v-if='work.projectCredits' class='work-credits'>
         <ProjectCredits :data='work.projectCredits' />
       </div>
-      <ProjectFooter />
+      <template v-if='allProjects[isNext]'>
+        <div class='work-footer'>
+          <p class='work-footer-text'>
+            Do you want to know more about my role,
+            the team and the process?
+          </p>
+          <div>
+            <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'>
+              Let's Chat
+            </NuxtLink>
+          </div>
+          <div class='work-footer-divider'></div>
+          <div class='work-footer-scroll'>
+            <p class='work-footer-scroll-heading'>Scroll to next project</p>
+            <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2>
+            <div class='work-footer-scroll-spinner'>
+              <div class='work-footer-scroll-spinner-base'>
+                <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
+                    fill="black" />
+                </svg>
+              </div>
+              <div class='work-footer-scroll-spinner-progress'>
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
+                    :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
+                </svg>
+              </div>
+            </div>
+            <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
+              <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                <SanityImage :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format" w='1000'
+                  fit='clip' />
+              </template>
+              <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                  <template #default="{ src }">
+                    <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                  </template>
+                </SanityFile>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
   </NuxtLayout>
 </template>
@@ -88,7 +215,7 @@ onMounted(() => {
 
   &-hero {
     position: relative;
-    min-height: calc(100vh - desktop-vw(20px));
+    height: calc(100vh - desktop-vw(20px));
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -117,6 +244,13 @@ onMounted(() => {
       img {
         flex-grow: 1;
         @include image-default();
+      }
+
+      video {
+        height: 100%;
+        width: 100%;
+        flex-grow: 1;
+        object-fit: cover;
       }
     }
 
@@ -257,6 +391,125 @@ onMounted(() => {
       gap: mobile-vw(6px);
     }
 
+  }
+
+  &-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: desktop-vw(20px);
+
+    @include mobile() {
+      gap: mobile-vw(20px);
+      padding: 0 mobile-vw(14px);
+    }
+
+    &-text {
+      @include medium-type();
+      width: 40%;
+
+      @include mobile() {
+        width: 100%;
+      }
+    }
+
+    &-button {
+      @include button-default-black();
+      @include small-type();
+      width: auto;
+      margin-bottom: desktop-vw(76px);
+      padding: desktop-vw(12px) desktop-vw(25px);
+
+      @include mobile() {
+        margin-bottom: mobile-vw(76px);
+        padding: mobile-vw(12px) mobile-vw(25px);
+      }
+    }
+
+    &-divider {
+      border: solid .5px $black10;
+      margin-bottom: desktop-vw(96px);
+
+      @include mobile() {
+        margin-bottom: mobile-vw(96px);
+      }
+    }
+
+    &-scroll {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      align-items: center;
+      gap: desktop-vw(24px);
+      padding: 0 desktop-vw(60px);
+
+      &-heading {
+        @include small-type();
+        color: $black50;
+      }
+
+      &-next {
+        @include sans-serif-regular();
+        font-size: desktop-vw(56px);
+        line-height: desktop-vw(67px);
+      }
+
+      &-spinner {
+        position: relative;
+        height: desktop-vw(44px);
+        width: desktop-vw(44px);
+        border-radius: 50%;
+        margin-bottom: desktop-vw(144px);
+
+        &-base {
+          position: relative;
+          z-index: 1;
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
+          background: $white;
+          border: $black10 solid 1px;
+        }
+
+        &-progress {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 2;
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
+          background: transparent;
+          transform: rotate(-90deg);
+
+          svg {
+            height: desktop-vw(44px);
+            width: desktop-vw(44px);
+          }
+        }
+      }
+
+      &-image {
+        position: absolute;
+        top: calc(100% - desktop-vw(74px));
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - desktop-vw(120px));
+
+        @include rounded();
+        overflow: hidden;
+
+        img {
+          @include image-default();
+        }
+
+        video {
+          @include image-default();
+        }
+      }
+
+
+    }
   }
 }
 </style>

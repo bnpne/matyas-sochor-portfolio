@@ -5,7 +5,7 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-plain-text'>
     <div class='section-plain-text-body'>
-      <SanityContent :blocks='data' />
+      <SanityContent :blocks='data.plainText' />
     </div>
   </section>
 </template>

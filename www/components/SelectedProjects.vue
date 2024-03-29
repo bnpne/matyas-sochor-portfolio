@@ -2,9 +2,11 @@
 defineProps(['projects'])
 
 const store = useStore()
+const route = useRoute()
 const { activeProject } = storeToRefs(store)
 
 onMounted(() => {
+  // console.log(activeProject)
 })
 </script>
 
@@ -21,7 +23,8 @@ onMounted(() => {
       </NuxtLink>
     </div>
     <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for='project, index in projects'
-      class="sidebar-projects-card" :class="{ active: activeProject == index && $device.isDesktop }">
+      class="sidebar-projects-card"
+      :class="{ active: activeProject == index && $device.isDesktop && route.path === '/' }">
       <div class='sidebar-projects-card-img'>
         <SanityImage :asset-id='project.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
       </div>

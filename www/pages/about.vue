@@ -18,14 +18,26 @@ onMounted(() => {
       <div class='about-container-flex'>
         <div v-if='!isMobile' class='about-avatar'>
           <ul class='about-avatar-list'>
-            <li>Website</li>
-            <li>Identity</li>
-            <li>Branding</li>
-            <li>Motion</li>
-            <li>Print</li>
+            <li>
+              <NuxtLink to='/archive'>
+                Website
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to='/archive'>Identity</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to='/archive'>Branding</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to='/archive'>Motion</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to='/archive'>Print</NuxtLink>
+            </li>
           </ul>
           <div v-if='about.bioImage' class='about-avatar-image'>
-            <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' />
+            <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
           </div>
         </div>
         <div class='about-info'>
@@ -34,14 +46,27 @@ onMounted(() => {
           </div>
           <div v-if='isMobile' class='about-avatar'>
             <ul class='about-avatar-list'>
-              <li>Website</li>
-              <li>Identity</li>
-              <li>Branding</li>
-              <li>Motion</li>
-              <li>Print</li>
+              <li>
+                <NuxtLink to='/archive'>
+                  Website
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to='/archive'>Identity</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to='/archive'>Branding</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to='/archive'>Motion</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to='/archive'>Print</NuxtLink>
+              </li>
+
             </ul>
             <div v-if='about.bioImage' class='about-avatar-image'>
-              <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' />
+              <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
             </div>
           </div>
           <template v-if='!isMobile'>
@@ -61,7 +86,7 @@ onMounted(() => {
       <div class='about-footer'>
         <div v-if='about.footerImage' class='about-footer-image'>
           <div class='about-footer-image-overlay'></div>
-          <SanityImage :asset-id='about.footerImage?.asset?._ref' format='auto' />
+          <SanityImage :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
           <div class='about-footer-image-text'>
             <p>Let's create something extraordinary together.</p>
             <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's Chat

@@ -110,7 +110,8 @@ onMounted(() => {
       <template v-if='route.path !== "/archive"'>
         <SocialPost v-if='data.socialPost' :post='data.socialPost' />
         <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
-        <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments' />
+        <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments'
+          :indexStart='data.selectedProjects.length' />
       </template>
       <template v-else>
         <ClientOnly>

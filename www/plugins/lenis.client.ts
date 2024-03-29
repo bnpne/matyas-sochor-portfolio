@@ -4,7 +4,7 @@ import R from '~/utils/R'
 export default defineNuxtPlugin(() => {
   const scroll = useScroll()
 
-  const lenis = new Lenis({lerp: 0.075})
+  const lenis = new Lenis({lerp: 0.1})
 
   // @ts-ignore
   R.add(time => {
@@ -21,6 +21,10 @@ export default defineNuxtPlugin(() => {
     lenis.start()
   }
 
+  const scrollToTop = () => {
+    lenis.scrollTo(0)
+  }
+
   scroll.value.scrollY = window.scrollY
 
   lenis.on('scroll', (_e: any) => {
@@ -32,6 +36,7 @@ export default defineNuxtPlugin(() => {
       lenis,
       scrollStop,
       scrollStart,
+      scrollToTop,
     },
   }
 })

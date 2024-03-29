@@ -1,7 +1,7 @@
 <script setup lang='ts'>
-defineProps(['experiments'])
+defineProps(['experiments', 'indexStart'])
 
-
+const route = useRoute()
 const store = useStore()
 const { activeProject } = storeToRefs(store)
 </script>
@@ -19,7 +19,8 @@ const { activeProject } = storeToRefs(store)
       </NuxtLink>
     </div>
     <NuxtLink :to="`/experiments/${experiment.projectSlug?.current}`" v-for='experiment, index in experiments'
-      class='sidebar-experiments-card' :class="{ active: activeProject == index && $device.isDesktop }">
+      class='sidebar-experiments-card'
+      :class="{ active: activeProject == index + indexStart && $device.isDesktop && route.path === '/' }">
       <div class='sidebar-experiments-card-img'>
         <SanityImage :asset-id='experiment.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
       </div>

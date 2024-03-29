@@ -49,10 +49,40 @@ export default defineType({
       validation: rule => rule.required(),
     }),
     defineField({
+      // title: 'Project Case Image',
+      // name: 'projectCaseImage',
+      // description: 'Image that appears on the homepage as a Case Image',
+      // type: 'image',
+      // validation: rule => rule.required(),
       title: 'Project Case Image',
       name: 'projectCaseImage',
-      description: 'Image that appears on the homepage as a Case Image',
-      type: 'image',
+      type: 'object',
+      fields: [
+        defineField({
+          title: 'Image or Video',
+          type: 'string',
+          name: 'projectCaseSelection',
+          options: {
+            layout: 'radio',
+            list: [
+              {title: 'Image', value: 'image'},
+              {title: 'Video', value: 'video'},
+            ],
+          },
+        }),
+        defineField({
+          title: 'Image',
+          type: 'image',
+          name: 'image',
+          hidden: ({parent}) => parent?.projectCaseSelection !== 'image',
+        }),
+        defineField({
+          title: 'Video',
+          type: 'file',
+          name: 'video',
+          hidden: ({parent}) => parent?.projectCaseSelection !== 'video',
+        }),
+      ],
       validation: rule => rule.required(),
     }),
     defineField({
