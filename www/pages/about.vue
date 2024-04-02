@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+const app = useNuxtApp()
 const query = groq`*[_type == 'about'][0]`
 const { data: about } = useSanityQuery(query)
 
@@ -9,6 +10,7 @@ useHead({
 })
 
 onMounted(() => {
+  app.$scrollStart()
 })
 </script>
 

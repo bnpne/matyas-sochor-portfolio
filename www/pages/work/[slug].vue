@@ -47,8 +47,11 @@ async function getIndex() {
   await nextTick()
 }
 
-watch(isNext, () => {
-  console.log(isNext.value)
+watchEffect(() => {
+  getIndex()
+  useHead({
+    title: `${work.value?.projectTitle} | Matyas Sochor`
+  })
 })
 
 onUpdated(() => {
@@ -60,15 +63,8 @@ onMounted(() => {
   tl.from('.work-hero', { opacity: 0 })
     .from('.intro-anima', { scale: 1.2 }, '>-.9')
     .from('.detail-anima', { y: '50%', opacity: 0, stagger: .17 }, '>-.5')
-
   ////////
   app.$scrollToTop()
-  watch(work, () => {
-    getIndex()
-    useHead({
-      title: `${work.value?.projectTitle} | Matyas Sochor`
-    })
-  })
 
   app.$lenis.on('scroll', (e) => {
     lenisProgress.value = e.progress
