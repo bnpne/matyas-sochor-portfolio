@@ -1,9 +1,11 @@
 <script setup lang='ts'>
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const el = ref()
 
 onMounted(() => {
+  ScrollTrigger.refresh()
   const children = gsap.utils.toArray(el.value.children)
   gsap.from(children, {
     opacity: 0,

@@ -5,17 +5,23 @@ defineProps(['data'])
 <template>
   <div v-if='data' class='sc-list-section'>
     <div class='sc-list-section-header'>
-      <p>Selected Projects & Collaborations</p>
-      <div class='sc-list-section-header-divider'></div>
+      <ScrollFadeIn>
+        <p>Selected Projects & Collaborations</p>
+      </ScrollFadeIn>
+      <ScrollDivider>
+        <div class='sc-list-section-header-divider'></div>
+      </ScrollDivider>
     </div>
     <div class='sc-list-section-info'>
-      <div v-for='info in data' class='sc-list-section-info-line'>
-        <p>{{ info.projectTitle }}</p>
-        <div class='sc-list-section-info-line-right'>
-          <p>{{ info.projectType }}</p>
-          <p>{{ info.projectDate.split('-')[0] }}</p>
+      <ScrollFadeIn>
+        <div v-for='info in data' class='sc-list-section-info-line'>
+          <p>{{ info.projectTitle }}</p>
+          <div class='sc-list-section-info-line-right'>
+            <p>{{ info.projectType }}</p>
+            <p>{{ info.projectDate.split('-')[0] }}</p>
+          </div>
         </div>
-      </div>
+      </ScrollFadeIn>
     </div>
   </div>
 </template>

@@ -25,7 +25,13 @@ const { data: work } = useSanityQuery(query)
 const store = useStore()
 const { allProjects } = storeToRefs(store)
 
-const tl = gsap.timeline({ defaults: { duration: 1, ease: 'circ.out' } })
+const tl = gsap.timeline({
+  defaults: { duration: 1, ease: 'circ.out' }, onStart: () => {
+    app.$scrollToTop()
+    app.$scrollStop()
+  }, onComplete: () =>
+    app.$scrollStart()
+})
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -73,24 +79,22 @@ onMounted(() => {
   let t = 0
   window.addEventListener('wheel', async (e) => {
     if (lenisProgress.value === 1) {
-
       t += e.deltaY / 20
       t = Math.min(Math.max(t, 0), 100)
       gsap.to(progress, { value: t, ease: 'circ.out' })
 
       if (t === 100) {
+        app.$scrollStop()
         await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`)
       }
     } else {
       t = 0
       gsap.to(progress, { value: 0, ease: 'circ.out' })
+
     }
   })
 })
 
-onUnmounted(() => {
-  app.$scrollStop()
-})
 </script>
 
 <template>

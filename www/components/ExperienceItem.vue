@@ -6,19 +6,25 @@ const { isMobile } = useDevice()
 <template>
   <div v-if='data' class='experience-list-section'>
     <div class='experience-list-section-header'>
-      <p>Experience</p>
-      <div class='experience-list-section-header-divider'></div>
+      <ScrollFadeIn>
+        <p>Experience</p>
+      </ScrollFadeIn>
+      <ScrollDivider>
+        <div class='experience-list-section-header-divider'></div>
+      </ScrollDivider>
     </div>
     <div class='experience-list-section-info'>
-      <div v-for='info in data' class='experience-list-section-info-line'>
-        <p v-if='!info.jobLink'>{{ info.job }}</p>
-        <NuxtLink v-else :to='info.jobLink' target='_blank'>{{ info.job }}</NuxtLink>
-        <div class='experience-list-section-info-line-right'>
-          <p v-if='!isMobile'>{{ info.jobRole }}</p>
-          <p v-if='!isMobile'>{{ info.jobLocation }}</p>
-          <p>{{ info.jobStartDate.split('-')[0] }} - Current</p>
+      <ScrollFadeIn>
+        <div v-for='info in data' class='experience-list-section-info-line'>
+          <p v-if='!info.jobLink'>{{ info.job }}</p>
+          <NuxtLink v-else :to='info.jobLink' target='_blank'>{{ info.job }}</NuxtLink>
+          <div class='experience-list-section-info-line-right'>
+            <p v-if='!isMobile'>{{ info.jobRole }}</p>
+            <p v-if='!isMobile'>{{ info.jobLocation }}</p>
+            <p>{{ info.jobStartDate.split('-')[0] }} - Current</p>
+          </div>
         </div>
-      </div>
+      </ScrollFadeIn>
     </div>
   </div>
 </template>

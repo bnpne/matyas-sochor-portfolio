@@ -5,18 +5,24 @@ defineProps(['data'])
 <template>
   <div v-if='data' class='list-section'>
     <div class='list-section-header'>
-      <p>Education</p>
-      <div class='list-section-header-divider'></div>
+      <ScrollFadeIn>
+        <p>Education</p>
+      </ScrollFadeIn>
+      <ScrollDivider>
+        <div class='list-section-header-divider'></div>
+      </ScrollDivider>
     </div>
     <div class='list-section-info'>
-      <div v-for='info in data' class='list-section-info-line'>
-        <p>{{ info.school }}</p>
-        <div class='list-section-info-line-right'>
-          <p>{{ info.schoolLocation }}</p>
-          <p v-if='!info.currentlyAttending'>{{ info.schoolDate.split('-')[0] }}</p>
-          <p v-else>Current</p>
+      <ScrollFadeIn>
+        <div v-for='info in data' class='list-section-info-line'>
+          <p>{{ info.school }}</p>
+          <div class='list-section-info-line-right'>
+            <p>{{ info.schoolLocation }}</p>
+            <p v-if='!info.currentlyAttending'>{{ info.schoolDate.split('-')[0] }}</p>
+            <p v-else>Current</p>
+          </div>
         </div>
-      </div>
+      </ScrollFadeIn>
     </div>
   </div>
 </template>

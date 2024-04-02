@@ -5,17 +5,23 @@ defineProps(['data'])
 <template>
   <div v-if='data' class='recognition-list-section'>
     <div class='recognition-list-section-header'>
-      <p>Recognition</p>
-      <div class='recognition-list-section-header-divider'></div>
+      <ScrollFadeIn>
+        <p>Recognition</p>
+      </ScrollFadeIn>
+      <ScrollDivider>
+        <div class='recognition-list-section-header-divider'></div>
+      </ScrollDivider>
     </div>
     <div class='recognition-list-section-info'>
-      <div v-for='info in data' class='recognition-list-section-info-line'>
-        <p v-if='!info.awardLink'>{{ info.award }}</p>
-        <NuxtLink v-else :to='info.awardLink' target='_blank'>{{ info.award }}</NuxtLink>
-        <div class='recognition-list-section-info-line-right'>
-          <p>{{ info.awardDate.split('-')[0] }}</p>
+      <ScrollFadeIn>
+        <div v-for='info in data' class='recognition-list-section-info-line'>
+          <p v-if='!info.awardLink'>{{ info.award }}</p>
+          <NuxtLink v-else :to='info.awardLink' target='_blank'>{{ info.award }}</NuxtLink>
+          <div class='recognition-list-section-info-line-right'>
+            <p>{{ info.awardDate.split('-')[0] }}</p>
+          </div>
         </div>
-      </div>
+      </ScrollFadeIn>
     </div>
   </div>
 </template>

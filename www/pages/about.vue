@@ -20,34 +20,7 @@ onMounted(() => {
       <div class='about-container-flex'>
         <div v-if='!isMobile' class='about-avatar'>
           <ul class='about-avatar-list'>
-            <li>
-              <NuxtLink to='/archive'>
-                Website
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to='/archive'>Identity</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to='/archive'>Branding</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to='/archive'>Motion</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to='/archive'>Print</NuxtLink>
-            </li>
-          </ul>
-          <div v-if='about.bioImage' class='about-avatar-image'>
-            <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
-          </div>
-        </div>
-        <div class='about-info'>
-          <div v-if='about.bio' class='about-info-bio'>
-            <SanityContent :blocks='about.bio' />
-          </div>
-          <div v-if='isMobile' class='about-avatar'>
-            <ul class='about-avatar-list'>
+            <ScrollFadeIn>
               <li>
                 <NuxtLink to='/archive'>
                   Website
@@ -65,10 +38,46 @@ onMounted(() => {
               <li>
                 <NuxtLink to='/archive'>Print</NuxtLink>
               </li>
-
+            </ScrollFadeIn>
+          </ul>
+          <div v-if='about.bioImage' class='about-avatar-image'>
+            <ScrollScaleIn>
+              <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+            </ScrollScaleIn>
+          </div>
+        </div>
+        <div class='about-info'>
+          <div v-if='about.bio' class='about-info-bio'>
+            <ScrollFadeIn>
+              <SanityContent :blocks='about.bio' />
+            </ScrollFadeIn>
+          </div>
+          <div v-if='isMobile' class='about-avatar'>
+            <ul class='about-avatar-list'>
+              <ScrollFadeIn>
+                <li>
+                  <NuxtLink to='/archive'>
+                    Website
+                  </NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to='/archive'>Identity</NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to='/archive'>Branding</NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to='/archive'>Motion</NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to='/archive'>Print</NuxtLink>
+                </li>
+              </ScrollFadeIn>
             </ul>
             <div v-if='about.bioImage' class='about-avatar-image'>
-              <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+              <ScrollScaleIn>
+                <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+              </ScrollScaleIn>
             </div>
           </div>
           <template v-if='!isMobile'>
@@ -76,7 +85,7 @@ onMounted(() => {
               slideClass='about-info-carousel-image' :images='about.imageCarousel' />
           </template>
           <div v-if='about.resume' class='about-info-resume'>
-            <EducationItem v-if='about.resume.eductionList' :data='about.resume.eductionList' />
+            <EducationItem v-if='about.resume.educationList' :data='about.resume.educationList' />
             <ExperienceItem v-if='about.resume.experienceList' :data='about.resume.experienceList' />
             <RecognitionItem v-if='about.resume.recognitionList' :data='about.resume.recognitionList' />
             <SoftwareItem v-if='about.resume.softwareList' :data='about.resume.softwareList' />
@@ -86,15 +95,17 @@ onMounted(() => {
         </div>
       </div>
       <div class='about-footer'>
-        <div v-if='about.footerImage' class='about-footer-image'>
-          <div class='about-footer-image-overlay'></div>
-          <SanityImage :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
-          <div class='about-footer-image-text'>
-            <p>Let's create something extraordinary together.</p>
-            <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's Chat
-            </NuxtLink>
+        <ScrollScaleIn>
+          <div v-if='about.footerImage' class='about-footer-image'>
+            <div class='about-footer-image-overlay'></div>
+            <SanityImage :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
+            <div class='about-footer-image-text'>
+              <p>Let's create something extraordinary together.</p>
+              <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's Chat
+              </NuxtLink>
+            </div>
           </div>
-        </div>
+        </ScrollScaleIn>
         <div class='about-footer-links'>
           <div class='about-footer-link'>
             <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
