@@ -1,6 +1,37 @@
 <!-- WORK PAGE -->
 <script setup lang='ts'>
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+definePageMeta({
+  pageTransition: {
+    css: false,
+    name: 'work',
+    mode: 'out-in',
+    onEnter(el, done) {
+      const app = useNuxtApp()
+      ScrollTrigger.update()
+
+      const tl = gsap.timeline({
+        defaults: { duration: 1, ease: 'circ.out' },
+        onComplete: () => {
+          app.$scrollStart()
+          done()
+        }
+      })
+
+      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
+        .from('.work-hero', { opacity: 0 }, '>-.5')
+        .from('.intro-anima', { scale: 1.2 }, '>-.9')
+        .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
+    },
+    onLeave(el, done) {
+      const app = useNuxtApp()
+      app.$scrollStop()
+      gsap.to('.t-o', { opacity: 1, duration: .75, ease: 'circ.out', onComplete: () => { done() } })
+    },
+  },
+})
 
 const app = useNuxtApp()
 const router = useRouter()
@@ -24,14 +55,6 @@ const { data: work } = useSanityQuery(query)
 
 const store = useStore()
 const { allProjects } = storeToRefs(store)
-
-const tl = gsap.timeline({
-  defaults: { duration: 1, ease: 'circ.out' }, onStart: () => {
-    app.$scrollToTop()
-    app.$scrollStop()
-  }, onComplete: () =>
-    app.$scrollStart()
-})
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -60,32 +83,22 @@ watchEffect(() => {
   })
 })
 
-onUpdated(() => {
-  app.$scrollStart()
-})
-
 onMounted(() => {
-  // Animation
-  tl.from('.work-hero', { opacity: 0 })
-    .from('.intro-anima', { scale: 1.2 }, '>-.9')
-    .from('.detail-anima', { y: '50%', opacity: 0, stagger: .17 }, '>-.5')
-  ////////
-  app.$scrollToTop()
-
   app.$lenis.on('scroll', (e) => {
     lenisProgress.value = e.progress
   })
 
   let t = 0
-  window.addEventListener('wheel', async (e) => {
+  window.addEventListener('wheel', (e) => {
     if (lenisProgress.value === 1) {
       t += e.deltaY / 20
       t = Math.min(Math.max(t, 0), 100)
       gsap.to(progress, { value: t, ease: 'circ.out' })
 
       if (t === 100) {
-        app.$scrollStop()
-        await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`)
+        setTimeout(() => {
+          router.push({ path: `/work/${allProjects.value[isNext.value].projectSlug.current}` })
+        }, 500)
       }
     } else {
       t = 0
@@ -94,136 +107,137 @@ onMounted(() => {
     }
   })
 })
-
 </script>
 
 <template>
-  <NuxtLayout name='work' class='work' :data='work'>
-    <div v-if='work' class='work-container'>
-      <div class='work-hero'>
-        <div class='work-hero-img'>
-          <div class='work-hero-img-overlay'></div>
-          <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
-            <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format" w='1000'
-              fit='clip' />
-          </template>
-          <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
-            <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
-              <template #default="{ src }">
-                <video class='intro-anima' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
-              </template>
-            </SanityFile>
-          </template>
-          <div v-if='work.projectDetails' class='work-hero-details'>
-            <div class='work-hero-details-client detail-anima'>
-              <p>Client</p>
-              <NuxtLink v-for='client in work.projectDetails?.clients' :to='client.clientLink'
-                class='work-hero-details-client-link' target="_blank" rel="noreferrer">
-                {{ client.clientName }}
-              </NuxtLink>
-              <div class="work-hero-details-client-footer"></div>
-            </div>
-            <div class='work-hero-details-info '>
-              <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectYear &&
-    work.projectDetails?.projectType'>
-                <p>Type/Year</p>
-                <p v-for='type in work.projectDetails?.projectType'>{{ type }}</p>
+  <div class='work' id='page'>
+    <NuxtLayout name='work' :data='work'>
+      <div v-if='work' class='work-container'>
+        <div class='work-hero'>
+          <div class='work-hero-img'>
+            <div class='work-hero-img-overlay'></div>
+            <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
+              <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
+                w='1000' fit='clip' />
+            </template>
+            <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
+              <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
+                <template #default="{ src }">
+                  <video class='intro-anima' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                </template>
+              </SanityFile>
+            </template>
+            <div v-if='work.projectDetails' class='work-hero-details'>
+              <div class='work-hero-details-client detail-anima'>
+                <p>Client</p>
+                <NuxtLink v-for='client in work.projectDetails?.clients' :to='client.clientLink'
+                  class='work-hero-details-client-link' target="_blank" rel="noreferrer">
+                  {{ client.clientName }}
+                </NuxtLink>
+                <div class="work-hero-details-client-footer"></div>
               </div>
-              <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectRole'>
-                <p>My role</p>
-                <p v-for='role in work.projectDetails?.projectRole'>{{ role }}</p>
-              </div>
-              <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.agencies'>
-                <p>Agencies</p>
-                <p v-for='agency in work.projectDetails?.agencies'>{{ agency }}</p>
-              </div>
-              <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.awards'>
-                <p>Recognition</p>
-                <p v-for='award in work.projectDetails?.awards'>{{ award }}</p>
+              <div class='work-hero-details-info '>
+                <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectYear &&
+      work.projectDetails?.projectType'>
+                  <p>Type/Year</p>
+                  <p v-for='type in work.projectDetails?.projectType'>{{ type }}</p>
+                </div>
+                <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectRole'>
+                  <p>My role</p>
+                  <p v-for='role in work.projectDetails?.projectRole'>{{ role }}</p>
+                </div>
+                <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.agencies'>
+                  <p>Agencies</p>
+                  <p v-for='agency in work.projectDetails?.agencies'>{{ agency }}</p>
+                </div>
+                <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.awards'>
+                  <p>Recognition</p>
+                  <p v-for='award in work.projectDetails?.awards'>{{ award }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div v-if='work.projectHeroText' class='work-intro'>
-        <ScrollFadeIn>
-          <p class='work-intro-header'>Introduction</p>
-        </ScrollFadeIn>
-        <ScrollFadeIn>
-          <SanityContent :blocks='work.projectHeroText' />
-        </ScrollFadeIn>
-      </div>
-      <div v-if='work.projectSections' class='work-sections'>
-        <template v-for='section in work.projectSections.sections'>
-          <ImageGrid v-if='section._type == "imageGrid"' :data='section' />
-          <FullWidthImage v-else-if='section._type == "fullWidthImage"' :data='section' />
-          <ProjectText v-else-if='section._type == "projectText"' :data='section' />
-          <PlainText v-else-if='section._type == "projectPlainText"' :data='section' />
+        <div v-if='work.projectHeroText' class='work-intro'>
+          <ScrollFadeIn>
+            <p class='work-intro-header'>Introduction</p>
+          </ScrollFadeIn>
+          <ScrollFadeIn>
+            <SanityContent :blocks='work.projectHeroText' />
+          </ScrollFadeIn>
+        </div>
+        <div v-if='work.projectSections' class='work-sections'>
+          <template v-for='section in work.projectSections.sections'>
+            <ImageGrid v-if='section._type == "imageGrid"' :data='section' />
+            <FullWidthImage v-else-if='section._type == "fullWidthImage"' :data='section' />
+            <ProjectText v-else-if='section._type == "projectText"' :data='section' />
+            <PlainText v-else-if='section._type == "projectPlainText"' :data='section' />
+          </template>
+        </div>
+        <div v-if='work.projectCredits' class='work-credits'>
+          <ProjectCredits :data='work.projectCredits' />
+        </div>
+        <template v-if='allProjects[isNext]'>
+          <div class='work-footer'>
+            <ScrollFadeIn>
+              <p class='work-footer-text'>
+                Do you want to know more about my role,
+                the team and the process?
+              </p>
+            </ScrollFadeIn>
+            <div>
+              <ScrollFadeIn>
+                <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'>
+                  Let's Chat
+                </NuxtLink>
+              </ScrollFadeIn>
+            </div>
+            <ScrollDivider>
+              <div class='work-footer-divider'></div>
+            </ScrollDivider>
+            <div class='work-footer-scroll'>
+              <ScrollFadeIn>
+                <p class='work-footer-scroll-heading'>Scroll to next project</p>
+              </ScrollFadeIn>
+              <ScrollFadeIn>
+                <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2>
+              </ScrollFadeIn>
+              <ScrollFadeIn>
+                <div class='work-footer-scroll-spinner'>
+                  <div class='work-footer-scroll-spinner-base'>
+                    <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
+                        fill="black" />
+                    </svg>
+                  </div>
+                  <div class='work-footer-scroll-spinner-progress'>
+                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
+                        :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
+                    </svg>
+                  </div>
+                </div>
+              </ScrollFadeIn>
+              <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
+                <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                  <SanityImage :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format"
+                    w='1000' fit='clip' />
+                </template>
+                <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                  <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                    <template #default="{ src }">
+                      <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                    </template>
+                  </SanityFile>
+                </template>
+              </div>
+            </div>
+          </div>
         </template>
       </div>
-      <div v-if='work.projectCredits' class='work-credits'>
-        <ProjectCredits :data='work.projectCredits' />
-      </div>
-      <template v-if='allProjects[isNext]'>
-        <div class='work-footer'>
-          <ScrollFadeIn>
-            <p class='work-footer-text'>
-              Do you want to know more about my role,
-              the team and the process?
-            </p>
-          </ScrollFadeIn>
-          <div>
-            <ScrollFadeIn>
-              <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'>
-                Let's Chat
-              </NuxtLink>
-            </ScrollFadeIn>
-          </div>
-          <ScrollDivider>
-            <div class='work-footer-divider'></div>
-          </ScrollDivider>
-          <div class='work-footer-scroll'>
-            <ScrollFadeIn>
-              <p class='work-footer-scroll-heading'>Scroll to next project</p>
-            </ScrollFadeIn>
-            <ScrollFadeIn>
-              <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2>
-            </ScrollFadeIn>
-            <ScrollFadeIn>
-              <div class='work-footer-scroll-spinner'>
-                <div class='work-footer-scroll-spinner-base'>
-                  <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
-                      fill="black" />
-                  </svg>
-                </div>
-                <div class='work-footer-scroll-spinner-progress'>
-                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
-                      :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
-                  </svg>
-                </div>
-              </div>
-            </ScrollFadeIn>
-            <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
-              <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                <SanityImage :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format" w='1000'
-                  fit='clip' />
-              </template>
-              <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
-                  <template #default="{ src }">
-                    <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
-                  </template>
-                </SanityFile>
-              </template>
-            </div>
-          </div>
-        </div>
-      </template>
-    </div>
-  </NuxtLayout>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style lang='scss'>

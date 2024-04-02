@@ -67,7 +67,7 @@ onMounted(() => {
       <div class='page-layout-notification-container'>
         <NuxtLink :to="`/work/${notificationsLink.list[index].current}`" v-for='no, index in notifications.list'
           class='page-layout-notification'>
-          <div class='page-layout-notification-img'>
+          <div v-if='no.notificationImage' class='page-layout-notification-img'>
             <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
           </div>
           <div class='page-layout-notification-info'>

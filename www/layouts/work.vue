@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id='page' class='work-layout'>
+  <div class='work-layout'>
     <template v-if='!isMobile'>
       <nav class='work-layout-nav'>
         <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
@@ -152,7 +152,7 @@ onMounted(() => {
     <div class='work-layout-container'>
       <div v-if='!isMobile' class='work-layout-notification-container'>
         <div v-for='no, index in notifications.list' class='work-layout-notification'>
-          <div class='work-layout-notification-img'>
+          <div v-if='no.notificationImage' class='work-layout-notification-img'>
             <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
           </div>
           <div class='work-layout-notification-info'>

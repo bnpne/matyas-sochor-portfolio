@@ -25,6 +25,7 @@ www.studiopaine.com
 <template>
   <NuxtLayout name='default'>
     <Preloader />
+    <TransitionElement />
     <NuxtPage />
   </NuxtLayout>
 </template>

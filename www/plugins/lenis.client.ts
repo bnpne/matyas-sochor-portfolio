@@ -27,7 +27,7 @@ export default defineNuxtPlugin(() => {
   }
 
   const scrollToTop = () => {
-    lenis.scrollTo(0)
+    lenis.scrollTo(0, {immediate: true})
   }
 
   scroll.value.scrollY = window.scrollY

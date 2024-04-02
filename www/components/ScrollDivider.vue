@@ -4,7 +4,7 @@ import gsap from 'gsap'
 const el = ref()
 
 onMounted(() => {
-  const children = gsap.utils.toArray('img, video', el.value)
+  const children = gsap.utils.toArray(el.value.children, el.value)
   gsap.from(children, {
     width: '0%',
     ease: 'circ.out',

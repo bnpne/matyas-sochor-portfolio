@@ -22,7 +22,6 @@ watch(activeFilters.value, () => {
     active.isActive = true
   } else {
     let trigger = false
-    console.log(toRaw(activeFilters.value))
     activeFilters.value.forEach(f => {
       if (f.type === 'show') {
         let html = f.el.children[0].innerHTML

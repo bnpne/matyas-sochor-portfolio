@@ -14,60 +14,62 @@ onMounted(() => {
 </script>
 
 <template>
-  <NuxtLayout name='work' class='experiment' :data='experiment'>
-    <div v-if='experiment' class='experiment-container'>
-      <div class='experiment-hero'>
-        <div class='experiment-hero-img'>
-          <div class='experiment-hero-img-overlay'></div>
-          <SanityImage :asset-id="experiment.projectCaseImage?.asset?._ref" auto="format" w='1000' fit='clip' />
-          <div v-if='experiment.projectDetails' class='experiment-hero-details'>
-            <div class='experiment-hero-details-client'>
-              <p>Client</p>
-              <NuxtLink v-for='client in experiment.projectDetails?.clients' :to='client.clientLink'
-                class='experiment-hero-details-client-link' target="_blank" rel="noreferrer">
-                {{ client.clientName }}
-              </NuxtLink>
-              <div class="experiment-hero-details-client-footer"></div>
-            </div>
-            <div class='experiment-hero-details-info'>
-              <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.projectYear &&
-    experiment.projectDetails?.projectType'>
-                <p>Type/Year</p>
-                <p v-for='type in experiment.projectDetails?.projectType'>{{ type }}</p>
+  <div class='experiment' id='page'>
+    <NuxtLayout name='work' :data='experiment'>
+      <div v-if='experiment' class='experiment-container'>
+        <div class='experiment-hero'>
+          <div class='experiment-hero-img'>
+            <div class='experiment-hero-img-overlay'></div>
+            <SanityImage :asset-id="experiment.projectCaseImage?.asset?._ref" auto="format" w='1000' fit='clip' />
+            <div v-if='experiment.projectDetails' class='experiment-hero-details'>
+              <div class='experiment-hero-details-client'>
+                <p>Client</p>
+                <NuxtLink v-for='client in experiment.projectDetails?.clients' :to='client.clientLink'
+                  class='experiment-hero-details-client-link' target="_blank" rel="noreferrer">
+                  {{ client.clientName }}
+                </NuxtLink>
+                <div class="experiment-hero-details-client-footer"></div>
               </div>
-              <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.projectRole'>
-                <p>My role</p>
-                <p v-for='role in experiment.projectDetails?.projectRole'>{{ role }}</p>
-              </div>
-              <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.agencies'>
-                <p>Agencies</p>
-                <p v-for='agency in experiment.projectDetails?.agencies'>{{ agency }}</p>
-              </div>
-              <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.awards'>
-                <p>Recognition</p>
-                <p v-for='award in experiment.projectDetails?.awards'>{{ award }}</p>
+              <div class='experiment-hero-details-info'>
+                <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.projectYear &&
+      experiment.projectDetails?.projectType'>
+                  <p>Type/Year</p>
+                  <p v-for='type in experiment.projectDetails?.projectType'>{{ type }}</p>
+                </div>
+                <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.projectRole'>
+                  <p>My role</p>
+                  <p v-for='role in experiment.projectDetails?.projectRole'>{{ role }}</p>
+                </div>
+                <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.agencies'>
+                  <p>Agencies</p>
+                  <p v-for='agency in experiment.projectDetails?.agencies'>{{ agency }}</p>
+                </div>
+                <div class='experiment-hero-details-info-section' v-if='experiment.projectDetails?.awards'>
+                  <p>Recognition</p>
+                  <p v-for='award in experiment.projectDetails?.awards'>{{ award }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div v-if='experiment.projectHeroText' class='experiment-intro'>
+          <p class='experiment-intro-header'>Introduction</p>
+          <SanityContent :blocks='experiment.projectHeroText' />
+        </div>
+        <div v-if='experiment.projectSections' class='experiment-sections'>
+          <template v-for='section in experiment.projectSections.sections'>
+            <ImageGrid v-if='section._type == "imageGrid"' :data='section' />
+            <FullWidthImage v-else-if='section._type == "fullWidthImage"' :data='section' />
+            <ProjectText v-else-if='section._type == "projectText"' :data='section' />
+            <PlainText v-else-if='section._type == "projectPlainText"' :data='section' />
+          </template>
+        </div>
+        <div v-if='experiment.projectCredits' class='experiment-credits'>
+          <ProjectCredits :data='experiment.projectCredits' />
+        </div>
       </div>
-      <div v-if='experiment.projectHeroText' class='experiment-intro'>
-        <p class='experiment-intro-header'>Introduction</p>
-        <SanityContent :blocks='experiment.projectHeroText' />
-      </div>
-      <div v-if='experiment.projectSections' class='experiment-sections'>
-        <template v-for='section in experiment.projectSections.sections'>
-          <ImageGrid v-if='section._type == "imageGrid"' :data='section' />
-          <FullWidthImage v-else-if='section._type == "fullWidthImage"' :data='section' />
-          <ProjectText v-else-if='section._type == "projectText"' :data='section' />
-          <PlainText v-else-if='section._type == "projectPlainText"' :data='section' />
-        </template>
-      </div>
-      <div v-if='experiment.projectCredits' class='experiment-credits'>
-        <ProjectCredits :data='experiment.projectCredits' />
-      </div>
-    </div>
-  </NuxtLayout>
+    </NuxtLayout>
+  </div>
 </template>
 
 

@@ -1,4 +1,33 @@
 <script setup lang='ts'>
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+definePageMeta({
+  pageTransition: {
+    css: false,
+    name: 'archive',
+    mode: 'out-in',
+    onEnter(el, done) {
+      const app = useNuxtApp()
+      ScrollTrigger.update()
+
+      const tl = gsap.timeline({
+        defaults: { duration: 1, ease: 'circ.out' },
+        onComplete: () => {
+          app.$scrollStart()
+          done()
+        }
+      })
+
+      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
+    },
+    onLeave(el, done) {
+      const app = useNuxtApp()
+      app.$scrollStop()
+      gsap.to('.t-o', { opacity: 1, duration: .75, ease: 'circ.out', onComplete: () => { done() } })
+    },
+  },
+})
 const query = groq`*[_type == 'articles'][0]{..., articleList[]{..., project->{projectSlug, projectType, projectFilters{filter[]->}},'articleType':articleTypeFilters.showFilter[]->}}`
 const { data: archive } = useSanityQuery(query)
 
@@ -24,26 +53,28 @@ onMounted(() => {
 </script>
 
 <template>
-  <NuxtLayout name='archive' class='archive'>
-    <div v-if='archive?.articleList' ref='grid' class='archive-container'>
-      <ArchiveCard v-for='card in archive.articleList' :card='card' />
-    </div>
-    <div v-if='isMobile' class='archive-mobile'>
-      <div @click='toggleFilter' v-if='!filtersIsOpen.isOpen' class="archive-mobile-pill">
-        Filter
+  <div class='archive' id='page'>
+    <NuxtLayout name='archive'>
+      <div v-if='archive?.articleList' ref='grid' class='archive-container'>
+        <ArchiveCard v-for='card in archive.articleList' :card='card' />
       </div>
-      <div @click='toggleFilter' v-else class="archive-mobile-pill-close">
-        Close
+      <div v-if='isMobile' class='archive-mobile'>
+        <div @click='toggleFilter' v-if='!filtersIsOpen.isOpen' class="archive-mobile-pill">
+          Filter
+        </div>
+        <div @click='toggleFilter' v-else class="archive-mobile-pill-close">
+          Close
+        </div>
       </div>
-    </div>
-    <div v-if='isMobile' class='archive-overlay' :class='{ open: filtersIsOpen.isOpen }'>
-      <ClientOnly>
-        <ArchiveShowFilters />
-        <ArchiveProjectFilters />
-        <ArchiveExperimentFilters />
-      </ClientOnly>
-    </div>
-  </NuxtLayout>
+      <div v-if='isMobile' class='archive-overlay' :class='{ open: filtersIsOpen.isOpen }'>
+        <ClientOnly>
+          <ArchiveShowFilters />
+          <ArchiveProjectFilters />
+          <ArchiveExperimentFilters />
+        </ClientOnly>
+      </div>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style lang='scss'>
