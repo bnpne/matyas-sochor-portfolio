@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="post" class='sidebar-post'>
+  <div v-if="post" class='sidebar-post pre-anima'>
     <div class='sidebar-post-text'>
       <SanityContent :blocks="post?.postText" />
     </div>

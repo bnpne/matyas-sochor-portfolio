@@ -4,9 +4,11 @@ defineProps(['data'])
 
 <template v-if='data'>
   <section class='section-plain-text'>
-    <div class='section-plain-text-body'>
-      <SanityContent :blocks='data.plainText' />
-    </div>
+    <ScrollFadeIn>
+      <div class='section-plain-text-body'>
+        <SanityContent :blocks='data.plainText' />
+      </div>
+    </ScrollFadeIn>
   </section>
 </template>
 

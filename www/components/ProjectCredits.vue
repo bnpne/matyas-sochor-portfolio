@@ -5,18 +5,22 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-credits'>
     <div class="section-credits-container">
-      <p class='section-credits-title'>Credits</p>
+      <ScrollFadeIn>
+        <p class='section-credits-title'>Credits</p>
+      </ScrollFadeIn>
       <ul>
         <li class='section-credits-credit' v-for="credit in data">
-          <p class='section-credits-credit-text'>
-            <span>
-              {{ credit.creditTitle }}
-            </span>
-            <span>&nbsp;·&nbsp;</span>
-            <span>
-              {{ credit.creditName }}
-            </span>
-          </p>
+          <ScrollFadeIn>
+            <p class='section-credits-credit-text'>
+              <span>
+                {{ credit.creditTitle }}
+              </span>
+              <span>&nbsp;·&nbsp;</span>
+              <span>
+                {{ credit.creditName }}
+              </span>
+            </p>
+          </ScrollFadeIn>
           <div class='section-credits-credit-divider'></div>
         </li>
       </ul>

@@ -40,7 +40,7 @@ onMounted(() => {
 
   setTimeout(() => {
     toggleNotification()
-  }, 2000)
+  }, 5000)
 
   if (data) {
     toRaw(data.value)?.forEach((n: any) => {

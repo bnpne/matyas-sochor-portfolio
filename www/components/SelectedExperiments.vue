@@ -7,7 +7,7 @@ const { activeProject } = storeToRefs(store)
 </script>
 
 <template>
-  <div v-if='experiments' class='sidebar-experiments'>
+  <div v-if='experiments' class='sidebar-experiments pre-anima'>
     <div class='sidebar-experiments-heading'>
       <div>Selected Experiments</div>
       <NuxtLink to='/archive' class='sidebar-experiments-heading-work'>

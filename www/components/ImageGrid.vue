@@ -3,11 +3,13 @@ defineProps(['data'])
 </script>
 
 <template v-if='data'>
-  <section class='section-image-grid'>
-    <div v-for="image in data.gridImage" class='section-image-grid-image'>
-      <SanityImage :asset-id="image.asset?._ref" auto="format" w='1000' fit='clip' />
-    </div>
-  </section>
+  <ScrollScaleIn>
+    <section class='section-image-grid'>
+      <div v-for="image in data.gridImage" class='section-image-grid-image'>
+        <SanityImage :asset-id="image.asset?._ref" auto="format" w='1000' fit='clip' />
+      </div>
+    </section>
+  </ScrollScaleIn>
 </template>
 
 <style lang='scss'>

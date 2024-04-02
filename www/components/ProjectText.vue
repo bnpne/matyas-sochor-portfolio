@@ -5,15 +5,21 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-project-text'>
     <div class='section-project-text-heading'>
-      <p class='section-project-text-heading-highlight'>
-        {{ data.projectTextHighlight }}
-      </p>
-      <p class='section-project-text-heading-title'>
-        {{ data.projectTextTitle }}
-      </p>
+      <ScrollFadeIn>
+        <p class='section-project-text-heading-highlight'>
+          {{ data.projectTextHighlight }}
+        </p>
+      </ScrollFadeIn>
+      <ScrollFadeIn>
+        <p class='section-project-text-heading-title'>
+          {{ data.projectTextTitle }}
+        </p>
+      </ScrollFadeIn>
     </div>
     <div class='section-project-text-body'>
-      <SanityContent :blocks='data.projectTextBody' />
+      <ScrollFadeIn>
+        <SanityContent :blocks='data.projectTextBody' />
+      </ScrollFadeIn>
     </div>
   </section>
 </template>

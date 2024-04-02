@@ -11,7 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if='projects' class='sidebar-projects'>
+  <div v-if='projects' class='sidebar-projects pre-anima'>
     <div class='sidebar-projects-heading'>
       <div>Selected Work</div>
       <NuxtLink to='/archive' class='sidebar-projects-heading-work'>
