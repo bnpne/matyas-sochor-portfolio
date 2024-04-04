@@ -29,7 +29,7 @@ const number = Math.floor(Math.random() * (3000 - 1000 + 1) + 1000)
 const likePost = () => {
   if (!postLiked) {
     store.incrementPostLikes()
-    gsap.to('.heart', { keyframes: [{ y: '-10%', rotate: 20, opacity: 1, duration: .6 }, { y: '0%', rotate: 0, opacity: 0, delay: .25, duration: 1 }], ease: 'heart' })
+    // gsap.to('.heart', { keyframes: [{ y: '-10%', rotate: 20, opacity: 1, duration: .6 }, { y: '0%', rotate: 0, opacity: 0, delay: .25, duration: 1 }], ease: 'heart' })
 
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-gray', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
@@ -37,7 +37,7 @@ const likePost = () => {
 
   } else {
     store.decrementPostLikes()
-    gsap.set('.heart', { opacity: 0, rotate: 0, y: '220%' })
+    // gsap.set('.heart', { opacity: 0, rotate: 0, y: '220%' })
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-red', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
     tl.fromTo('.mini-heart-gray', { scale: 1.4 }, { scale: 1, })
@@ -63,6 +63,7 @@ onMounted(() => {
 
 <template>
   <div v-if="post" class='sidebar-post pre-anima'>
+    <div @dblclick.native='likePost' class='sidebar-post-overlay'></div>
     <div class='sidebar-post-text'>
       <SanityContent :blocks="post?.postText" />
     </div>
@@ -95,12 +96,12 @@ onMounted(() => {
         <div>{{ post?.postLocation }}</div>
       </div>
     </div>
-    <svg ref='heart' class='heart' width="62" height="58" viewBox="0 0 62 58" fill="none"
-      xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M44.7539 1.55996H44.754C46.8826 1.55996 48.9904 1.97922 50.9569 2.7938C52.9235 3.60837 54.7104 4.80232 56.2155 6.30746C57.7206 7.8126 58.9146 9.59947 59.7292 11.566C60.5437 13.5326 60.963 15.6403 60.963 17.7689C60.963 26.2803 56.1212 34.113 49.856 40.7842C43.7318 47.3051 36.3254 52.6343 31.0012 56.3119C25.6771 52.6343 18.2707 47.3051 12.1465 40.7842C5.88121 34.113 1.03945 26.2803 1.03945 17.7689C1.03945 13.47 2.74718 9.34723 5.78695 6.30746C8.82673 3.26769 12.9495 1.55996 17.2484 1.55996H17.2485C19.8516 1.55958 22.4163 2.1873 24.7249 3.38984C27.0335 4.59237 29.0179 6.33421 30.5095 8.46747L31.0012 9.17068L31.4929 8.46747C32.9846 6.33421 34.969 4.59237 37.2776 3.38984C39.5862 2.1873 42.1509 1.55958 44.7539 1.55996Z"
-        fill="#F02F2F" stroke="#F02F2F" stroke-width="1.2" />
-    </svg>
+    <!-- <svg ref='heart' class='heart' width="62" height="58" viewBox="0 0 62 58" fill="none" -->
+    <!--   xmlns="http://www.w3.org/2000/svg"> -->
+    <!--   <path -->
+    <!--     d="M44.7539 1.55996H44.754C46.8826 1.55996 48.9904 1.97922 50.9569 2.7938C52.9235 3.60837 54.7104 4.80232 56.2155 6.30746C57.7206 7.8126 58.9146 9.59947 59.7292 11.566C60.5437 13.5326 60.963 15.6403 60.963 17.7689C60.963 26.2803 56.1212 34.113 49.856 40.7842C43.7318 47.3051 36.3254 52.6343 31.0012 56.3119C25.6771 52.6343 18.2707 47.3051 12.1465 40.7842C5.88121 34.113 1.03945 26.2803 1.03945 17.7689C1.03945 13.47 2.74718 9.34723 5.78695 6.30746C8.82673 3.26769 12.9495 1.55996 17.2484 1.55996H17.2485C19.8516 1.55958 22.4163 2.1873 24.7249 3.38984C27.0335 4.59237 29.0179 6.33421 30.5095 8.46747L31.0012 9.17068L31.4929 8.46747C32.9846 6.33421 34.969 4.59237 37.2776 3.38984C39.5862 2.1873 42.1509 1.55958 44.7539 1.55996Z" -->
+    <!--     fill="#F02F2F" stroke="#F02F2F" stroke-width="1.2" /> -->
+    <!-- </svg> -->
   </div>
 </template>
 
@@ -116,6 +117,18 @@ onMounted(() => {
   @include mobile() {
     padding: mobile-vw(12px);
     gap: mobile-vw(16px);
+  }
+
+  &-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    @include rounded();
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 
   .heart {
@@ -145,6 +158,8 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       gap: desktop-vw(5px);
+      position: relative;
+      z-index: 10;
 
       align-items: center;
       cursor: pointer;

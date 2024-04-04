@@ -48,7 +48,7 @@ export function horizontalLoop(items, config) {
       return xPercents[i]
     },
   })
-  gsap.set(items, {x: '100%'})
+  gsap.set(items, {x: '0%'})
   totalWidth =
     items[length - 1].offsetLeft +
     (xPercents[length - 1] / 100) * widths[length - 1] -
@@ -58,9 +58,9 @@ export function horizontalLoop(items, config) {
     parseFloat(config.paddingRight || 0)
   for (i = 0; i < length; i++) {
     item = items[i]
-    curX = (xPercents[i] / 100) * widths[i] - widths[i]
-    distanceToStart = widths[i]
-    // distanceToStart = 0
+    curX = (xPercents[i] / 100) * widths[i]
+    // distanceToStart = widths[i]
+    distanceToStart = 0
     distanceToLoop =
       distanceToStart + widths[i] * gsap.getProperty(item, 'scaleX')
     tl.to(

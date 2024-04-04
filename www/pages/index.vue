@@ -118,6 +118,9 @@ onBeforeUnmount(() => {
                 <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
         project.projectSnippet
       }}</p>
+                <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
+        project.projectSnippet
+                  }}</p>
               </div>
             </div>
           </div>
@@ -145,6 +148,7 @@ onBeforeUnmount(() => {
   &-project {
     position: relative;
     min-height: desktop-vw(866px);
+    max-height: desktop-vw(866px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -222,6 +226,9 @@ onBeforeUnmount(() => {
           width: 100%;
           height: 100%;
           z-index: 2;
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
 
         &-text {

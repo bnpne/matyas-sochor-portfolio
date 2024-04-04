@@ -310,7 +310,7 @@ onBeforeUnmount(() => {
       left: 0;
       background: $white10;
       backdrop-filter: blur(10px);
-      padding: desktop-vw(18px) desktop-vw(14px) desktop-vw(28px);
+      padding: desktop-vw(18px) desktop-vw(24px) desktop-vw(28px);
       display: flex;
       flex-direction: row;
       justify-content: space-between;
