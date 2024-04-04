@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const el = ref()
 
@@ -13,7 +14,6 @@ onMounted(() => {
     scrollTrigger: {
       trigger: el.value,
       start: 'top 95%',
-      // markers: true
     }
   })
 })

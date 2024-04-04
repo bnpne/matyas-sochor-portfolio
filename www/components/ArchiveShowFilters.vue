@@ -4,38 +4,24 @@ const { data: filters } = useSanityQuery(query)
 
 const store = useStore()
 const { showFilters, showFilterLengths, activeFilters } = storeToRefs(store)
-// const activeFilters = reactive({ filters: [] })
 
 const reset = ref(false)
+const filterButton = ref([])
 
-const resetFilter = (event) => {
+const resetFilter = async (event) => {
   event.preventDefault()
-  activeFilters.value.forEach((f, i) => {
-    if (f.type === 'show') {
+  filterButton.value.forEach((f, i) => {
+    if (f.classList.contains('active')) {
       f.classList.toggle('active')
     }
   })
   store.clearActiveShowFilters()
+  await navigateTo({
+    path: '/archive',
+  })
   reset.value = false
 }
 
-// const selectFilter = (event) => {
-//   event.preventDefault()
-//   event.target.classList.toggle('active')
-//
-//   if (event.target.classList.contains('active')) {
-//     store.addActiveFilter(event.target)
-//
-//     if (activeFilters.value.length > 0) {
-//       reset.value = true
-//     }
-//   } else {
-//     store.removeActiveFilter(event.target)
-//     if (activeFilters.value.length === 0) {
-//       reset.value = false
-//     }
-//   }
-// }
 const selectFilter = (event) => {
   event.preventDefault()
   event.target.classList.toggle('active')
@@ -54,6 +40,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   } else {
@@ -69,6 +57,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   }
@@ -106,7 +96,7 @@ onUnmounted(() => {
       </div>
     </div>
     <div v-if='showFilters' class='filters-filters'>
-      <div @click='selectFilter' v-for='filter, index in showFilters' class='filters-filter'>
+      <div ref='filterButton' @click='selectFilter' v-for='filter, index in showFilters' class='filters-filter'>
         <span style='pointer-events: none;'>
           {{ filter === 'Selected Project' ? filter.split(' ')[1] : filter }}
         </span>
@@ -192,9 +182,13 @@ onUnmounted(() => {
     }
 
     &:hover {
+      background-color: $black10 !important;
+      color: $black !important;
+      border: 1px $black10 solid !important;
+
       &>span {
         &:last-child {
-          color: $white50;
+          color: $black50 !important;
         }
       }
 

@@ -1,12 +1,13 @@
 <script setup lang='ts'>
-const props = defineProps(['card'])
+const props = defineProps(['card',])
 
 const store = useStore()
-const { activeFilters, activeProjectFilters } = storeToRefs(store)
+const { activeFilters } = storeToRefs(store)
 const { isMobile } = useDevice();
-
 const article = ref()
-const active = reactive({ isActive: true })
+const route = useRoute()
+const routeParams = reactive({ params: route.query.filter })
+const isActive = ref(true)
 
 const resizeGridItem = (item) => {
   const grid = document.querySelector(".archive-container");
@@ -16,43 +17,51 @@ const resizeGridItem = (item) => {
   item.style.gridRowEnd = "span " + rowSpan;
 }
 
+watch(() => route.query.filter, () => {
+  routeParams.params = route.query.filter ? route.query.filter : ''
 
-watch(activeFilters.value, () => {
-  if (activeFilters.value.length === 0) {
-    active.isActive = true
-  } else {
-    let trigger = false
-    activeFilters.value.forEach(f => {
-      if (f.type === 'show') {
-        let html = f.el.children[0].innerHTML
-        let t = props.card.articleType[0]?.showTagTitle
-        if (props.card.articleType[0]?.showTagTitle === 'Selected Project') t = 'Project'
+  if (route.query.filter) {
+    let splt = route.query.filter.split(';')
 
-        if (t === html) {
-          trigger = true
-        }
+    if (props.card.articleType[0]) {
+      let t = props.card.articleType[0]?.showTagTitle
+      if (props.card.articleType[0]?.showTagTitle === 'Selected Project') {
+        t = 'Project'
       }
-      else if (f.type === 'project' || f.type === 'experiement') {
-        let html = f.el.children[0].innerHTML
-        let t = props.card.project !== null || undefined ? props.card.project?.projectFilters?.filter : null
 
-        if (t !== null) {
-          t.forEach(p => {
-            if (p.tagTitle === html) {
-              trigger = true
+      if (splt.includes(t)) {
+        isActive.value = true
+
+        // if project, filter more
+        if (props.card.project && splt.includes('Project')) {
+          let y = props.card.project !== null || undefined ? props.card.project?.projectFilters?.filter[0].tagTitle : null
+
+          let tempF = activeFilters.value.filter(f => {
+            if (f.type === 'project') {
+              return f
             }
           })
-        } else {
-          trigger = false
+          let tempS = tempF.map(p => {
+            return p.el.children[0].innerHTML
+          })
+          if (tempS.length > 0) {
+            if (tempS.includes(y)) {
+              isActive.value = true
+            } else {
+              isActive.value = false
+            }
+          } else {
+            isActive.value = true
+          }
         }
+      } else {
+        isActive.value = false
       }
-    })
-
-    if (trigger === true) {
-      active.isActive = true
-    } else {
-      active.isActive = false
     }
+
+    // if project
+  } else {
+    isActive.value = true
   }
 })
 
@@ -65,8 +74,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if='card' ref='article' class='card'
-    :class='{ project: card.isProject, base: !card.isProject, active: active.isActive }'>
+  <div v-if='card' ref='article' class='card' :class='{
+    project: card.isProject, base: !card.isProject, active:
+      isActive
+  }'>
     <div class='card-heading'>
       <p class='card-type'>{{ card.articleType[0]?.showTagTitle }}</p>
       <div v-if='card.project?.projectFilters?.filter' class='card-tag'>{{

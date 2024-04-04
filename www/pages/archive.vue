@@ -9,7 +9,6 @@ definePageMeta({
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
-      ScrollTrigger.update()
 
       const tl = gsap.timeline({
         defaults: { duration: 1, ease: 'circ.out' },
@@ -28,8 +27,15 @@ definePageMeta({
     },
   },
 })
+
 const query = groq`*[_type == 'articles'][0]{..., articleList[]{..., project->{projectSlug, projectType, projectFilters{filter[]->}},'articleType':articleTypeFilters.showFilter[]->}}`
 const { data: archive } = useSanityQuery(query)
+
+const store = useStore()
+const { activeFilters, activeProjectFilters } = storeToRefs(store)
+const router = useRouter()
+const route = useRoute()
+const params = reactive({ value: [] })
 
 useHead({
   title: 'Archive | Matyas Sochor'
@@ -48,7 +54,49 @@ const toggleFilter = () => {
   }
 }
 
+watch(activeFilters.value, async () => {
+  const temp = activeFilters.value.map(a => {
+    let html = a.el.children[0].innerHTML
+    return html
+  })
+
+  if (temp.length > 0) {
+    params.value = temp
+  } else {
+    params.value = []
+  }
+
+  let s = ''
+
+  if (params.value.length > 0) {
+    params.value.forEach((p, i) => {
+      let str = p
+      s += str
+      if (i < params.value.length - 1) {
+        s += ';'
+      }
+    })
+
+    await navigateTo({
+      path: '/archive',
+      query: {
+        filter: s,
+
+      }
+    })
+  } else {
+    await navigateTo({
+      path: '/archive',
+    })
+  }
+})
+
 onMounted(() => {
+})
+
+onBeforeUnmount(() => {
+  // Revert gsap context
+  ScrollTrigger.killAll()
 })
 </script>
 

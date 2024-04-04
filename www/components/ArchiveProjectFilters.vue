@@ -2,10 +2,26 @@
 const query = groq`*[_type == 'articles'][0]{'filters':articleList[].project->{projectType, 'filters': projectFilters.filter[]->tagTitle}}`
 const { data: filters } = useSanityQuery(query)
 
+const route = useRoute()
 const store = useStore()
 const { projectFilters, projectFilterLengths, activeFilters } = storeToRefs(store)
-
 const reset = ref(false)
+const isActive = ref(false)
+
+watch(() => route.query.filter, () => {
+  if (route.query.filter) {
+
+    let splt = route.query.filter.split(';')
+    if (splt.includes('Project')) {
+      isActive.value = true
+    } else {
+      store.clearActiveProjectFilters()
+      isActive.value = false
+    }
+  } else {
+    isActive.value = false
+  }
+})
 
 const resetFilter = (event) => {
   event.preventDefault()
@@ -36,6 +52,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   } else {
@@ -51,6 +69,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   }
@@ -71,7 +91,6 @@ watch(filters, () => {
   }
 })
 
-
 onMounted(() => {
   // These are the filters of each article on the archive page
 })
@@ -82,10 +101,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class='filters filters-show'>
+  <div class='filters-project' :class='{ active: isActive }'>
     <div class='filters-heading'>
       <p>Projects</p>
-      <div @click='resetFilter' v-if='reset == true' class='filters-reset'>Reset</div>
+      <div @click='resetFilter' v-if='reset' class='filters-reset'>Reset</div>
       <div v-else class='filters-caret'>
         <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
@@ -108,17 +127,23 @@ onUnmounted(() => {
 </template>
 
 <style lang='scss'>
-.filters {
+.filters-project {
+
   @include rounded-border();
   padding: desktop-vw(12px);
   @include small-type();
-  display: flex;
   flex-direction: column;
   gap: desktop-vw(12px);
+  display: none;
 
   @include mobile() {
     padding: mobile-vw(12px);
     gap: mobile-vw(12px);
+  }
+
+
+  &.active {
+    display: flex;
   }
 
   &-heading {
@@ -181,9 +206,13 @@ onUnmounted(() => {
     }
 
     &:hover {
+      background-color: $black10 !important;
+      color: $black !important;
+      border: 1px $black10 solid !important;
+
       &>span {
         &:last-child {
-          color: $white50;
+          color: $black50 !important;
         }
       }
 

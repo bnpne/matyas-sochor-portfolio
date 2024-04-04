@@ -6,6 +6,23 @@ const store = useStore()
 const { experimentFilters, experimentFilterLengths, activeFilters } = storeToRefs(store)
 
 const reset = ref(false)
+const isActive = ref(false)
+const route = useRoute()
+
+watch(() => route.query.filter, () => {
+  if (route.query.filter) {
+
+    let splt = route.query.filter.split(';')
+    if (splt.includes('Experiments')) {
+      isActive.value = true
+    } else {
+      store.clearActiveExperimentFilters()
+      isActive.value = false
+    }
+  } else {
+    isActive.value = false
+  }
+})
 
 const resetFilter = (event) => {
   event.preventDefault()
@@ -36,6 +53,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   } else {
@@ -51,6 +70,8 @@ const selectFilter = (event) => {
       })
       if (t === false) {
         reset.value = false
+      } else {
+        reset.value = true
       }
     }
   }
@@ -81,10 +102,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class='filters filters-show'>
-    <div class='filters-heading'>
+  <div class='filters filters-experiment' :class='{ active: isActive }'>
+    <div class=' filters-heading'>
       <p>Experiments</p>
-      <div @click='resetFilter' v-if='reset == true' class='filters-reset'>Reset</div>
+      <div @click='resetFilter' v-if='reset' class='filters-reset'>Reset</div>
       <div v-else class='filters-caret'>
         <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
@@ -94,7 +115,7 @@ onUnmounted(() => {
       </div>
     </div>
     <div v-if='experimentFilters' class='filters-filters'>
-      <div @click='selectFilter' v-for='filter, index in experimentFilters' class='filters-filter'>
+      <div @click='selectFilter' v-for='   filter, index    in    experimentFilters   ' class='filters-filter'>
         <span style='pointer-events: none;'>
           {{ filter }}
         </span>
@@ -107,11 +128,11 @@ onUnmounted(() => {
 </template>
 
 <style lang='scss'>
-.filters {
+.filters-experiment {
   @include rounded-border();
   padding: desktop-vw(12px);
   @include small-type();
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: desktop-vw(12px);
 
@@ -119,6 +140,10 @@ onUnmounted(() => {
     padding: mobile-vw(12px);
     gap: mobile-vw(12px);
 
+  }
+
+  &.active {
+    display: flex;
   }
 
   &-heading {
@@ -182,9 +207,13 @@ onUnmounted(() => {
     }
 
     &:hover {
+      background-color: $black10 !important;
+      color: $black !important;
+      border: 1px $black10 solid !important;
+
       &>span {
         &:last-child {
-          color: $white50;
+          color: $black50 !important;
         }
       }
 

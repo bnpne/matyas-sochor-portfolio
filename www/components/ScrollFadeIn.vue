@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 const el = ref()
 
 onMounted(() => {
-  ScrollTrigger.refresh()
   const children = gsap.utils.toArray(el.value.children)
   gsap.from(children, {
     opacity: 0,
@@ -15,7 +14,7 @@ onMounted(() => {
     stagger: .17,
     scrollTrigger: {
       trigger: el.value,
-      start: 'top 90%'
+      start: 'top 95%',
     }
   })
 })

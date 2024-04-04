@@ -272,7 +272,7 @@ onMounted(() => {
     }
 
     &-archive {
-      @include button-second-white();
+      @include button-second-black();
     }
 
     &-more {
@@ -291,7 +291,7 @@ onMounted(() => {
     }
 
     &-notifications {
-      @include button-second-white();
+      @include button-second-black();
       border-radius: 50%;
       height: desktop-vw(42px);
       width: desktop-vw(42px);

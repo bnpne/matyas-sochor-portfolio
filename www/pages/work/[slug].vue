@@ -1,7 +1,9 @@
 <!-- WORK PAGE -->
+<!-- https://plasticbionic.com/project/days-2-->
 <script setup lang='ts'>
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+const ctx = gsap.context(() => { })
 
 definePageMeta({
   pageTransition: {
@@ -10,7 +12,6 @@ definePageMeta({
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
-      ScrollTrigger.update()
 
       const tl = gsap.timeline({
         defaults: { duration: 1, ease: 'circ.out' },
@@ -96,8 +97,8 @@ onMounted(() => {
       gsap.to(progress, { value: t, ease: 'circ.out' })
 
       if (t === 100) {
-        setTimeout(() => {
-          router.push({ path: `/work/${allProjects.value[isNext.value].projectSlug.current}` })
+        setTimeout(async () => {
+          await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`, { redirectCode: 301 })
         }, 500)
       }
     } else {
@@ -106,6 +107,11 @@ onMounted(() => {
 
     }
   })
+})
+
+onBeforeUnmount(() => {
+  // Revert gsap context
+  ScrollTrigger.killAll()
 })
 </script>
 

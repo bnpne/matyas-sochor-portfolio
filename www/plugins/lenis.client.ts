@@ -1,20 +1,30 @@
+/*
+  Lenis and Gsap config
+*/
+
 import Lenis from '@studio-freight/lenis'
 import R from '~/utils/R'
 
 import gsap from 'gsap'
 import {ScrollTrigger} from 'gsap/ScrollTrigger'
+import {CustomEase} from 'gsap/all'
 
 export default defineNuxtPlugin(() => {
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger, CustomEase)
+  CustomEase.create('heart', '.17,.67,.83,.67')
+  gsap.config({
+    // Stops console warnings for targets missing
+    nullTargetWarn: false,
+  })
 
   const scroll = useScroll()
 
   const lenis = new Lenis({lerp: 0.1})
 
   // @ts-ignore
-  // R.add(time => {
-  //   lenis.raf(time)
-  // }, 0)
+  R.add(time => {
+    lenis.raf(time)
+  }, 0)
 
   const scrollStop = () => {
     // document.body.style.overflowY = 'hidden'
@@ -33,15 +43,9 @@ export default defineNuxtPlugin(() => {
   scroll.value.scrollY = window.scrollY
 
   lenis.on('scroll', (_e: any) => {
-    scroll.value.scrollY = window.scrollY
     ScrollTrigger.update()
+    scroll.value.scrollY = window.scrollY
   })
-
-  gsap.ticker.add(time => {
-    lenis.raf(time * 1000)
-  })
-
-  gsap.ticker.lagSmoothing(0)
 
   return {
     provide: {

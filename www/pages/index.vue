@@ -9,7 +9,6 @@ definePageMeta({
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
-      ScrollTrigger.update()
 
       const tl = gsap.timeline({
         defaults: { duration: 1, ease: 'circ.out' },
@@ -79,6 +78,11 @@ onMounted(() => {
     //   });
     // })
   }
+})
+
+onBeforeUnmount(() => {
+  // Revert gsap context
+  ScrollTrigger.killAll()
 })
 </script>
 
