@@ -28,7 +28,7 @@ onMounted(() => {
       })
     } else {
       gsap.to('.page-layout-notification', {
-        x: '110%',
+        x: '150%',
         ease: 'expo.out',
         stagger: {
           each: .1
@@ -140,7 +140,7 @@ onMounted(() => {
     max-width: desktop-vw(300px);
 
     // for Animation
-    transform: translateX(110%);
+    transform: translateX(150%);
 
     &:hover {
 

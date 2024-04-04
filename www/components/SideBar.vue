@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import Lenis from '@studio-freight/lenis'
 import R from '~/utils/R'
+import gsap from 'gsap'
 
 const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
 const { data } = useSanityQuery<HomeData>(query)
@@ -13,7 +14,7 @@ const container = ref()
 const dropdown = ref()
 const toggler = ref()
 const toggle = ref()
-let isOpen = false
+const isOpen = ref(false)
 const toggleIsOpen = reactive({ isOpen: false })
 const route = useRoute()
 const { isMobile, isDesktop } = useDevice()
@@ -32,13 +33,19 @@ const openToggle = () => {
   }
 }
 
-const openDropdown = () => {
-  if (!isOpen) {
-    isOpen = true
-    dropdown.value.classList.toggle('active')
+const dropdownOver = () => {
+  isOpen.value = true
+}
+
+const dropdownLeave = () => {
+  isOpen.value = false
+}
+
+const mobileDropdownToggle = () => {
+  if (!isOpen.value) {
+    isOpen.value = true
   } else {
-    isOpen = false
-    dropdown.value.classList.toggle('active')
+    isOpen.value = false
   }
 }
 
@@ -66,14 +73,34 @@ onMounted(() => {
           </NuxtLink>
           <div class='sidebar-avatar-info-email'>
             <p v-if='data.name' class='sidebar-avatar-info-email-text'>{{ data.name }}</p>
-            <div @click='openDropdown' v-if='data.emailForm' class='sidebar-avatar-info-email-link' target='_blank'>
-              {{ data.emailForm?.emailText }} +
-            </div>
-            <div ref='dropdown' v-if='links' class='sidebar-link-dropdown'>
-              <NuxtLink v-for='link in links.linkArray' :to='link.linkURL' class='sidebar-link-dropdown-link'>
-                {{ link.linkText }}
-              </NuxtLink>
-            </div>
+
+            <!-- DROPDOWN -->
+            <template v-if='!isMobile'>
+              <div @mouseover='dropdownOver' @mouseleave='dropdownLeave' class='sidebar-dropdown'>
+                <div v-if='data.emailForm' class='sidebar-dropdown-email' :class='{ active: isOpen }'>
+                  {{ data.emailForm?.emailText }}
+                </div>
+                <div ref='dropdown' v-if='links' class='sidebar-dropdown-content' :class='{ active: isOpen }'>
+                  <NuxtLink v-for=' link in links.linkArray' :to='link.linkURL' target='_blank'
+                    class='sidebar-dropdown-link'>
+                    {{ link.linkText }}
+                  </NuxtLink>
+                </div>
+              </div>
+            </template>
+            <template v-else-if='isMobile'>
+              <div @click='mobileDropdownToggle' class='sidebar-dropdown'>
+                <div v-if='data.emailForm' class='sidebar-dropdown-email'>
+                  {{ data.emailForm?.emailText }}
+                </div>
+                <div ref='dropdown' v-if='links' class='sidebar-dropdown-content' :class='{ active: isOpen }'>
+                  <NuxtLink v-for=' link in links.linkArray' :to='link.linkURL' class='sidebar-dropdown-link'>
+                    {{ link.linkText }}
+                  </NuxtLink>
+                </div>
+              </div>
+            </template>
+            <!-- DROPDOWN -->
           </div>
         </div>
         <div class='sidebar-avatar-about'>
@@ -186,6 +213,8 @@ onMounted(() => {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 1000;
 
       @include mobile() {
         padding: mobile-vw(20px) mobile-vw(20px) 0;
@@ -231,41 +260,67 @@ onMounted(() => {
       }
 
       &-email {
-        @include small-type();
-        cursor: pointer;
-
-        &-link {
-          color: rgba(30, 30, 30, .5);
-        }
+        margin-top: 6px;
       }
     }
   }
 
-  &-link-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    @include rounded();
-    background: $black;
-    color: $white;
-    padding: desktop-vw(12px);
-    display: flex;
-    flex-direction: column;
-    gap: desktop-vw(6px);
-    @include small-type();
-    font-size: desktop-vw(12px);
-    pointer-events: none;
-    opacity: 0;
-    z-index: 4;
+  &-dropdown {
+    position: relative;
+    display: block;
+    height: calc(100% + 6px);
+    z-index: 10;
+    cursor: pointer;
 
-    @include mobile() {
-      font-size: mobile-vw(12px);
-      padding: mobile-vw(12px);
-      gap: mobile-vw(6px);
+    &-email {
+      @include small-type();
+      color: rgba(30, 30, 30, .5);
+      padding-bottom: 6px;
+
+      &::after {
+        content: '+';
+        position: absolute;
+        top: 0;
+        left: calc(100% + 6px);
+        color: rgba(30, 30, 30, .5);
+        transition: transform 200ms ease-out;
+      }
+
+      &.active {
+        &::after {
+          transform: rotate(45deg);
+        }
+      }
     }
 
-    &.active {
-      opacity: 1;
-      pointer-events: auto;
+    &-content {
+      position: absolute;
+      @include rounded();
+      background: $black;
+      color: $white;
+      top: calc(100%);
+      padding: desktop-vw(12px);
+      display: none;
+      flex-direction: column;
+      gap: desktop-vw(6px);
+      @include small-type();
+      font-size: desktop-vw(12px);
+      opacity: 0;
+      z-index: 4;
+
+      transition: opacity 500ms ease-out;
+
+      @include mobile() {
+        font-size: mobile-vw(12px);
+        padding: mobile-vw(12px);
+        gap: mobile-vw(6px);
+      }
+
+      &.active {
+        display: flex;
+        opacity: 1;
+
+      }
     }
 
     &-link {
@@ -290,8 +345,6 @@ onMounted(() => {
 
     &.open {
       background: $black;
-
-
     }
 
     &-hamburger {

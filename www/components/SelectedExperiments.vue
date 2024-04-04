@@ -72,6 +72,10 @@ const { activeProject } = storeToRefs(store)
       @include mobile() {
         gap: mobile-vw(8px);
       }
+
+      &:hover {
+        color: $black75;
+      }
     }
   }
 

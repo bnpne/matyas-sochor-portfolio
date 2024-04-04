@@ -30,7 +30,9 @@ definePageMeta({
 
 const app = useNuxtApp()
 const query = groq`*[_type == 'about'][0]`
+const linkQuery = groq`*[_type == 'links'][0].linkArray`
 const { data: about } = useSanityQuery(query)
+const { data: links } = useSanityQuery(linkQuery)
 
 const { isMobile } = useDevice()
 
@@ -58,21 +60,21 @@ onBeforeUnmount(() => {
             <ul class='about-avatar-list'>
               <ScrollFadeIn>
                 <li>
-                  <NuxtLink to='/archive'>
+                  <NuxtLink class='about-avatar-list-link' to='/archive'>
                     Website
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Identity</NuxtLink>
+                  <NuxtLink class='about-avatar-list-link' to='/archive'>Identity</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Branding</NuxtLink>
+                  <NuxtLink class='about-avatar-list-link' to='/archive'>Branding</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Motion</NuxtLink>
+                  <NuxtLink class='about-avatar-list-link' to='/archive'>Motion</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Print</NuxtLink>
+                  <NuxtLink class='about-avatar-list-link' to='/archive'>Print</NuxtLink>
                 </li>
               </ScrollFadeIn>
             </ul>
@@ -148,7 +150,12 @@ onBeforeUnmount(() => {
               <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
             </div>
             <div class='about-footer-linkList'>
-              <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
+              <NuxtLink class='about-footer-linkList-el' target='_blank' v-for='link in links' to={{ link.linkURL }}>
+                {{ link.linkText }}
+              </NuxtLink>
+              <NuxtLink class='about-footer-linkList-el lets-chat' to='mailto:matyas@sochor.xyz'>
+                Let's Chat
+              </NuxtLink>
             </div>
             <div class='about-footer-copyright'>
               <p>©Matyas Sochor 2024</p>
@@ -216,11 +223,18 @@ onBeforeUnmount(() => {
         display: flex;
         justify-content: space-between;
       }
+
+      &-link {
+        &:hover {
+          color: $black75;
+        }
+      }
+
     }
 
     &-image {
       position: relative;
-      top: desktop-vw(200px);
+      top: desktop-vw(600px);
       @include rounded();
       overflow: hidden;
 
@@ -228,7 +242,15 @@ onBeforeUnmount(() => {
         transform: none;
       }
 
+      &>span {
+
+        display: flex;
+        flex-direction: column;
+      }
+
       &>img {
+        flex-grow: 1;
+        vertical-align: top;
         @include image-default();
       }
     }
@@ -306,7 +328,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(24px);
-    margin-right: desktop-vw(14px);
+    // margin-right: desktop-vw(14px);
 
     @include mobile() {
       gap: mobile-vw(24px);
@@ -352,6 +374,7 @@ onBeforeUnmount(() => {
 
         &>p {
           @include medium-type();
+          line-height: desktop-vw(40px);
           color: $white;
         }
 
@@ -376,22 +399,67 @@ onBeforeUnmount(() => {
       @include mobile() {
         margin-bottom: mobile-vw(40px);
       }
+    }
 
-      &-link,
-      &-copyright {
-        min-width: desktop-vw(180px);
+    &-link,
+    &-linkList {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      max-width: 50%;
 
-        @include mobile() {
-          min-width: mobile-vw(180px);
-
-        }
-
-        &-copyright {
-          display: flex;
-          justify-content: flex-end;
-          color: $black50;
+      &>a {
+        &:hover {
+          color: $black75;
         }
       }
+
+      &-el {
+        &:not(:last-child, &.lets-chat) {
+          &::after {
+            content: url('~/assets/svg/link-dot.svg');
+            margin-left: desktop-vw(5px);
+            margin-right: desktop-vw(8px);
+            vertical-align: top;
+            padding-bottom: 5px;
+            position: relative;
+            bottom: 2px;
+          }
+        }
+
+        &.lets-chat {
+          &::after {
+            content: url('~/assets/svg/link-arrow-gray.svg');
+            color: $black50;
+            width: desktop-vw(13px);
+            height: desktop-vw(13px);
+            display: inline-block;
+            margin-left: 4px;
+            margin-top: 2px;
+            margin-bottom: 1px;
+            overflow: hidden;
+
+            @include mobile() {
+              width: mobile-vw(13px);
+              height: mobile-vw(13px);
+            }
+          }
+        }
+      }
+    }
+
+    &-copyright {
+      color: $black50;
+      min-width: desktop-vw(180px);
+
+      @include mobile() {
+        min-width: mobile-vw(180px);
+
+      }
+
+      display: flex;
+      justify-content: flex-end;
+
     }
   }
 }
