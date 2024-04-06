@@ -51,7 +51,6 @@ const openDropdown = () => {
     <template v-if='!isMobile'>
       <nav class='archive-layout-nav'>
         <NuxtLink to='/' class='archive-layout-nav-home'>Back to Homepage</NuxtLink>
-        <div class='archive-layout-nav-more'>2</div>
       </nav>
     </template>
     <template v-else>

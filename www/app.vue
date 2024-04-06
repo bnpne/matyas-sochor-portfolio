@@ -11,6 +11,7 @@ const store = useStore()
 store.addProjects(data)
 
 onMounted(() => {
+  app.$scrollToTop()
   console.log(
     `
 Development by 
@@ -18,13 +19,12 @@ Studio Paine c/o Ben Paine
 www.studiopaine.com
 `
   )
-  app.$lenis.scrollTo(0)
 })
 </script>
 
 <template>
   <NuxtLayout name='default'>
-    <!-- <Preloader /> -->
+    <Preloader />
     <TransitionElement />
     <NuxtPage />
   </NuxtLayout>

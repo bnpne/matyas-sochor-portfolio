@@ -19,8 +19,7 @@ const resizeGridItem = (item) => {
 
 watch(() => route.query.filter, () => {
   routeParams.params = route.query.filter ? route.query.filter : ''
-
-  if (route.query.filter) {
+  if (routeParams.params !== '') {
     let splt = route.query.filter.split(';')
 
     if (props.card.articleType[0]) {
@@ -67,7 +66,14 @@ watch(() => route.query.filter, () => {
 
 onMounted(() => {
   if (!isMobile) {
-    window.onload = resizeGridItem(article.value)
+    // await nextTick(() => {
+    //   const grid = document.querySelector(".archive-container");
+    //   if (grid) {
+    //     // window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
+    //     resizeGridItem(article.value)
+    //   }
+    // })
+    window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
     window.addEventListener('resize', resizeGridItem(article.value))
   }
 })
@@ -96,7 +102,7 @@ onMounted(() => {
       <NuxtLink v-if='card.project.projectType === "selectedProject"' :to="`/work/${card.project.projectSlug.current}`">
         Show
       </NuxtLink>
-      <NuxtLink v-else :to="`/experiements/${card.project.projectSlug.current}`">
+      <NuxtLink v-else :to="`/experiments/${card.project.projectSlug.current}`">
         Show
       </NuxtLink>
     </div>

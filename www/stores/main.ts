@@ -92,9 +92,7 @@ export const useStore = defineStore('main', {
     },
     clearActiveShowFilters() {
       this.activeFilters.forEach((a, i) => {
-        if (a.type === 'show') {
-          this.activeFilters.splice(i, 1)
-        }
+        this.removeActiveFilter({type: a.type, el: a.el})
       })
     },
     clearActiveProjectFilters() {

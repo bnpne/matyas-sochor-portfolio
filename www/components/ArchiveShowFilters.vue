@@ -15,6 +15,7 @@ const resetFilter = async (event) => {
       f.classList.toggle('active')
     }
   })
+
   store.clearActiveShowFilters()
   await navigateTo({
     path: '/archive',
@@ -86,14 +87,14 @@ onUnmounted(() => {
   <div class='filters filters-show'>
     <div class='filters-heading'>
       <p>Show</p>
-      <div @click='resetFilter' v-if='reset == true' class='filters-reset'>Reset</div>
-      <div v-else class='filters-caret'>
-        <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M1.25 0.416992L5 4.16699L8.75 0.416992L10 1.66699L5 6.66699L0 1.66699L1.25 0.416992Z" fill="#1E1E1E"
-            fill-opacity="0.75" />
-        </svg>
-      </div>
+      <!-- <div @click='resetFilter' v-if='reset == true' class='filters-reset'>Reset</div> -->
+      <!-- <div v-else class='filters-caret'> -->
+      <!--   <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
+      <!--     <path fill-rule="evenodd" clip-rule="evenodd" -->
+      <!--       d="M1.25 0.416992L5 4.16699L8.75 0.416992L10 1.66699L5 6.66699L0 1.66699L1.25 0.416992Z" fill="#1E1E1E" -->
+      <!--       fill-opacity="0.75" /> -->
+      <!--   </svg> -->
+      <!-- </div> -->
     </div>
     <div v-if='showFilters' class='filters-filters'>
       <div ref='filterButton' @click='selectFilter' v-for='filter, index in showFilters' class='filters-filter'>

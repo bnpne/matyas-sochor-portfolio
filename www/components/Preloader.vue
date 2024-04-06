@@ -22,6 +22,7 @@ onMounted(() => {
     .from('.pre-anima', { x: '-50%', stagger: .08 }, '<')
     .from('.pre-project', { y: '20%', stagger: .15 }, '<')
     .from('.pre-image', { scale: 1.2, duration: 1.5, stagger: .08 }, '<')
+    .from(['.work-layout-nav', '.page-layout-nav'], { y: '-100%', duration: 1.5, }, '<')
 })
 </script>
 

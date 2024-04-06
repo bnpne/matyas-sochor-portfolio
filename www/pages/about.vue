@@ -41,6 +41,54 @@ useHead({
 })
 
 onMounted(() => {
+  ScrollTrigger.refresh(true)
+  /// Fade In
+  let animaFade = gsap.utils.toArray('.anima-fade')
+  animaFade.forEach(f => {
+    gsap.from(f.children, {
+      opacity: 0,
+      y: '80%',
+      duration: 1,
+      ease: 'circ.out',
+      stagger: .17,
+      scrollTrigger: {
+        trigger: f,
+        start: 'top 95%',
+      }
+    })
+  })
+
+  /// Scale
+  let animaScale = gsap.utils.toArray('.anima-scale')
+  animaScale.forEach(s => {
+    let img = gsap.utils.toArray('.a', s)
+    console.log(img)
+    gsap.from(img, {
+      scale: 1.1,
+      ease: 'circ.out',
+      stagger: .17,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: s,
+        start: 'top 95%',
+      }
+    })
+  })
+
+  /// Divider
+  let animaDivider = gsap.utils.toArray('.anima-divider')
+  animaDivider.forEach(d => {
+    gsap.from(d.children, {
+      width: '0%',
+      ease: 'circ.out',
+      stagger: .17,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: d,
+        start: 'top 95%',
+      }
+    })
+  })
   app.$scrollStart()
 })
 
@@ -57,65 +105,59 @@ onBeforeUnmount(() => {
       <div class='about-container'>
         <div class='about-container-flex'>
           <div v-if='!isMobile' class='about-avatar'>
-            <ul class='about-avatar-list'>
-              <ScrollFadeIn>
+            <ul class='about-avatar-list anima-fade'>
+              <li>
+                <NuxtLink class='about-avatar-list-link' to='/archive'>
+                  Website
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink class='about-avatar-list-link' to='/archive'>Identity</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink class='about-avatar-list-link' to='/archive'>Branding</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink class='about-avatar-list-link' to='/archive'>Motion</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink class='about-avatar-list-link' to='/archive'>Print</NuxtLink>
+              </li>
+            </ul>
+            <div v-if='about.bioImage' class='about-avatar-image'>
+              <span class='anima-scale'>
+                <SanityImage class='a' :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+              </span>
+            </div>
+          </div>
+          <div class='about-info'>
+            <div v-if='about.bio' class='about-info-bio anima-fade'>
+              <SanityContent :blocks='about.bio' />
+            </div>
+            <div v-if='isMobile' class='about-avatar'>
+              <ul class='about-avatar-list anima-fade'>
                 <li>
-                  <NuxtLink class='about-avatar-list-link' to='/archive'>
+                  <NuxtLink to='/archive'>
                     Website
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink class='about-avatar-list-link' to='/archive'>Identity</NuxtLink>
+                  <NuxtLink to='/archive'>Identity</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink class='about-avatar-list-link' to='/archive'>Branding</NuxtLink>
+                  <NuxtLink to='/archive'>Branding</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink class='about-avatar-list-link' to='/archive'>Motion</NuxtLink>
+                  <NuxtLink to='/archive'>Motion</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink class='about-avatar-list-link' to='/archive'>Print</NuxtLink>
+                  <NuxtLink to='/archive'>Print</NuxtLink>
                 </li>
-              </ScrollFadeIn>
-            </ul>
-            <div v-if='about.bioImage' class='about-avatar-image'>
-              <ScrollScaleIn>
-                <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
-              </ScrollScaleIn>
-            </div>
-          </div>
-          <div class='about-info'>
-            <div v-if='about.bio' class='about-info-bio'>
-              <ScrollFadeIn>
-                <SanityContent :blocks='about.bio' />
-              </ScrollFadeIn>
-            </div>
-            <div v-if='isMobile' class='about-avatar'>
-              <ul class='about-avatar-list'>
-                <ScrollFadeIn>
-                  <li>
-                    <NuxtLink to='/archive'>
-                      Website
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to='/archive'>Identity</NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to='/archive'>Branding</NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to='/archive'>Motion</NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to='/archive'>Print</NuxtLink>
-                  </li>
-                </ScrollFadeIn>
               </ul>
               <div v-if='about.bioImage' class='about-avatar-image'>
-                <ScrollScaleIn>
-                  <SanityImage :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
-                </ScrollScaleIn>
+                <span class='anima-scale'>
+                  <SanityImage class='a' :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+                </span>
               </div>
             </div>
             <template v-if='!isMobile'>
@@ -133,18 +175,16 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class='about-footer'>
-          <ScrollScaleIn>
-            <div v-if='about.footerImage' class='about-footer-image'>
-              <div class='about-footer-image-overlay'></div>
-              <SanityImage :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
-              <div class='about-footer-image-text'>
-                <p>Let's create something extraordinary together.</p>
-                <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's
-                  Chat
-                </NuxtLink>
-              </div>
+          <div v-if='about.footerImage' class='about-footer-image anima-scale'>
+            <div class='about-footer-image-overlay'></div>
+            <SanityImage class='a' :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
+            <div class='about-footer-image-text'>
+              <p>Let's create something extraordinary together.</p>
+              <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's
+                Chat
+              </NuxtLink>
             </div>
-          </ScrollScaleIn>
+          </div>
           <div class='about-footer-links'>
             <div class='about-footer-link'>
               <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
@@ -207,7 +247,7 @@ onBeforeUnmount(() => {
       position: relative;
       max-width: 100%;
       flex: 1;
-      bottom: auto;
+      bottom: 0;
       display: flex;
       flex-direction: column;
       gap: mobile-vw(20px);
@@ -239,7 +279,8 @@ onBeforeUnmount(() => {
       overflow: hidden;
 
       @include mobile() {
-        transform: none;
+        top: 0;
+
       }
 
       &>span {
@@ -394,19 +435,38 @@ onBeforeUnmount(() => {
     &-links {
       display: flex;
       justify-content: space-between;
+      flex-direction: row;
       margin-bottom: desktop-vw(40px);
 
       @include mobile() {
+        font-size: mobile-vw(12px);
         margin-bottom: mobile-vw(40px);
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: mobile-vw(40px);
+        padding: 0 mobile-vw(14px);
       }
     }
 
-    &-link,
+    &-link {
+      display: block;
+      min-width: 20%;
+
+      @include mobile() {
+        display: none;
+      }
+    }
+
     &-linkList {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       max-width: 50%;
+
+      @include mobile() {
+        flex-direction: row;
+        max-width: none;
+      }
 
       &>a {
         &:hover {
@@ -424,6 +484,11 @@ onBeforeUnmount(() => {
             padding-bottom: 5px;
             position: relative;
             bottom: 2px;
+
+            @include mobile() {
+              margin-left: mobile-vw(5px);
+              margin-right: mobile-vw(8px);
+            }
           }
         }
 
@@ -434,14 +499,13 @@ onBeforeUnmount(() => {
             width: desktop-vw(13px);
             height: desktop-vw(13px);
             display: inline-block;
-            margin-left: 4px;
-            margin-top: 2px;
+            margin-left: desktop-vw(4px);
             margin-bottom: 1px;
-            overflow: hidden;
 
             @include mobile() {
-              width: mobile-vw(13px);
-              height: mobile-vw(13px);
+              margin-left: mobile-vw(4px);
+              width: mobile-vw(8px);
+              height: mobile-vw(9px);
             }
           }
         }
@@ -451,14 +515,13 @@ onBeforeUnmount(() => {
     &-copyright {
       color: $black50;
       min-width: desktop-vw(180px);
+      display: flex;
+      justify-content: flex-end;
 
       @include mobile() {
         min-width: mobile-vw(180px);
-
+        justify-content: flex-end;
       }
-
-      display: flex;
-      justify-content: flex-end;
 
     }
   }

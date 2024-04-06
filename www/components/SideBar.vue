@@ -3,6 +3,7 @@ import Lenis from '@studio-freight/lenis'
 import R from '~/utils/R'
 import gsap from 'gsap'
 
+
 const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
 const { data } = useSanityQuery<HomeData>(query)
 

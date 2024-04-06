@@ -150,7 +150,7 @@ onMounted(async () => {
 
       if (t === 100) {
         setTimeout(async () => {
-          await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+          await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`)
         }, 500)
       }
     } else {

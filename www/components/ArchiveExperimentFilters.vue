@@ -31,7 +31,11 @@ const resetFilter = (event) => {
       f.el.classList.toggle('active')
     }
   })
-  store.clearActiveExperimentFilters()
+  activeFilters.value.forEach(a => {
+    if (a.type === 'experiment') {
+      store.removeActiveFilter({ type: 'experiment', el: a.el })
+    }
+  })
   reset.value = false
 }
 
@@ -105,17 +109,17 @@ onUnmounted(() => {
   <div class='filters filters-experiment' :class='{ active: isActive }'>
     <div class=' filters-heading'>
       <p>Experiments</p>
-      <div @click='resetFilter' v-if='reset' class='filters-reset'>Reset</div>
-      <div v-else class='filters-caret'>
-        <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M1.25 0.416992L5 4.16699L8.75 0.416992L10 1.66699L5 6.66699L0 1.66699L1.25 0.416992Z" fill="#1E1E1E"
-            fill-opacity="0.75" />
-        </svg>
-      </div>
+      <!-- <div @click='resetFilter' v-if='reset' class='filters-reset'>Reset</div> -->
+      <!-- <div v-else class='filters-caret'> -->
+      <!--   <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
+      <!--     <path fill-rule="evenodd" clip-rule="evenodd" -->
+      <!--       d="M1.25 0.416992L5 4.16699L8.75 0.416992L10 1.66699L5 6.66699L0 1.66699L1.25 0.416992Z" fill="#1E1E1E" -->
+      <!--       fill-opacity="0.75" /> -->
+      <!--   </svg> -->
+      <!-- </div> -->
     </div>
     <div v-if='experimentFilters' class='filters-filters'>
-      <div @click='selectFilter' v-for='   filter, index    in    experimentFilters   ' class='filters-filter'>
+      <div @click='selectFilter' v-for='filter, index in experimentFilters' class='filters-filter'>
         <span style='pointer-events: none;'>
           {{ filter }}
         </span>

@@ -11,6 +11,7 @@
   width: 100%;
   background: $white;
   pointer-events: none;
+  touch-action: none;
   top: 0;
   opacity: 0;
   z-index: 999;

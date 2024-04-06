@@ -43,7 +43,7 @@ useHead({
 
 const { isMobile } = useDevice()
 const filtersIsOpen = reactive({ isOpen: false })
-
+const cardsActive = ref(false)
 const grid = ref()
 
 const toggleFilter = () => {
@@ -92,6 +92,9 @@ watch(activeFilters.value, async () => {
 })
 
 onMounted(() => {
+  if (grid.value) {
+    cardsActive.value = true
+  }
 })
 
 onBeforeUnmount(() => {
@@ -104,7 +107,9 @@ onBeforeUnmount(() => {
   <div class='archive' id='page'>
     <NuxtLayout name='archive'>
       <div v-if='archive?.articleList' ref='grid' class='archive-container'>
-        <ArchiveCard v-for='card in archive.articleList' :card='card' />
+        <template v-if='cardsActive'>
+          <ArchiveCard v-for='card in archive.articleList' :card='card' />
+        </template>
       </div>
       <div v-if='isMobile' class='archive-mobile'>
         <div @click='toggleFilter' v-if='!filtersIsOpen.isOpen' class="archive-mobile-pill">
