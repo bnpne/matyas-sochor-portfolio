@@ -12,9 +12,9 @@ const { activeProject } = storeToRefs(store)
       <div>Selected Experiments</div>
       <NuxtLink to='/archive' class='sidebar-experiments-heading-work'>
         <span>All Experiments</span>
-        <svg width="7" height="11" viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M0.75 9.25L4.5 5.5L0.75 1.75L2 0.5L7 5.5L2 10.5L0.75 9.25Z"
-            fill="#1E1E1E" fill-opacity="0.25" />
+            fill="currentColor" />
         </svg>
       </NuxtLink>
     </div>
@@ -75,13 +75,24 @@ const { activeProject } = storeToRefs(store)
 
       &:hover {
         color: $black75;
+
+        &>svg {
+          color: currentColor;
+        }
+      }
+
+
+      &>svg {
+        opacity: .5;
+        height: desktop-vw(11px);
+        width: desktop-vw(7px);
       }
     }
   }
 
   @include desktop() {
     &:hover {
-      &>.sidebar-projects-card {
+      &>.sidebar-experiments-card {
         opacity: .5;
       }
     }

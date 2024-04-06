@@ -4,11 +4,11 @@ defineProps(['data'])
 
 <template v-if='data'>
   <section class='section-plain-text'>
-    <ScrollFadeIn>
+    <span class='anima-fade'>
       <div class='section-plain-text-body'>
         <SanityContent :blocks='data.plainText' />
       </div>
-    </ScrollFadeIn>
+    </span>
   </section>
 </template>
 
@@ -16,7 +16,7 @@ defineProps(['data'])
 .section-plain-text {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
   margin-top: desktop-vw(30px);

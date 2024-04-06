@@ -33,14 +33,14 @@ const likePost = () => {
 
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-gray', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
-    tl.fromTo('.mini-heart-red', { scale: 1.4 }, { scale: 1, })
+    tl.fromTo('.mini-heart-red', { scale: 1.4 }, { scale: 1, duration: .5, ease: 'bounce' })
 
   } else {
     store.decrementPostLikes()
     // gsap.set('.heart', { opacity: 0, rotate: 0, y: '220%' })
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-red', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
-    tl.fromTo('.mini-heart-gray', { scale: 1.4 }, { scale: 1, })
+    tl.fromTo('.mini-heart-gray', { scale: 1.4 }, { scale: 1, duration: .5, ease: 'bounce' })
   }
 }
 

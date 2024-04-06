@@ -14,7 +14,7 @@ export default defineNuxtPlugin(() => {
   CustomEase.create('heart', '.17,.67,.83,.67')
   gsap.config({
     // Stops console warnings for targets missing
-    nullTargetWarn: false,
+    // nullTargetWarn: false,
   })
 
   const scroll = useScroll()

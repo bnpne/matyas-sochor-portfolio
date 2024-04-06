@@ -268,17 +268,22 @@ onMounted(() => {
   &-dropdown {
     position: relative;
     display: block;
-    height: calc(100% + 6px);
+    height: calc(100% + desktop-vw(10px));
     z-index: 10;
     cursor: pointer;
+
+    @include mobile() {
+      height: calc(100% + mobile-vw(10px));
+    }
 
     &-email {
       @include small-type();
       color: rgba(30, 30, 30, .5);
-      padding-bottom: 6px;
+      padding-bottom: desktop-vw(10px);
 
       &::after {
         content: '+';
+        font-size: desktop-vw(16px);
         position: absolute;
         top: 0;
         left: calc(100% + 6px);
@@ -291,6 +296,10 @@ onMounted(() => {
           transform: rotate(45deg);
         }
       }
+
+      @include mobile() {
+        padding-bottom: mobile-vw(10px);
+      }
     }
 
     &-content {
@@ -299,6 +308,8 @@ onMounted(() => {
       background: $black;
       color: $white;
       top: calc(100%);
+      left: desktop-vw(-55px);
+      width: desktop-vw(200px);
       padding: desktop-vw(12px);
       display: none;
       flex-direction: column;
@@ -311,6 +322,7 @@ onMounted(() => {
       transition: opacity 500ms ease-out;
 
       @include mobile() {
+        left: mobile-vw(-55px);
         font-size: mobile-vw(12px);
         padding: mobile-vw(12px);
         gap: mobile-vw(6px);
@@ -321,13 +333,14 @@ onMounted(() => {
         opacity: 1;
 
       }
-    }
 
-    &-link {
-      &:hover {
+      &:hover .sidebar-dropdown-link:not(:hover) {
         color: $white50;
+
       }
     }
+
+    &-link {}
   }
 
   &-toggle {

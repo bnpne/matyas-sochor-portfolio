@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/': {prerender: true},
     '/archive': {prerender: true},
+    '/work/**': {swr: true},
   },
   modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper', '@nuxtjs/device'],
   build: {

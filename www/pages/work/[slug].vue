@@ -84,7 +84,59 @@ watchEffect(() => {
   })
 })
 
-onMounted(() => {
+onMounted(async () => {
+  ScrollTrigger.refresh(true)
+
+  /// SCROLL ANIMATIONS
+  /// Fade In
+  let animaFade = gsap.utils.toArray('.anima-fade')
+  animaFade.forEach(f => {
+    gsap.from(f.children, {
+      opacity: 0,
+      y: '80%',
+      duration: 1,
+      ease: 'circ.out',
+      stagger: .17,
+      scrollTrigger: {
+        trigger: f,
+        start: 'top 95%',
+      }
+    })
+  })
+
+  /// Scale
+  let animaScale = gsap.utils.toArray('.anima-scale')
+  animaScale.forEach(s => {
+    let img = gsap.utils.toArray('.a', s)
+    console.log(img)
+    gsap.from(img, {
+      scale: 1.1,
+      ease: 'circ.out',
+      stagger: .17,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: s,
+        start: 'top 95%',
+      }
+    })
+  })
+
+  /// Divider
+  let animaDivider = gsap.utils.toArray('.anima-divider')
+  animaDivider.forEach(d => {
+    gsap.from(d.children, {
+      width: '0%',
+      ease: 'circ.out',
+      stagger: .17,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: d,
+        start: 'top 95%',
+      }
+    })
+  })
+
+
   app.$lenis.on('scroll', (e) => {
     lenisProgress.value = e.progress
   })
@@ -165,12 +217,12 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-if='work.projectHeroText' class='work-intro'>
-          <ScrollFadeIn>
+          <span class='anima-fade'>
             <p class='work-intro-header'>Introduction</p>
-          </ScrollFadeIn>
-          <ScrollFadeIn>
+          </span>
+          <span class='anima-fade'>
             <SanityContent :blocks='work.projectHeroText' />
-          </ScrollFadeIn>
+          </span>
         </div>
         <div v-if='work.projectSections' class='work-sections'>
           <template v-for='section in work.projectSections.sections'>
@@ -185,30 +237,28 @@ onBeforeUnmount(() => {
         </div>
         <template v-if='allProjects[isNext]'>
           <div class='work-footer'>
-            <ScrollFadeIn>
+            <span class='anima-fade'>
               <p class='work-footer-text'>
                 Do you want to know more about my role,
                 the team and the process?
               </p>
-            </ScrollFadeIn>
+            </span>
             <div>
-              <ScrollFadeIn>
+              <span class='anima-fade'>
                 <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'>
                   Let's Chat
                 </NuxtLink>
-              </ScrollFadeIn>
+              </span>
             </div>
-            <ScrollDivider>
-              <div class='work-footer-divider'></div>
-            </ScrollDivider>
+            <div class='work-footer-divider'></div>
             <div class='work-footer-scroll'>
-              <ScrollFadeIn>
+              <span class='anima-fade'>
                 <p class='work-footer-scroll-heading'>Scroll to next project</p>
-              </ScrollFadeIn>
-              <ScrollFadeIn>
+              </span>
+              <span class='anima-fade'>
                 <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2>
-              </ScrollFadeIn>
-              <ScrollFadeIn>
+              </span>
+              <span class='anima-fade'>
                 <div class='work-footer-scroll-spinner'>
                   <div class='work-footer-scroll-spinner-base'>
                     <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -224,20 +274,22 @@ onBeforeUnmount(() => {
                     </svg>
                   </div>
                 </div>
-              </ScrollFadeIn>
-              <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
-                <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                  <SanityImage :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format"
-                    w='1000' fit='clip' />
-                </template>
-                <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                  <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
-                    <template #default="{ src }">
-                      <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
-                    </template>
-                  </SanityFile>
-                </template>
-              </div>
+              </span>
+              <span class='anima-scale'>
+                <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
+                  <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                    <SanityImage class='a' :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref"
+                      auto="format" w='1000' fit='clip' />
+                  </template>
+                  <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                    <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                      <template #default="{ src }">
+                        <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                      </template>
+                    </SanityFile>
+                  </template>
+                </div>
+              </span>
             </div>
           </div>
         </template>

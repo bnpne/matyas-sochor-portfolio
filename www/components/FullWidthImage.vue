@@ -3,19 +3,19 @@ defineProps(['data'])
 </script>
 
 <template v-if='data'>
-  <ScrollScaleIn>
+  <span class='anima-scale'>
     <section class='section-full-width'>
       <div class='section-full-width-image'>
-        <SanityImage v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" w='1000' fit='clip' />
+        <SanityImage class='a' v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" w='1000' fit='clip' />
         <!-- todo fix video -->
         <SanityFile v-else-if='data.video' :asset-id="data.video.asset?._ref">
           <template #default="{ src }">
-            <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+            <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
           </template>
         </SanityFile>
       </div>
     </section>
-  </ScrollScaleIn>
+  </span>
 </template>
 
 <style lang='scss'>

@@ -5,21 +5,21 @@ defineProps(['data'])
 <template v-if='data'>
   <section class='section-project-text'>
     <div class='section-project-text-heading'>
-      <ScrollFadeIn>
+      <span class='anima-fade'>
         <p class='section-project-text-heading-highlight'>
           {{ data.projectTextHighlight }}
         </p>
-      </ScrollFadeIn>
-      <ScrollFadeIn>
+      </span>
+      <span class='anima-fade'>
         <p class='section-project-text-heading-title'>
           {{ data.projectTextTitle }}
         </p>
-      </ScrollFadeIn>
+      </span>
     </div>
     <div class='section-project-text-body'>
-      <ScrollFadeIn>
+      <span class='anima-fade'>
         <SanityContent :blocks='data.projectTextBody' />
-      </ScrollFadeIn>
+      </span>
     </div>
   </section>
 </template>
