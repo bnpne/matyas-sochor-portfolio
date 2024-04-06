@@ -371,6 +371,9 @@ onBeforeUnmount(() => {
       @include mobile() {
         min-height: mobile-vw(125px);
         padding: mobile-vw(18px) mobile-vw(14px) mobile-vw(28px);
+        justify-content: flex-start;
+        gap: mobile-vw(40px);
+        overflow-x: scroll;
       }
 
       &-client {
@@ -425,7 +428,7 @@ onBeforeUnmount(() => {
         align-content: flex-start;
 
         @include mobile() {
-          gap: mobile-vw(130px);
+          gap: mobile-vw(40px);
         }
 
         &-section {
@@ -439,6 +442,7 @@ onBeforeUnmount(() => {
           @include mobile() {
             gap: mobile-vw(6px);
             line-height: mobile-vw(14px);
+            min-width: mobile-vw(100px);
           }
 
           &>p {

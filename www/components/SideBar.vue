@@ -262,7 +262,9 @@ onMounted(() => {
 
       &-email {
         margin-top: 6px;
+
       }
+
     }
   }
 

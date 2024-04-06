@@ -178,6 +178,7 @@ onMounted(() => {
 
   @include mobile {
     padding: mobile-vw(6px);
+    padding-top: mobile-vw(90px);
   }
 
   &-avatar {
@@ -187,6 +188,9 @@ onMounted(() => {
     z-index: 3;
     width: 100vw;
     box-sizing: border-box;
+
+    background: white;
+    box-shadow: 0px 2px 12px 0px #0000001F;
 
     &-about {
       @include small-type();
@@ -200,7 +204,7 @@ onMounted(() => {
       width: 100%;
 
       @include mobile() {
-        padding: mobile-vw(20px) mobile-vw(20px) 0;
+        padding: mobile-vw(14px) mobile-vw(14px) mobile-vw(20px);
       }
     }
 
