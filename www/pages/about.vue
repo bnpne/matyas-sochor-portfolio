@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
               </NuxtLink>
             </div>
           </div>
-          <div class='about-footer-links'>
+          <div v-if='links' class='about-footer-links'>
             <div class='about-footer-link'>
               <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
             </div>

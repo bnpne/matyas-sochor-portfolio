@@ -542,6 +542,11 @@ onBeforeUnmount(() => {
       gap: desktop-vw(24px);
       padding: 0 desktop-vw(60px);
 
+      @include mobile() {
+        gap: mobile-vw(24px);
+        padding: 0 mobile-vw(60px);
+      }
+
       &-heading {
         @include small-type();
         color: $black50;
@@ -551,6 +556,12 @@ onBeforeUnmount(() => {
         @include sans-serif-regular();
         font-size: desktop-vw(56px);
         line-height: desktop-vw(67px);
+
+        @include mobile() {
+          text-align: center;
+          font-size: mobile-vw(56px);
+          line-height: mobile-vw(67px);
+        }
       }
 
       &-spinner {
@@ -559,6 +570,12 @@ onBeforeUnmount(() => {
         width: desktop-vw(44px);
         border-radius: 50%;
         margin-bottom: desktop-vw(144px);
+
+        @include mobile() {
+          height: mobile-vw(44px);
+          width: mobile-vw(44px);
+          margin-bottom: mobile-vw(144px);
+        }
 
         &-base {
           position: relative;
@@ -584,6 +601,11 @@ onBeforeUnmount(() => {
           svg {
             height: desktop-vw(44px);
             width: desktop-vw(44px);
+
+            @include mobile() {
+              height: mobile-vw(44px);
+              width: mobile-vw(44px);
+            }
           }
         }
       }
@@ -597,6 +619,11 @@ onBeforeUnmount(() => {
 
         @include rounded();
         overflow: hidden;
+
+        @include mobile() {
+          top: calc(100% - mobile-vw(74px));
+          width: calc(100% - mobile-vw(10px));
+        }
 
         img {
           @include image-default();

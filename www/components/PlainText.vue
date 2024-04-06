@@ -30,6 +30,10 @@ defineProps(['data'])
     strong {
       color: $black50;
     }
+
+    @include mobile() {
+      max-width: none;
+    }
   }
 }
 </style>
