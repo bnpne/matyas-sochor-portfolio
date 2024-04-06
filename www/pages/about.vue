@@ -101,8 +101,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class='about' id='page'>
-    <NuxtLayout v-if='about' name='work'>
-      <div class='about-container'>
+    <NuxtLayout name='work'>
+      <div v-if='about' class='about-container'>
         <div class='about-container-flex'>
           <div v-if='!isMobile' class='about-avatar'>
             <ul class='about-avatar-list anima-fade'>
@@ -185,11 +185,11 @@ onBeforeUnmount(() => {
               </NuxtLink>
             </div>
           </div>
-          <div v-if='links' class='about-footer-links'>
+          <div class='about-footer-links'>
             <div class='about-footer-link'>
               <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
             </div>
-            <div class='about-footer-linkList'>
+            <div v-if='links' class='about-footer-linkList'>
               <NuxtLink class='about-footer-linkList-el' target='_blank' v-for='link in links' to={{ link.linkURL }}>
                 {{ link.linkText }}
               </NuxtLink>
