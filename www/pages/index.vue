@@ -30,11 +30,14 @@ definePageMeta({
 
 import { horizontalLoop } from '~/utils/helpers/horizontalLoop'
 const projects = ref([])
-const store = useStore()
-const { allProjects } = storeToRefs(store)
 const snippets = ref([])
 const cursor = ref([])
 const app = useNuxtApp()
+const loading = ref(true)
+
+const main = useStore()
+const store = useData()
+const { data } = storeToRefs(store)
 
 let setCursorPosition = function (c, e) {
   let xPosition = e.clientX - c.clientWidth / 2 + "px";
@@ -47,54 +50,56 @@ let setCursorPosition = function (c, e) {
   };
 };
 
-onMounted(() => {
-  ScrollTrigger.refresh(true)
-  /// Image Mask
-  let st = gsap.utils.toArray('.s-t')
-  st.forEach(t => {
-    let s = gsap.utils.toArray('.s', t)
-    gsap.to(s, {
-      y: '30%',
-      ease: ' circ.out',
-      scrollTrigger: {
-        trigger: t,
-        scrub: true,
-        start: 'top top',
-        end: 'bottom top'
-      }
-    })
-  })
+watch([() => store.isFetched, () => loading.value], async () => {
+  if (store.isFetched || !loading) {
+    await nextTick()
+    ScrollTrigger.refresh(true)
+    /// Image Mask
 
-  app.$scrollStart()
-  if (snippets) {
-    snippets.value.forEach(s => {
-      horizontalLoop(s, { paused: false, repeat: -1, speed: .3, })
-    })
-  }
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          store.setActiveProject(entry.target.dataset.index)
+    let st = gsap.utils.toArray('.s-t')
+    st.forEach(t => {
+      let s = gsap.utils.toArray('.s', t)
+      gsap.to(s, {
+        y: '30%',
+        ease: ' circ.out',
+        scrollTrigger: {
+          trigger: t,
+          scrub: true,
+          start: 'top top',
+          end: 'bottom top'
         }
-      });
-    },
-    {
-      threshold: 0.5,
-    }
-  );
-
-  if (projects) {
-    projects.value.forEach(p => {
-      observer.observe(p)
+      })
     })
 
-    // projects.value.forEach((p, i) => {
-    //   p.addEventListener("mousemove", e => {
-    //     setCursorPosition(cursor.value[i], e)
-    //   });
-    // })
+    app.$scrollStart()
+    if (snippets) {
+      snippets.value.forEach(s => {
+        horizontalLoop(s, { paused: false, repeat: -1, speed: .3, })
+      })
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            main.setActiveProject(entry.target.dataset.index)
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    if (projects) {
+      projects.value.forEach(p => {
+        observer.observe(p)
+      })
+    }
   }
+})
+
+onMounted(() => {
+  loading.value = false
 })
 
 onBeforeUnmount(() => {
@@ -106,8 +111,8 @@ onBeforeUnmount(() => {
 <template>
   <div class='home' id='page'>
     <NuxtLayout name='page'>
-      <div v-if='allProjects' class='home-container'>
-        <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project, index in allProjects"
+      <div class='home-container'>
+        <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for="project, index in data?.home.selectedProjects"
           class='home-project pre-project s-t'>
           <div ref='projects' class='home-project-img pre-image' :data-index='index'>
             <div class='home-project-img-overlay'></div>
@@ -126,18 +131,20 @@ onBeforeUnmount(() => {
           <div v-if='project.projectDetails' class='home-project-details'>
             <div class='home-project-details-info'>
               <p v-if='project.filters' v-for='filter in project.filters'>{{ filter.tagTitle }},</p>
-              <p v-if='project.projectDetails?.projectYear'>{{ project.projectDetails?.projectYear.split('-')[0] }},</p>
+              <p v-if='project.projectDetails?.projectYear'>{{ project.projectDetails?.projectYear.split('-')[0] }},
+              </p>
               <p v-if='project.projectDetails?.awards'>{{ project.projectDetails?.awards.length }} Awards</p>
-              <p v-else>{{ project.projectDetails?.agencies[0] }} +{{ project.projectDetails?.agencies.length - 1 }}</p>
+              <p v-else>{{ project.projectDetails?.agencies[0] }} +{{ project.projectDetails?.agencies.length - 1 }}
+              </p>
             </div>
             <div class='home-project-details-snippet'>
               <div class='home-project-details-snippet-mask'>
                 <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
-        project.projectSnippet
-      }}</p>
+          project.projectSnippet
+        }}</p>
                 <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
-        project.projectSnippet
-                  }}</p>
+          project.projectSnippet
+        }}</p>
               </div>
             </div>
           </div>
@@ -224,6 +231,7 @@ onBeforeUnmount(() => {
       display: flex;
       align-items: center;
       gap: desktop-vw(16px);
+      z-index: 10;
 
       &-info {
         display: flex;

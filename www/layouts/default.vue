@@ -1,9 +1,6 @@
 <script setup lang='ts'>
 const route = useRoute()
 const { isMobile } = useDevice()
-
-onMounted(() => {
-})
 </script>
 
 <template>

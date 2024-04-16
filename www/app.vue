@@ -3,12 +3,16 @@ useHead({
   title: 'Matyas Sochor | Digital Graphic Designer'
 })
 
-const query = groq`*[_type == 'home']{selectedProjects[]->{...,"filters":projectFilters.filter[]->}}[0].selectedProjects`
-const { data } = useSanityQuery<Project>(query)
-
 const app = useNuxtApp()
-const store = useStore()
-store.addProjects(data)
+
+const store = useData()
+// store.$subscribe((state, mutation) => console.log(mutation.isFetched))
+// const { data } = storeToRefs(store)
+// watch(data, () => {
+//   if (data.value) {
+//     console.log(toRaw(data.value).home)
+//   }
+// })
 
 onMounted(() => {
   app.$scrollToTop()

@@ -3,12 +3,8 @@ import Lenis from '@studio-freight/lenis'
 import R from '~/utils/R'
 import gsap from 'gsap'
 
-
-const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
-const { data } = useSanityQuery<HomeData>(query)
-
-const linkQuery = groq`*[_type == 'links'][0]{linkArray}`
-const { data: links } = useSanityQuery(linkQuery)
+const store = useData()
+const { data } = storeToRefs(store)
 
 const wrapper = ref()
 const container = ref()
@@ -65,90 +61,94 @@ onMounted(() => {
 
 <template>
   <section ref="wrapper" class='sidebar'>
-    <div v-if='isMobile' class='sidebar-overlay' :class='{ open: toggleIsOpen.isOpen }'></div>
-    <div v-if='data' class='sidebar-avatar'>
-      <div class='sidebar-avatar-container'>
-        <div class='sidebar-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
-          <NuxtLink to='/' v-if='data.avatar' class='sidebar-avatar-info-img'>
-            <SanityImage :asset-id="data.avatar?.asset?._ref" auto='format' w='80' />
-          </NuxtLink>
-          <div class='sidebar-avatar-info-email'>
-            <p v-if='data.name' class='sidebar-avatar-info-email-text'>{{ data.name }}</p>
+    <ClientOnly>
+      <div v-if='isMobile' class='sidebar-overlay' :class='{ open: toggleIsOpen.isOpen }'></div>
+      <div v-if='data' class='sidebar-avatar'>
+        <div class='sidebar-avatar-container'>
+          <div class='sidebar-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
+            <NuxtLink to='/' v-if='data.home.avatar' class='sidebar-avatar-info-img'>
+              <SanityImage :asset-id="data.home.avatar?.asset?._ref" auto='format' w='80' />
+            </NuxtLink>
+            <div class='sidebar-avatar-info-email'>
+              <p v-if='data.home.name' class='sidebar-avatar-info-email-text'>{{ data.home.name }}</p>
 
-            <!-- DROPDOWN -->
-            <template v-if='!isMobile'>
-              <div @mouseover='dropdownOver' @mouseleave='dropdownLeave' class='sidebar-dropdown'>
-                <div v-if='data.emailForm' class='sidebar-dropdown-email' :class='{ active: isOpen }'>
-                  {{ data.emailForm?.emailText }}
+              <!-- DROPDOWN -->
+              <template v-if='!isMobile'>
+                <div @mouseover='dropdownOver' @mouseleave='dropdownLeave' class='sidebar-dropdown'>
+                  <div v-if='data.home.emailForm' class='sidebar-dropdown-email' :class='{ active: isOpen }'>
+                    {{ data.home.emailForm?.emailText }}
+                  </div>
+                  <div ref='dropdown' v-if='data.links.linkArray' class='sidebar-dropdown-content'
+                    :class='{ active: isOpen }'>
+                    <NuxtLink v-for=' link in data.links.linkArray' :to='link.linkURL' target='_blank'
+                      class='sidebar-dropdown-link'>
+                      {{ link.linkText }}
+                    </NuxtLink>
+                  </div>
                 </div>
-                <div ref='dropdown' v-if='links' class='sidebar-dropdown-content' :class='{ active: isOpen }'>
-                  <NuxtLink v-for=' link in links.linkArray' :to='link.linkURL' target='_blank'
-                    class='sidebar-dropdown-link'>
-                    {{ link.linkText }}
-                  </NuxtLink>
+              </template>
+              <template v-else-if='isMobile'>
+                <div @click='mobileDropdownToggle' class='sidebar-dropdown'>
+                  <div v-if='data.home.emailForm' class='sidebar-dropdown-email'>
+                    {{ data.home.emailForm?.emailText }}
+                  </div>
+                  <div ref='dropdown' v-if='data.links.linkArray' class='sidebar-dropdown-content'
+                    :class='{ active: isOpen }'>
+                    <NuxtLink v-for=' link in data.links.linkArray' :to='link.linkURL' class='sidebar-dropdown-link'>
+                      {{ link.linkText }}
+                    </NuxtLink>
+                  </div>
                 </div>
-              </div>
-            </template>
-            <template v-else-if='isMobile'>
-              <div @click='mobileDropdownToggle' class='sidebar-dropdown'>
-                <div v-if='data.emailForm' class='sidebar-dropdown-email'>
-                  {{ data.emailForm?.emailText }}
-                </div>
-                <div ref='dropdown' v-if='links' class='sidebar-dropdown-content' :class='{ active: isOpen }'>
-                  <NuxtLink v-for=' link in links.linkArray' :to='link.linkURL' class='sidebar-dropdown-link'>
-                    {{ link.linkText }}
-                  </NuxtLink>
-                </div>
-              </div>
-            </template>
-            <!-- DROPDOWN -->
-          </div>
-        </div>
-        <div class='sidebar-avatar-about'>
-          <NuxtLink v-if='isDesktop' to="/about" class='btn btn-third'>About Me</NuxtLink>
-          <div ref='toggler' @click='openToggle' v-else class='sidebar-toggle'>
-            <div class='sidebar-toggle-hamburger'>
-              <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.142578" y="0.25" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                <rect x="0.142578" y="3.46387" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                <rect x="0.142578" y="6.67871" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-              </svg>
-              <svg v-else viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
-                  fill="white" />
-                <path
-                  d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
-                  fill="white" />
-              </svg>
-            </div>
-            <div class='sidebar-toggle-index'>2</div>
-          </div>
-          <div ref='toggle' v-if='isMobile' class='sidebar-toggle-menu'>
-            <div class='sidebar-toggle-menu-links'>
-              <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-              <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+              </template>
+              <!-- DROPDOWN -->
             </div>
           </div>
+          <div class='sidebar-avatar-about'>
+            <NuxtLink v-if='isDesktop' to="/about" class='btn btn-third'>About Me</NuxtLink>
+            <div ref='toggler' @click='openToggle' v-else class='sidebar-toggle'>
+              <div class='sidebar-toggle-hamburger'>
+                <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.142578" y="0.25" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+                  <rect x="0.142578" y="3.46387" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+                  <rect x="0.142578" y="6.67871" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+                </svg>
+                <svg v-else viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
+                    fill="white" />
+                  <path
+                    d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
+                    fill="white" />
+                </svg>
+              </div>
+              <div class='sidebar-toggle-index'>2</div>
+            </div>
+            <div ref='toggle' v-if='isMobile' class='sidebar-toggle-menu'>
+              <div class='sidebar-toggle-menu-links'>
+                <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
+                <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class='sidebar-avatar-gradient'></div>
       </div>
-      <div class='sidebar-avatar-gradient'></div>
-    </div>
-    <div v-if='data' ref='container' class='sidebar-container'>
-      <template v-if='route.path !== "/archive"'>
-        <SocialPost v-if='data.socialPost' :post='data.socialPost' />
-        <SelectedProjects v-if='data.selectedProjects' :projects='data.selectedProjects' />
-        <SelectedExperiments v-if='data.selectedExperiments' :experiments='data.selectedExperiments'
-          :indexStart='data.selectedProjects.length' />
-      </template>
-      <template v-else>
-        <ClientOnly>
-          <ArchiveShowFilters />
-          <ArchiveProjectFilters />
-          <ArchiveExperimentFilters />
-        </ClientOnly>
-      </template>
-    </div>
+      <div v-if='data' ref='container' class='sidebar-container'>
+        <template v-if='route.path !== "/archive"'>
+          <SocialPost v-if='data.home.socialPost' :post='data.home.socialPost' />
+          <SelectedProjects v-if='data.home.selectedProjects' :projects='data.home.selectedProjects' />
+          <SelectedExperiments v-if='data.home.selectedExperiments' :experiments='data.home.selectedExperiments'
+            :indexStart='data.home.selectedProjects.length' />
+        </template>
+        <template v-else>
+          <ClientOnly>
+            <ArchiveShowFilters />
+            <ArchiveProjectFilters />
+            <ArchiveExperimentFilters />
+          </ClientOnly>
+        </template>
+      </div>
+    </ClientOnly>
   </section>
 </template>
 

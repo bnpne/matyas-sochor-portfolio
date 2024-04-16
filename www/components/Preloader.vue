@@ -2,27 +2,35 @@
 import gsap from 'gsap'
 
 const app = useNuxtApp()
-const store = useStore()
-const pre = ref()
+const store = useData()
+// const { data } = storeToRefs(store)
+let appReady = false
+const pre = ref(null)
 
 onMounted(() => {
-  app.$scrollStop()
-
   const tl = gsap.timeline({
-    defaults: { duration: 1.5, ease: 'circ.out' }, onComplete: () => {
+    defaults: { duration: 1.5, ease: 'circ.out' }, paused: true, onComplete: () => {
       app.$scrollStart()
       pre.value.remove()
     }
   })
+  app.hook('app:suspense:resolve', () => {
+    store.$subscribe((s, m) => {
+      if (m.isFetched) {
+        tl.to('.pl-overlay', { x: '100%', duration: 3 })
+          .from('.pl-text', { y: '100%', opacity: 0, duration: 1, stagger: .15 }, '>-1.7')
+          .to('.pl', { y: '-100%', duration: 1.2, ease: 'circ.inOut' })
+          .from('.sidebar', { x: '-20%' }, '<')
+          .from('.pre-anima', { x: '-50%', stagger: .08 }, '<')
+          .from('.pre-project', { y: '20%', stagger: .15 }, '<')
+          .from('.pre-image', { scale: 1.2, duration: 1.5, stagger: .08 }, '<')
+          .from(['.work-layout-nav', '.page-layout-nav'], { y: '-100%', duration: 1.5, }, '<')
 
-  tl.to('.pl-overlay', { x: '100%', duration: 3 })
-    .from('.pl-text', { y: '100%', opacity: 0, duration: 1, stagger: .15 }, '>-1.7')
-    .to('.pl', { y: '-100%', duration: 1.2, ease: 'circ.inOut' })
-    .from('.sidebar', { x: '-20%' }, '<')
-    .from('.pre-anima', { x: '-50%', stagger: .08 }, '<')
-    .from('.pre-project', { y: '20%', stagger: .15 }, '<')
-    .from('.pre-image', { scale: 1.2, duration: 1.5, stagger: .08 }, '<')
-    .from(['.work-layout-nav', '.page-layout-nav'], { y: '-100%', duration: 1.5, }, '<')
+        tl.play()
+      }
+    })
+  })
+  app.$scrollStop()
 })
 </script>
 

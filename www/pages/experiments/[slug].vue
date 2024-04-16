@@ -1,4 +1,5 @@
-<!-- Experiments PAGE -->
+<!-- EXPERIMENTS PAGE -->
+<!-- https://plasticbionic.com/project/days-2-->
 <script setup lang='ts'>
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -6,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 definePageMeta({
   pageTransition: {
     css: false,
-    name: 'experiment',
+    name: 'experiments',
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
@@ -20,9 +21,6 @@ definePageMeta({
       })
 
       tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
-        .from('.work-hero', { opacity: 0 }, '>-.5')
-        .from('.intro-anima', { scale: 1.2 }, '>-.9')
-        .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     },
     onLeave(el, done) {
       const app = useNuxtApp()
@@ -49,62 +47,129 @@ const da = computed(() => {
 })
 
 const route = useRoute()
-const query = groq`*[_type == 'projects' && projectSlug.current == "${route.params.slug}"][0]`
-const { data: work } = useSanityQuery(query)
-
-const store = useStore()
-const { allProjects } = storeToRefs(store)
+const store = useData()
+const { data } = storeToRefs(store)
+const work = ref(null)
+const loading = ref(true)
 
 // Get next index
-// const nextIndex = reactive({ value: null })
-// const isNext = computed(() => {
-//   return nextIndex.value
-// })
-// async function getIndex() {
-//   if (work.value) {
-//     toRaw(allProjects.value).forEach((a, i) => {
-//       if (a?._id === work.value?._id) {
-//         if (i === allProjects.value.length - 1) {
-//           nextIndex.value = 0
-//         } else {
-//           nextIndex.value = i + 1
-//         }
-//       }
-//     })
-//   }
-//   await nextTick()
-// }
+const nextIndex = reactive({ value: null })
+const isNext = computed(() => {
+  return nextIndex.value
+})
+async function getIndex() {
+  if (work.value) {
+    toRaw(data.value).home?.selectedExperiments.forEach((a, i) => {
+      if (a?._id === work.value?._id) {
+        if (i === toRaw(data.value).home.selectedExperiments.length - 1) {
+          nextIndex.value = 0
+        } else {
+          nextIndex.value = i + 1
+        }
+      }
+    })
+  }
+  await nextTick()
+}
 
-watchEffect(() => {
-  // getIndex()
-  useHead({
-    title: `${work.value?.projectTitle} | Matyas Sochor`
-  })
+watch([() => store.isFetched, () => loading.value], async () => {
+  if (data.value || !loading || store.isFetched) {
+    toRaw(data.value)?.projects.forEach(p => {
+      if (p.projectSlug.current === route.params.slug) {
+        work.value = p
+      }
+    })
+    getIndex()
+    useHead({
+      title: `${work.value?.projectTitle} | Matyas Sochor`
+    })
+    await nextTick()
+
+    let intro = gsap.timeline({ defaults: { duration: 1, ease: 'circ.out' }, paused: true })
+    intro
+      .from('.work-hero', { opacity: 0 }, '>-.5')
+      .from('.intro-anima', { scale: 1.2 }, '>-.9')
+      .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
+    intro.play()
+    ScrollTrigger.refresh(true)
+
+    /// SCROLL ANIMATIONS
+    /// Fade In
+    let animaFade = gsap.utils.toArray('.anima-fade')
+    animaFade.forEach(f => {
+      gsap.from(f.children, {
+        opacity: 0,
+        y: '80%',
+        duration: 1,
+        ease: 'circ.out',
+        stagger: .17,
+        scrollTrigger: {
+          trigger: f,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Scale
+    let animaScale = gsap.utils.toArray('.anima-scale')
+    animaScale.forEach(s => {
+      let img = gsap.utils.toArray('.a', s)
+      gsap.from(img, {
+        scale: 1.1,
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: s,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Divider
+    let animaDivider = gsap.utils.toArray('.anima-divider')
+    animaDivider.forEach(d => {
+      gsap.from(d.children, {
+        width: '0%',
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: d,
+          start: 'top 95%',
+        }
+      })
+    })
+
+
+    app.$lenis.on('scroll', (e) => {
+      lenisProgress.value = e.progress
+    })
+
+    let t = 0
+    window.addEventListener('wheel', (e) => {
+      if (lenisProgress.value === 1) {
+        t += e.deltaY / 20
+        t = Math.min(Math.max(t, 0), 100)
+        gsap.to(progress, { value: t, ease: 'circ.out' })
+
+        if (t === 100) {
+          setTimeout(async () => {
+            await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`,
+              { redirectCode: 301, replace: true })
+          }, 500)
+        }
+      } else {
+        t = 0
+        gsap.to(progress, { value: 0, ease: 'circ.out' })
+
+      }
+    })
+  }
 })
 
 onMounted(() => {
-  app.$lenis.on('scroll', (e) => {
-    lenisProgress.value = e.progress
-  })
-
-  // let t = 0
-  // window.addEventListener('wheel', (e) => {
-  //   if (lenisProgress.value === 1) {
-  //     t += e.deltaY / 20
-  //     t = Math.min(Math.max(t, 0), 100)
-  //     gsap.to(progress, { value: t, ease: 'circ.out' })
-  //
-  //     if (t === 100) {
-  //       setTimeout(async () => {
-  //         await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`, { redirectCode: 301 })
-  //       }, 500)
-  //     }
-  //   } else {
-  //     t = 0
-  //     gsap.to(progress, { value: 0, ease: 'circ.out' })
-  //
-  //   }
-  // })
+  loading.value = false
 })
 
 onBeforeUnmount(() => {
@@ -163,12 +228,12 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div v-if='work.projectHeroText' class='work-intro'>
-          <ScrollFadeIn>
+          <span class='anima-fade'>
             <p class='work-intro-header'>Introduction</p>
-          </ScrollFadeIn>
-          <ScrollFadeIn>
+          </span>
+          <span class='anima-fade'>
             <SanityContent :blocks='work.projectHeroText' />
-          </ScrollFadeIn>
+          </span>
         </div>
         <div v-if='work.projectSections' class='work-sections'>
           <template v-for='section in work.projectSections.sections'>
@@ -181,64 +246,67 @@ onBeforeUnmount(() => {
         <div v-if='work.projectCredits' class='work-credits'>
           <ProjectCredits :data='work.projectCredits' />
         </div>
-        <!-- <template v-if='allProjects[isNext]'> -->
-        <!--   <div class='work-footer'> -->
-        <!--     <ScrollFadeIn> -->
-        <!--       <p class='work-footer-text'> -->
-        <!--         Do you want to know more about my role, -->
-        <!--         the team and the process? -->
-        <!--       </p> -->
-        <!--     </ScrollFadeIn> -->
-        <!--     <div> -->
-        <!--       <ScrollFadeIn> -->
-        <!--         <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'> -->
-        <!--           Let's Chat -->
-        <!--         </NuxtLink> -->
-        <!--       </ScrollFadeIn> -->
-        <!--     </div> -->
-        <!--     <ScrollDivider> -->
-        <!--       <div class='work-footer-divider'></div> -->
-        <!--     </ScrollDivider> -->
-        <!--     <div class='work-footer-scroll'> -->
-        <!--       <ScrollFadeIn> -->
-        <!--         <p class='work-footer-scroll-heading'>Scroll to next project</p> -->
-        <!--       </ScrollFadeIn> -->
-        <!--       <ScrollFadeIn> -->
-        <!--         <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2> -->
-        <!--       </ScrollFadeIn> -->
-        <!--       <ScrollFadeIn> -->
-        <!--         <div class='work-footer-scroll-spinner'> -->
-        <!--           <div class='work-footer-scroll-spinner-base'> -->
-        <!--             <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
-        <!--               <path -->
-        <!--                 d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z" -->
-        <!--                 fill="black" /> -->
-        <!--             </svg> -->
-        <!--           </div> -->
-        <!--           <div class='work-footer-scroll-spinner-progress'> -->
-        <!--             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
-        <!--               <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black' -->
-        <!--                 :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" /> -->
-        <!--             </svg> -->
-        <!--           </div> -->
-        <!--         </div> -->
-        <!--       </ScrollFadeIn> -->
-        <!--       <div v-if='allProjects[isNext]' class='work-footer-scroll-image'> -->
-        <!--         <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'> -->
-        <!--           <SanityImage :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format" -->
-        <!--             w='1000' fit='clip' /> -->
-        <!--         </template> -->
-        <!--         <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'"> -->
-        <!--           <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref"> -->
-        <!--             <template #default="{ src }"> -->
-        <!--               <video autoplay='true' playsinline='true' loop='true' muted :src='src'></video> -->
-        <!--             </template> -->
-        <!--           </SanityFile> -->
-        <!--         </template> -->
-        <!--       </div> -->
-        <!--     </div> -->
-        <!--   </div> -->
-        <!-- </template> -->
+        <template v-if='data.home?.selectedExperiments[isNext]'>
+          <div class='work-footer'>
+            <span class='anima-fade'>
+              <p class='work-footer-text'>
+                Do you want to know more about my role,
+                the team and the process?
+              </p>
+            </span>
+            <div>
+              <span class='anima-fade'>
+                <NuxtLink to='mailto:matyas@sochor.xyz' class='work-footer-button'>
+                  Let's Chat
+                </NuxtLink>
+              </span>
+            </div>
+            <div class='work-footer-divider'></div>
+            <div class='work-footer-scroll'>
+              <span class='anima-fade'>
+                <p class='work-footer-scroll-heading'>Scroll to next project</p>
+              </span>
+              <span class='anima-fade'>
+                <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
+              </span>
+              <span class='anima-fade'>
+                <div class='work-footer-scroll-spinner'>
+                  <div class='work-footer-scroll-spinner-base'>
+                    <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
+                        fill="black" />
+                    </svg>
+                  </div>
+                  <div class='work-footer-scroll-spinner-progress'>
+                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
+                        :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
+                    </svg>
+                  </div>
+                </div>
+              </span>
+              <span class='anima-scale'>
+                <div v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                  <template
+                    v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                    <SanityImage class='a'
+                      :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
+                      auto="format" w='1000' fit='clip' />
+                  </template>
+                  <template
+                    v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                    <SanityFile :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
+                      <template #default="{ src }">
+                        <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                      </template>
+                    </SanityFile>
+                  </template>
+                </div>
+              </span>
+            </div>
+          </div>
+        </template>
       </div>
     </NuxtLayout>
   </div>
@@ -317,6 +385,9 @@ onBeforeUnmount(() => {
       @include mobile() {
         min-height: mobile-vw(125px);
         padding: mobile-vw(18px) mobile-vw(14px) mobile-vw(28px);
+        justify-content: flex-start;
+        gap: mobile-vw(40px);
+        overflow-x: scroll;
       }
 
       &-client {
@@ -371,7 +442,7 @@ onBeforeUnmount(() => {
         align-content: flex-start;
 
         @include mobile() {
-          gap: mobile-vw(130px);
+          gap: mobile-vw(40px);
         }
 
         &-section {
@@ -385,6 +456,7 @@ onBeforeUnmount(() => {
           @include mobile() {
             gap: mobile-vw(6px);
             line-height: mobile-vw(14px);
+            min-width: mobile-vw(100px);
           }
 
           &>p {
@@ -488,6 +560,11 @@ onBeforeUnmount(() => {
       gap: desktop-vw(24px);
       padding: 0 desktop-vw(60px);
 
+      @include mobile() {
+        gap: mobile-vw(24px);
+        padding: 0 mobile-vw(60px);
+      }
+
       &-heading {
         @include small-type();
         color: $black50;
@@ -497,6 +574,12 @@ onBeforeUnmount(() => {
         @include sans-serif-regular();
         font-size: desktop-vw(56px);
         line-height: desktop-vw(67px);
+
+        @include mobile() {
+          text-align: center;
+          font-size: mobile-vw(56px);
+          line-height: mobile-vw(67px);
+        }
       }
 
       &-spinner {
@@ -505,6 +588,12 @@ onBeforeUnmount(() => {
         width: desktop-vw(44px);
         border-radius: 50%;
         margin-bottom: desktop-vw(144px);
+
+        @include mobile() {
+          height: mobile-vw(44px);
+          width: mobile-vw(44px);
+          margin-bottom: mobile-vw(144px);
+        }
 
         &-base {
           position: relative;
@@ -530,6 +619,11 @@ onBeforeUnmount(() => {
           svg {
             height: desktop-vw(44px);
             width: desktop-vw(44px);
+
+            @include mobile() {
+              height: mobile-vw(44px);
+              width: mobile-vw(44px);
+            }
           }
         }
       }
@@ -543,6 +637,11 @@ onBeforeUnmount(() => {
 
         @include rounded();
         overflow: hidden;
+
+        @include mobile() {
+          top: calc(100% - mobile-vw(74px));
+          width: calc(100% - mobile-vw(10px));
+        }
 
         img {
           @include image-default();

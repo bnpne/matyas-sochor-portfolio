@@ -10,7 +10,6 @@ export default defineConfig({
 
   projectId: '8dcr9g54',
   dataset: 'production',
-
   schema: {
     types: schemaTypes,
   },

@@ -3,6 +3,8 @@ import gsap from 'gsap'
 
 const query = groq`*[_type == 'projects']{notifications, projectSlug}`
 const { data } = useSanityQuery<Project>(query)
+// const store = useData()
+// store.$subscribe(state => console.log(state.data))
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })

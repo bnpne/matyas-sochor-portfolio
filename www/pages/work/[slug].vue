@@ -3,12 +3,11 @@
 <script setup lang='ts'>
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-const ctx = gsap.context(() => { })
 
 definePageMeta({
   pageTransition: {
     css: false,
-    name: 'work',
+    name: 'experiments',
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
@@ -22,9 +21,6 @@ definePageMeta({
       })
 
       tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
-        .from('.work-hero', { opacity: 0 }, '>-.5')
-        .from('.intro-anima', { scale: 1.2 }, '>-.9')
-        .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     },
     onLeave(el, done) {
       const app = useNuxtApp()
@@ -51,11 +47,10 @@ const da = computed(() => {
 })
 
 const route = useRoute()
-const query = groq`*[_type == 'projects' && projectSlug.current == "${route.params.slug}"][0]`
-const { data: work } = useSanityQuery(query)
-
-const store = useStore()
-const { allProjects } = storeToRefs(store)
+const store = useData()
+const { data } = storeToRefs(store)
+const work = ref(null)
+const loading = ref(true)
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -64,9 +59,9 @@ const isNext = computed(() => {
 })
 async function getIndex() {
   if (work.value) {
-    toRaw(allProjects.value).forEach((a, i) => {
+    toRaw(data.value).home?.selectedProjects.forEach((a, i) => {
       if (a?._id === work.value?._id) {
-        if (i === allProjects.value.length - 1) {
+        if (i === toRaw(data.value).home.selectedProjects.length - 1) {
           nextIndex.value = 0
         } else {
           nextIndex.value = i + 1
@@ -77,88 +72,104 @@ async function getIndex() {
   await nextTick()
 }
 
-watchEffect(() => {
-  getIndex()
-  useHead({
-    title: `${work.value?.projectTitle} | Matyas Sochor`
-  })
+watch([() => store.isFetched, () => loading.value], async () => {
+  if (!loading || store.isFetched) {
+    toRaw(data.value)?.projects.forEach(p => {
+      if (p.projectSlug.current === route.params.slug) {
+        work.value = p
+      }
+    })
+    getIndex()
+    useHead({
+      title: `${work.value?.projectTitle} | Matyas Sochor`
+    })
+    await nextTick()
+
+    let intro = gsap.timeline({ defaults: { duration: 1, ease: 'circ.out' }, paused: true })
+    intro
+      .from('.work-hero', { opacity: 0 }, '>-.5')
+      .from('.intro-anima', { scale: 1.2 }, '>-.9')
+      .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
+    intro.play()
+    ScrollTrigger.refresh(true)
+
+    /// SCROLL ANIMATIONS
+    /// Fade In
+    let animaFade = gsap.utils.toArray('.anima-fade')
+    animaFade.forEach(f => {
+      gsap.from(f.children, {
+        opacity: 0,
+        y: '80%',
+        duration: 1,
+        ease: 'circ.out',
+        stagger: .17,
+        scrollTrigger: {
+          trigger: f,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Scale
+    let animaScale = gsap.utils.toArray('.anima-scale')
+    animaScale.forEach(s => {
+      let img = gsap.utils.toArray('.a', s)
+      gsap.from(img, {
+        scale: 1.1,
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: s,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Divider
+    let animaDivider = gsap.utils.toArray('.anima-divider')
+    animaDivider.forEach(d => {
+      gsap.from(d.children, {
+        width: '0%',
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: d,
+          start: 'top 95%',
+        }
+      })
+    })
+
+
+    app.$lenis.on('scroll', (e) => {
+      lenisProgress.value = e.progress
+    })
+
+    let t = 0
+    window.addEventListener('wheel', (e) => {
+      if (lenisProgress.value === 1) {
+        t += e.deltaY / 20
+        t = Math.min(Math.max(t, 0), 100)
+        gsap.to(progress, { value: t, ease: 'circ.out' })
+
+        if (t === 100) {
+          setTimeout(async () => {
+            await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
+              { redirectCode: 301, replace: true })
+          }, 500)
+        }
+      } else {
+        t = 0
+        gsap.to(progress, { value: 0, ease: 'circ.out' })
+
+      }
+    })
+  }
 })
 
-onMounted(async () => {
-  ScrollTrigger.refresh(true)
-
-  /// SCROLL ANIMATIONS
-  /// Fade In
-  let animaFade = gsap.utils.toArray('.anima-fade')
-  animaFade.forEach(f => {
-    gsap.from(f.children, {
-      opacity: 0,
-      y: '80%',
-      duration: 1,
-      ease: 'circ.out',
-      stagger: .17,
-      scrollTrigger: {
-        trigger: f,
-        start: 'top 95%',
-      }
-    })
-  })
-
-  /// Scale
-  let animaScale = gsap.utils.toArray('.anima-scale')
-  animaScale.forEach(s => {
-    let img = gsap.utils.toArray('.a', s)
-    console.log(img)
-    gsap.from(img, {
-      scale: 1.1,
-      ease: 'circ.out',
-      stagger: .17,
-      duration: 1.5,
-      scrollTrigger: {
-        trigger: s,
-        start: 'top 95%',
-      }
-    })
-  })
-
-  /// Divider
-  let animaDivider = gsap.utils.toArray('.anima-divider')
-  animaDivider.forEach(d => {
-    gsap.from(d.children, {
-      width: '0%',
-      ease: 'circ.out',
-      stagger: .17,
-      duration: 1.5,
-      scrollTrigger: {
-        trigger: d,
-        start: 'top 95%',
-      }
-    })
-  })
-
-
-  app.$lenis.on('scroll', (e) => {
-    lenisProgress.value = e.progress
-  })
-
-  let t = 0
-  window.addEventListener('wheel', (e) => {
-    if (lenisProgress.value === 1) {
-      t += e.deltaY / 20
-      t = Math.min(Math.max(t, 0), 100)
-      gsap.to(progress, { value: t, ease: 'circ.out' })
-
-      if (t === 100) {
-        setTimeout(async () => {
-          await navigateTo(`/work/${allProjects.value[isNext.value].projectSlug.current}`)
-        }, 500)
-      }
-    } else {
-      t = 0
-      gsap.to(progress, { value: 0, ease: 'circ.out' })
-
-    }
-  })
+onMounted(() => {
+  loading.value = false
 })
 
 onBeforeUnmount(() => {
@@ -170,9 +181,9 @@ onBeforeUnmount(() => {
 <template>
   <div class='work' id='page'>
     <NuxtLayout name='work' :data='work'>
-      <div v-if='work' class='work-container'>
-        <div class='work-hero'>
-          <div class='work-hero-img'>
+      <div v-if='work' class='work-container '>
+        <div class='work-hero pre-project'>
+          <div class='work-hero-img pre-image'>
             <div class='work-hero-img-overlay'></div>
             <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
               <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
@@ -235,7 +246,7 @@ onBeforeUnmount(() => {
         <div v-if='work.projectCredits' class='work-credits'>
           <ProjectCredits :data='work.projectCredits' />
         </div>
-        <template v-if='allProjects[isNext]'>
+        <template v-if='data.home?.selectedProjects[isNext]'>
           <div class='work-footer'>
             <span class='anima-fade'>
               <p class='work-footer-text'>
@@ -256,7 +267,7 @@ onBeforeUnmount(() => {
                 <p class='work-footer-scroll-heading'>Scroll to next project</p>
               </span>
               <span class='anima-fade'>
-                <h2 class='work-footer-scroll-next'>{{ allProjects[isNext]?.projectTitle }}</h2>
+                <h2 class='work-footer-scroll-next'>{{ data.home?.selectedProjects[isNext]?.projectTitle }}</h2>
               </span>
               <span class='anima-fade'>
                 <div class='work-footer-scroll-spinner'>
@@ -276,13 +287,16 @@ onBeforeUnmount(() => {
                 </div>
               </span>
               <span class='anima-scale'>
-                <div v-if='allProjects[isNext]' class='work-footer-scroll-image'>
-                  <template v-if='allProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                    <SanityImage class='a' :asset-id="allProjects[isNext]?.projectCaseImage?.image.asset?._ref"
-                      auto="format" w='1000' fit='clip' />
+                <div v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
+                  <template
+                    v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                    <SanityImage class='a'
+                      :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.image.asset?._ref" auto="format"
+                      w='1000' fit='clip' />
                   </template>
-                  <template v-else-if="allProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                    <SanityFile :asset-id="allProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                  <template
+                    v-else-if="data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                    <SanityFile :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.video.asset?._ref">
                       <template #default="{ src }">
                         <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
                       </template>
