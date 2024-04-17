@@ -12,15 +12,12 @@ definePageMeta({
     onEnter(el, done) {
       const app = useNuxtApp()
 
-      const tl = gsap.timeline({
-        defaults: { duration: 1, ease: 'circ.out' },
+      gsap.to('.t-o', {
+        opacity: 0, duration: .75, delay: .25, ease: 'circ.out',
         onComplete: () => {
-          app.$scrollStart()
           done()
         }
       })
-
-      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out' })
     },
     onLeave(el, done) {
       const app = useNuxtApp()
@@ -51,6 +48,7 @@ const store = useData()
 const { data } = storeToRefs(store)
 const work = ref(null)
 const loading = ref(true)
+const called = ref(false)
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -71,6 +69,17 @@ async function getIndex() {
   }
   await nextTick()
 }
+
+watch(() => called.value, () => {
+  if (called.value === true) {
+
+    // console.log('hit')
+    setTimeout(async () => {
+      await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
+        { redirectCode: 301 })
+    }, 500)
+  }
+})
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
@@ -149,15 +158,16 @@ watch([() => store.isFetched, () => loading.value], async () => {
     let t = 0
     window.addEventListener('wheel', (e) => {
       if (lenisProgress.value === 1) {
-        t += e.deltaY / 20
-        t = Math.min(Math.max(t, 0), 100)
-        gsap.to(progress, { value: t, ease: 'circ.out' })
+        if (t < 100) {
+
+          t += e.deltaY / 20
+          t = Math.min(Math.max(t, 0), 100)
+          gsap.to(progress, { value: t, ease: 'circ.out' })
+        }
 
         if (t === 100) {
-          setTimeout(async () => {
-            await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
-              { redirectCode: 301, replace: true })
-          }, 500)
+          called.value = true
+          app.$scrollStop()
         }
       } else {
         t = 0
@@ -170,6 +180,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
 onMounted(() => {
   loading.value = false
+  app.$scrollStart()
 })
 
 onBeforeUnmount(() => {

@@ -40,7 +40,6 @@ watch(() => route.query.filter, () => {
               return f
             }
           })
-          console.log(tempF)
           let tempS = tempF.map(p => {
             return p.el.children[0].innerHTML
           })

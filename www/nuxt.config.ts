@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   pages: true,
   routeRules: {
     '/archive': {prerender: true},
-    '/work/**': {prerender: true},
+    // '/work/**': {prerender: true},
   },
   modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper', '@nuxtjs/device'],
   build: {

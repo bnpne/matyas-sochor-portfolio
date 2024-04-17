@@ -64,9 +64,9 @@ watch([() => store.isFetched, () => loading.value], async () => {
         ease: ' circ.out',
         scrollTrigger: {
           trigger: t,
-          scrub: true,
+          scrub: 0,
           start: 'top top',
-          end: 'bottom top'
+          end: 'bottom top',
         }
       })
     })
