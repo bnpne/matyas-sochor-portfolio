@@ -524,8 +524,10 @@ onBeforeUnmount(() => {
     &-text {
       @include medium-type();
       width: 40%;
+      margin-top: desktop-vw(68px);
 
       @include mobile() {
+        margin-top: mobile-vw(68px);
         width: 100%;
       }
     }

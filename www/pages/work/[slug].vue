@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 definePageMeta({
   pageTransition: {
     css: false,
-    name: 'experiments',
+    name: 'work',
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
@@ -20,7 +20,7 @@ definePageMeta({
         }
       })
 
-      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
+      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out' })
     },
     onLeave(el, done) {
       const app = useNuxtApp()
@@ -524,8 +524,10 @@ onBeforeUnmount(() => {
     &-text {
       @include medium-type();
       width: 40%;
+      margin-top: desktop-vw(68px);
 
       @include mobile() {
+        margin-top: mobile-vw(68px);
         width: 100%;
       }
     }

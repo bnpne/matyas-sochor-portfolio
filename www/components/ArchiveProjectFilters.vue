@@ -7,15 +7,20 @@ const store = useStore()
 const { projectFilters, projectFilterLengths, activeFilters } = storeToRefs(store)
 const reset = ref(false)
 const isActive = ref(false)
+const filtersArr = ref([])
 
 watch(() => route.query.filter, () => {
   if (route.query.filter) {
-
     let splt = route.query.filter.split(';')
-    if (splt.includes('Project')) {
+    if (splt.includes('Projects')) {
       isActive.value = true
     } else {
       store.clearActiveProjectFilters()
+      filtersArr.value.forEach(f => {
+        if (f.classList.contains('active')) {
+          f.classList.toggle('active')
+        }
+      })
       isActive.value = false
     }
   } else {
@@ -119,7 +124,7 @@ onUnmounted(() => {
       <!-- </div> -->
     </div>
     <div v-if='projectFilters' class='filters-filters'>
-      <div @click='selectFilter' v-for='filter, index in projectFilters' class='filters-filter'>
+      <div @click='selectFilter' ref='filtersArr' v-for='filter, index in projectFilters' class='filters-filter'>
         <span style='pointer-events: none;'>
           {{ filter }}
         </span>

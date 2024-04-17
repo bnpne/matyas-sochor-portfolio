@@ -29,69 +29,76 @@ definePageMeta({
 })
 
 const app = useNuxtApp()
-const query = groq`*[_type == 'about'][0]`
-const linkQuery = groq`*[_type == 'links'][0].linkArray`
-const { data: about } = useSanityQuery(query)
-const { data: links } = useSanityQuery(linkQuery)
-
 const { isMobile } = useDevice()
+const store = useData()
+const { data } = storeToRefs(store)
+const loading = ref(true)
+// const query = groq`*[_type == 'about'][0]`
+// const linkQuery = groq`*[_type == 'links'][0].linkArray`
+// const { data: about } = useSanityQuery(query)
+// const { data: links } = useSanityQuery(linkQuery)
 
-useHead({
-  title: 'About | Matyas Sochor'
+watch([() => store.isFetched, () => loading.value], async () => {
+  if (!loading || store.isFetched) {
+    useHead({
+      title: 'About | Matyas Sochor'
+    })
+
+    await nextTick()
+
+    ScrollTrigger.refresh(true)
+    /// Fade In
+    let animaFade = gsap.utils.toArray('.anima-fade')
+    animaFade.forEach(f => {
+      gsap.from(f.children, {
+        opacity: 0,
+        y: '80%',
+        duration: 1,
+        ease: 'circ.out',
+        stagger: .17,
+        scrollTrigger: {
+          trigger: f,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Scale
+    let animaScale = gsap.utils.toArray('.anima-scale')
+    animaScale.forEach(s => {
+      let img = gsap.utils.toArray('.a', s)
+      gsap.from(img, {
+        scale: 1.1,
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: s,
+          start: 'top 95%',
+        }
+      })
+    })
+
+    /// Divider
+    let animaDivider = gsap.utils.toArray('.anima-divider')
+    animaDivider.forEach(d => {
+      gsap.from(d.children, {
+        width: '0%',
+        ease: 'circ.out',
+        stagger: .17,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: d,
+          start: 'top 95%',
+        }
+      })
+    })
+  }
 })
 
 onMounted(() => {
-  ScrollTrigger.refresh(true)
-  /// Fade In
-  let animaFade = gsap.utils.toArray('.anima-fade')
-  animaFade.forEach(f => {
-    gsap.from(f.children, {
-      opacity: 0,
-      y: '80%',
-      duration: 1,
-      ease: 'circ.out',
-      stagger: .17,
-      scrollTrigger: {
-        trigger: f,
-        start: 'top 95%',
-      }
-    })
-  })
-
-  /// Scale
-  let animaScale = gsap.utils.toArray('.anima-scale')
-  animaScale.forEach(s => {
-    let img = gsap.utils.toArray('.a', s)
-    console.log(img)
-    gsap.from(img, {
-      scale: 1.1,
-      ease: 'circ.out',
-      stagger: .17,
-      duration: 1.5,
-      scrollTrigger: {
-        trigger: s,
-        start: 'top 95%',
-      }
-    })
-  })
-
-  /// Divider
-  let animaDivider = gsap.utils.toArray('.anima-divider')
-  animaDivider.forEach(d => {
-    gsap.from(d.children, {
-      width: '0%',
-      ease: 'circ.out',
-      stagger: .17,
-      duration: 1.5,
-      scrollTrigger: {
-        trigger: d,
-        start: 'top 95%',
-      }
-    })
-  })
-  app.$scrollStart()
+  loading.value = false
 })
-
 
 onBeforeUnmount(() => {
   // Revert gsap context
@@ -102,7 +109,7 @@ onBeforeUnmount(() => {
 <template>
   <div class='about' id='page'>
     <NuxtLayout name='work'>
-      <div v-if='about' class='about-container'>
+      <div v-if='data' class='about-container'>
         <div class='about-container-flex'>
           <div v-if='!isMobile' class='about-avatar'>
             <ul class='about-avatar-list anima-fade'>
@@ -124,15 +131,15 @@ onBeforeUnmount(() => {
                 <NuxtLink class='about-avatar-list-link' to='/archive'>Print</NuxtLink>
               </li>
             </ul>
-            <div v-if='about.bioImage' class='about-avatar-image'>
+            <div v-if='data?.about.bioImage' class='about-avatar-image'>
               <span class='anima-scale'>
-                <SanityImage class='a' :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+                <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
               </span>
             </div>
           </div>
           <div class='about-info'>
-            <div v-if='about.bio' class='about-info-bio anima-fade'>
-              <SanityContent :blocks='about.bio' />
+            <div v-if='data?.about.bio' class='about-info-bio anima-fade'>
+              <SanityContent :blocks='data?.about.bio' />
             </div>
             <div v-if='isMobile' class='about-avatar'>
               <ul class='about-avatar-list anima-fade'>
@@ -154,30 +161,31 @@ onBeforeUnmount(() => {
                   <NuxtLink to='/archive'>Print</NuxtLink>
                 </li>
               </ul>
-              <div v-if='about.bioImage' class='about-avatar-image'>
+              <div v-if='data?.about.bioImage' class='about-avatar-image'>
                 <span class='anima-scale'>
-                  <SanityImage class='a' :asset-id='about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+                  <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='1000'
+                    fit='clip' />
                 </span>
               </div>
             </div>
             <template v-if='!isMobile'>
-              <ImageCarousel v-if='about.imageCarousel' containerClass='about-info-carousel'
-                slideClass='about-info-carousel-image' :images='about.imageCarousel' />
+              <ImageCarousel v-if='data?.about.imageCarousel' containerClass='about-info-carousel'
+                slideClass='about-info-carousel-image' :images='data?.about.imageCarousel' />
             </template>
-            <div v-if='about.resume' class='about-info-resume'>
-              <EducationItem v-if='about.resume.educationList' :data='about.resume.educationList' />
-              <ExperienceItem v-if='about.resume.experienceList' :data='about.resume.experienceList' />
-              <RecognitionItem v-if='about.resume.recognitionList' :data='about.resume.recognitionList' />
-              <SoftwareItem v-if='about.resume.softwareList' :data='about.resume.softwareList' />
-              <SelectedProjectsItem v-if='about.resume.selectedAndCollaborations'
-                :data='about.resume.selectedAndCollaborations' />
+            <div v-if='data?.about.resume' class='about-info-resume'>
+              <EducationItem v-if='data?.about.resume.educationList' :data='data?.about.resume.educationList' />
+              <ExperienceItem v-if='data?.about.resume.experienceList' :data='data?.about.resume.experienceList' />
+              <RecognitionItem v-if='data?.about.resume.recognitionList' :data='data?.about.resume.recognitionList' />
+              <SoftwareItem v-if='data?.about.resume.softwareList' :data='data?.about.resume.softwareList' />
+              <SelectedProjectsItem v-if='data?.about.resume.selectedAndCollaborations'
+                :data='data?.about.resume.selectedAndCollaborations' />
             </div>
           </div>
         </div>
         <div class='about-footer'>
-          <div v-if='about.footerImage' class='about-footer-image anima-scale'>
+          <div v-if='data?.about.footerImage' class='about-footer-image anima-scale'>
             <div class='about-footer-image-overlay'></div>
-            <SanityImage class='a' :asset-id='about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
+            <SanityImage class='a' :asset-id='data?.about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
             <div class='about-footer-image-text'>
               <p>Let's create something extraordinary together.</p>
               <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's
@@ -189,8 +197,9 @@ onBeforeUnmount(() => {
             <div class='about-footer-link'>
               <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
             </div>
-            <div v-if='links' class='about-footer-linkList'>
-              <NuxtLink class='about-footer-linkList-el' target='_blank' v-for='link in links' to={{ link.linkURL }}>
+            <div v-if='data.links' class='about-footer-linkList'>
+              <NuxtLink class='about-footer-linkList-el' target='_blank' v-for='link in data.links?.linkArray'
+                :to='link.linkURL'>
                 {{ link.linkText }}
               </NuxtLink>
               <NuxtLink class='about-footer-linkList-el lets-chat' to='mailto:matyas@sochor.xyz'>

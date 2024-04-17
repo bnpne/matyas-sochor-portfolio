@@ -8,6 +8,7 @@ const { experimentFilters, experimentFilterLengths, activeFilters } = storeToRef
 const reset = ref(false)
 const isActive = ref(false)
 const route = useRoute()
+const filtersArr = ref([])
 
 watch(() => route.query.filter, () => {
   if (route.query.filter) {
@@ -17,6 +18,11 @@ watch(() => route.query.filter, () => {
       isActive.value = true
     } else {
       store.clearActiveExperimentFilters()
+      filtersArr.value.forEach(f => {
+        if (f.classList.contains('active')) {
+          f.classList.toggle('active')
+        }
+      })
       isActive.value = false
     }
   } else {
@@ -119,7 +125,7 @@ onUnmounted(() => {
       <!-- </div> -->
     </div>
     <div v-if='experimentFilters' class='filters-filters'>
-      <div @click='selectFilter' v-for='filter, index in experimentFilters' class='filters-filter'>
+      <div @click='selectFilter' ref='filtersArr' v-for='filter, index in experimentFilters' class='filters-filter'>
         <span style='pointer-events: none;'>
           {{ filter }}
         </span>

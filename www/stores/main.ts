@@ -116,8 +116,5 @@ export const useStore = defineStore('main', {
       let index = this.activeProjectFilters.indexOf(filter)
       this.activeProjectFilters.splice(index, 1)
     },
-    clearActiveProjectFilters() {
-      this.activeProjectFilters.length = 0
-    },
   },
 })

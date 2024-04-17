@@ -32,7 +32,7 @@ watch(() => route.query.filter, () => {
         isActive.value = true
 
         // if project, filter more
-        if (props.card.project && splt.includes('Project')) {
+        if (props.card.project && splt.includes('Projects')) {
           let y = props.card.project !== null || undefined ? props.card.project?.projectFilters?.filter[0].tagTitle : null
 
           let tempF = activeFilters.value.filter(f => {
@@ -40,6 +40,7 @@ watch(() => route.query.filter, () => {
               return f
             }
           })
+          console.log(tempF)
           let tempS = tempF.map(p => {
             return p.el.children[0].innerHTML
           })
@@ -94,18 +95,23 @@ onMounted(() => {
       <SanityImage :asset-id='card.articleImage?.asset?._ref' auto='format' w='1000' fit='clip' />
     </div>
     <p class='card-desc'>{{ card.articleDesc }}</p>
-    <div v-if='card.articleLink' class='card-link'>
-      <NuxtLink :to='card.articleLink' target='_blank'>{{ card.articleLinkText
-        }}</NuxtLink>
-    </div>
-    <div v-if='card.project?.projectSlug' class='card-link'>
-      <NuxtLink v-if='card.project.projectType === "selectedProject"' :to="`/work/${card.project.projectSlug.current}`">
-        Show
-      </NuxtLink>
-      <NuxtLink v-else :to="`/experiments/${card.project.projectSlug.current}`">
-        Show
-      </NuxtLink>
-    </div>
+    <template v-if='card.articleLink'>
+      <div class='card-link'>
+        <NuxtLink :to='card.articleLink' target='_blank'>{{ card.articleLinkText
+          }}</NuxtLink>
+      </div>
+    </template>
+    <template v-if='card.project?.projectSlug && !card.articleLink'>
+      <div class='card-link'>
+        <NuxtLink v-if='card.project.projectType === "selectedProject"'
+          :to="`/work/${card.project.projectSlug.current}`">
+          Show
+        </NuxtLink>
+        <NuxtLink v-else :to="`/experiments/${card.project.projectSlug.current}`">
+          Show
+        </NuxtLink>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -143,7 +149,7 @@ onMounted(() => {
 }
 
 .card {
-  padding: desktop-vw(12px);
+  padding: desktop-vw(16px);
   position: relative;
   display: flex;
   flex-direction: column;

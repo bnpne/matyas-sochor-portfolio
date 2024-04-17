@@ -81,7 +81,6 @@ watch(activeFilters.value, async () => {
       path: '/archive',
       query: {
         filter: s,
-
       }
     })
   } else {
@@ -91,9 +90,12 @@ watch(activeFilters.value, async () => {
   }
 })
 
-onMounted(() => {
+onMounted(async () => {
   if (grid.value) {
     cardsActive.value = true
+    await navigateTo({
+      path: '/archive',
+    })
   }
 })
 
