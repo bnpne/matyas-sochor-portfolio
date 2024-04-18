@@ -7,8 +7,10 @@
 <style lang='scss'>
 .t-o {
   position: fixed;
-  height: 100%;
+  //height: 100%;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
   background: $white;
   pointer-events: none;
   touch-action: none;

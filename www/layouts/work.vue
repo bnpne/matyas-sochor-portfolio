@@ -204,7 +204,7 @@ onMounted(() => {
       width: 100%;
 
       @include mobile() {
-        padding: mobile-vw(14px) mobile-vw(14px) mobile-vw(20px);
+        padding: mobile-vw(24px) mobile-vw(20px) mobile-vw(20px);
       }
     }
 

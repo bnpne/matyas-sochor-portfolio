@@ -54,6 +54,8 @@ onMounted(() => {
   z-index: 9998;
   justify-content: flex-end;
   align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
 
   &-overlay {
     display: flex;
