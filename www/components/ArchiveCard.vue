@@ -26,13 +26,26 @@ watch(() => route.query.filter, async () => {
     let splt = route.query.filter.split(';')
 
     if (cardFilters.value.length > 0) {
-      console.log(cardFilters.value)
       let isThere = false
       cardFilters.value.forEach(c => {
         if (splt.includes(c)) {
           isThere = true
         }
       })
+
+      if (cardFilters.value.includes('Projects') && splt.includes('Projects')) {
+        let index = cardFilters.value.indexOf('Projects')
+        let temp = cardFilters.value
+        temp.splice(index, 1)
+
+        temp.forEach(t => {
+          if (splt.includes(t)) {
+            isThere = true
+          } else {
+            isThere = false
+          }
+        })
+      }
 
       if (isThere) {
         isActive.value = true
