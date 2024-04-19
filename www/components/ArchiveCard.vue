@@ -8,6 +8,9 @@ const article = ref()
 const route = useRoute()
 const routeParams = reactive({ params: route.query.filter })
 const isActive = ref(true)
+const isProject = ref(false)
+const cardFilters = reactive({ value: [] })
+const isConfigured = ref(false)
 
 const resizeGridItem = (item) => {
   const grid = document.querySelector(".archive-container");
@@ -17,76 +20,68 @@ const resizeGridItem = (item) => {
   item.style.gridRowEnd = "span " + rowSpan;
 }
 
-watch(() => route.query.filter, () => {
+watch(() => route.query.filter, async () => {
   routeParams.params = route.query.filter ? route.query.filter : ''
   if (routeParams.params !== '') {
     let splt = route.query.filter.split(';')
 
-    if (props.card.articleType[0]) {
-      let t = props.card.articleType[0]?.showTagTitle
-      if (props.card.articleType[0]?.showTagTitle === 'Selected Project') {
-        t = 'Project'
-      }
-
-      if (splt.includes(t)) {
-        isActive.value = true
-
-        // if project, filter more
-        if (props.card.project && splt.includes('Projects')) {
-          let y = props.card.project !== null || undefined ? props.card.project?.projectFilters?.filter[0].tagTitle : null
-
-          let tempF = activeFilters.value.filter(f => {
-            if (f.type === 'project') {
-              return f
-            }
-          })
-          let tempS = tempF.map(p => {
-            return p.el.children[0].innerHTML
-          })
-          if (tempS.length > 0) {
-            if (tempS.includes(y)) {
-              isActive.value = true
-            } else {
-              isActive.value = false
-            }
-          } else {
-            isActive.value = true
-          }
+    if (cardFilters.value.length > 0) {
+      console.log(cardFilters.value)
+      let isThere = false
+      cardFilters.value.forEach(c => {
+        if (splt.includes(c)) {
+          isThere = true
         }
+      })
+
+      if (isThere) {
+        isActive.value = true
       } else {
         isActive.value = false
       }
     }
-
-    // if project
   } else {
     isActive.value = true
   }
 })
 
-onMounted(() => {
+watch(() => isConfigured.value, async () => {
+  await nextTick()
   if (!isMobile) {
-    // await nextTick(() => {
-    //   const grid = document.querySelector(".archive-container");
-    //   if (grid) {
-    //     // window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
-    //     resizeGridItem(article.value)
-    //   }
-    // })
-    window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
-    window.addEventListener('resize', resizeGridItem(article.value))
+    // window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
+    // window.addEventListener('resize', resizeGridItem(article.value))
   }
+})
+
+const configureCard = () => {
+  if (props.card.isProject && props.card.project.projectType === 'selectedProject') {
+    isProject.value = true
+  }
+  props.card.articleType.forEach(a => {
+    cardFilters.value.push(a.title)
+  })
+  if (props.card.isProject) {
+    props.card.project.projectFilters.filter.forEach(f => {
+      cardFilters.value.push(f.tagTitle)
+    })
+  }
+  isConfigured.value = true
+
+}
+
+onMounted(() => {
+  configureCard()
 })
 </script>
 
 <template>
   <div v-if='card' ref='article' class='card' :class='{
-    project: card.isProject, base: !card.isProject, active:
+    project: isProject, base: !isProject, active:
       isActive
   }'>
     <div class='card-heading'>
-      <p class='card-type'>{{ card.articleType[0]?.showTagTitle }}</p>
-      <div v-if='card.project?.projectFilters?.filter' class='card-tag'>{{
+      <p class='card-type'>{{ card.articleType[0]?.title }}</p>
+      <div v-if='isProject' class='card-tag'>{{
     card.project?.projectFilters?.filter[0].tagTitle }}</div>
     </div>
     <p class='card-title'>{{ card.articleTitle }}</p>
@@ -94,19 +89,35 @@ onMounted(() => {
       <SanityImage :asset-id='card.articleImage?.asset?._ref' auto='format' w='1000' fit='clip' />
     </div>
     <p class='card-desc'>{{ card.articleDesc }}</p>
+    <!-- Has article Link, but not a project -->
     <template v-if='card.articleLink'>
       <div class='card-link'>
         <NuxtLink :to='card.articleLink' target='_blank'>{{ card.articleLinkText
           }}</NuxtLink>
       </div>
     </template>
-    <template v-if='card.project?.projectSlug && !card.articleLink'>
+    <!-- is a selected project -->
+    <template v-if='isProject'>
       <div class='card-link'>
         <NuxtLink v-if='card.project.projectType === "selectedProject"'
           :to="`/work/${card.project.projectSlug.current}`">
           Show
         </NuxtLink>
-        <NuxtLink v-else :to="`/experiments/${card.project.projectSlug.current}`">
+      </div>
+    </template>
+    <!-- is not a selected project, but still a project -->
+    <template v-if='!isProject && card.articleType === "Projects"'>
+      <div class='card-link-rounded'>
+        <NuxtLink v-if='card.project.projectType === "selectedProject"'
+          :to="`/work/${card.project.projectSlug.current}`">
+          Show
+        </NuxtLink>
+      </div>
+    </template>
+    <!-- is an experiment -->
+    <template v-if='card.project?.projectType === "experiment"'>
+      <div class='card-link-rounded'>
+        <NuxtLink :to="`/experiments/${card.project.projectSlug.current}`">
           Show
         </NuxtLink>
       </div>
@@ -196,6 +207,18 @@ onMounted(() => {
   &-link {
     @include small-type();
     color: $black50;
+
+    &>a {
+      &:hover {
+        color: $black75;
+      }
+    }
+
+    &-rounded {
+      &>a {
+        @include button-third();
+      }
+    }
   }
 
   &-image {

@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxtjs/sanity', '@pinia/nuxt', 'nuxt-swiper', '@nuxtjs/device'],
   build: {
-    transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper'],
+    transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper', 'masonry-layout'],
   },
   device: {
     refreshOnResize: true,

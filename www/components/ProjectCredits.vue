@@ -50,10 +50,12 @@ defineProps(['data'])
     flex-direction: column;
     gap: desktop-vw(40px);
     width: 50%;
+    margin-right: desktop-vw(14px);
 
     @include mobile() {
       gap: mobile-vw(40px);
       width: 100%;
+      margin-right: mobile-vw(14px);
     }
   }
 

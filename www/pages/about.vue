@@ -185,7 +185,15 @@ onBeforeUnmount(() => {
         <div class='about-footer'>
           <div v-if='data?.about.footerImage' class='about-footer-image anima-scale'>
             <div class='about-footer-image-overlay'></div>
-            <SanityImage class='a' :asset-id='data?.about.footerImage?.asset?._ref' format='auto' w='1000' fit='clip' />
+            <SanityImage class='a' v-if='data?.about?.footerImage?.image'
+              :asset-id="data?.about?.footerImage?.image.asset?._ref" auto="format" w='1000' fit='clip' />
+            <!-- todo fix video -->
+            <SanityFile v-else-if='data?.about?.footerImage?.video'
+              :asset-id="data?.about?.footerImage?.video.asset?._ref">
+              <template #default="{ src }">
+                <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+              </template>
+            </SanityFile>
             <div class='about-footer-image-text'>
               <p>Let's create something extraordinary together.</p>
               <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's
@@ -283,17 +291,15 @@ onBeforeUnmount(() => {
 
     &-image {
       position: relative;
-      top: desktop-vw(600px);
+      top: desktop-vw(610px);
       @include rounded();
       overflow: hidden;
 
       @include mobile() {
         top: 0;
-
       }
 
       &>span {
-
         display: flex;
         flex-direction: column;
       }
@@ -312,16 +318,18 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(40px);
+    padding-top: desktop-vw(14px);
 
     @include mobile() {
       gap: mobile-vw(40px);
+      padding-top: mobile-vw(14px);
     }
 
     &-bio {
       @include medium-type();
-      font-size: desktop-vw(20px);
-      line-height: desktop-vw(34px);
-      max-width: desktop-vw(725px);
+      font-size: desktop-vw(18px);
+      line-height: desktop-vw(28px);
+      max-width: desktop-vw(726px);
       margin-bottom: desktop-vw(120px);
 
       @include mobile() {
@@ -334,7 +342,9 @@ onBeforeUnmount(() => {
       }
 
       strong {
-        font-weight: 500;
+        @include sans-serif-medium();
+        font-size: inherit;
+        line-height: inherit;
       }
     }
 
@@ -505,8 +515,8 @@ onBeforeUnmount(() => {
           &::after {
             content: url('~/assets/svg/link-arrow-gray.svg');
             color: $black50;
-            width: desktop-vw(13px);
-            height: desktop-vw(13px);
+            width: desktop-vw(8px);
+            height: desktop-vw(8px);
             display: inline-block;
             margin-left: desktop-vw(4px);
             margin-bottom: 1px;

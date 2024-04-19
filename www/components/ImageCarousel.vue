@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 defineProps(['images', 'containerClass', 'slideClass'])
+const app = useNuxtApp()
 </script>
 
 <template>
@@ -14,6 +15,7 @@ defineProps(['images', 'containerClass', 'slideClass'])
 <style lang='scss'>
 .swiper-container {
   position: relative;
+  cursor: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IkRyYWciPgo8cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIyNCIgZmlsbD0id2hpdGUiLz4KPGcgaWQ9ImljX2RyYWciPgo8cGF0aCBkPSJNMjAuMDQ4NiAyMEwyMSAyMC45NEwxNy45MDk2IDI0TDIxIDI3LjA2TDIwLjA0ODYgMjhMMTYgMjRMMjAuMDQ4NiAyMFoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGQ9Ik0yNy45NTE0IDI4TDI3IDI3LjA2TDMwLjA5MDQgMjRMMjcgMjAuOTRMMjcuOTUxNCAyMEwzMiAyNEwyNy45NTE0IDI4WiIgZmlsbD0iYmxhY2siLz4KPC9nPgo8L2c+Cjwvc3ZnPgo=') 50 50, pointer;
 }
 
 .swiper-image {

@@ -231,7 +231,33 @@ export default defineType({
     defineField({
       title: 'Footer Image',
       name: 'footerImage',
-      type: 'image',
+      type: 'object',
+      fields: [
+        defineField({
+          title: 'Image or Video',
+          type: 'string',
+          name: 'footerImageSelection',
+          options: {
+            layout: 'radio',
+            list: [
+              {title: 'Image', value: 'image'},
+              {title: 'Video', value: 'video'},
+            ],
+          },
+        }),
+        defineField({
+          title: 'Image',
+          type: 'image',
+          name: 'image',
+          hidden: ({parent}) => parent?.footerImageSelection !== 'image',
+        }),
+        defineField({
+          title: 'Video',
+          type: 'file',
+          name: 'video',
+          hidden: ({parent}) => parent?.footerImageSelection !== 'video',
+        }),
+      ],
     }),
   ],
 })

@@ -16,6 +16,7 @@ import home from './home'
 import articles from './articles'
 import article from './articles/article'
 import showFilters from './filters/showFilters'
+import imageOption from './imageOption'
 
 export const schemaTypes = [
   home,
@@ -36,4 +37,5 @@ export const schemaTypes = [
   article,
   showFilters,
   showTags,
+  imageOption,
 ]

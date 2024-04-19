@@ -194,13 +194,13 @@ onUnmounted(() => {
       }
 
       &.active {
-        background: transparent;
-        color: $black;
+        background: $black75 !important;
+        color: $white !important;
         border: 1px $black10 solid;
 
         &>span {
           &:last-child {
-            color: $black50;
+            color: $white50 !important;
           }
         }
       }

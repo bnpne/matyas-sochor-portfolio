@@ -26,7 +26,7 @@ onMounted(() => {
       class="sidebar-projects-card"
       :class="{ active: activeProject == index && $device.isDesktop && route.path === '/' }">
       <div class='sidebar-projects-card-img'>
-        <SanityImage :asset-id='project.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
+        <SanityImage :asset-id='project.projectCardImage?.asset?._ref' auto='format' fit='crop' h='300' w='300' />
       </div>
       <div class='sidebar-projects-card-info'>
         <div class="sidebar-projects-card-heading">
@@ -131,6 +131,8 @@ onMounted(() => {
 
     &-img {
       min-width: desktop-vw(56px);
+      width: desktop-vw(56px);
+      height: desktop-vw(56px);
       aspect-ratio: 1/1;
       border-radius: desktop-vw(8px);
       overflow: hidden;
@@ -138,6 +140,8 @@ onMounted(() => {
       @include mobile() {
         min-width: mobile-vw(56px);
         border-radius: mobile-vw(8px);
+        width: mobile-vw(56px);
+        height: mobile-vw(56px);
       }
 
       img {

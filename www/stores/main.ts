@@ -10,6 +10,7 @@ type Store = {
   activeFilters: {type: string; el: HTMLElement}[] | []
   activeProjectFilters: HTMLElement[] | []
   allProjects: [] | null
+  activeCards: [] | null
 }
 
 export const useStore = defineStore('main', {
@@ -25,10 +26,14 @@ export const useStore = defineStore('main', {
     activeFilters: [],
     activeProjectFilters: [],
     allProjects: [],
+    activeCards: [],
   }),
   actions: {
     addProjects(projects: any) {
       this.allProjects = projects
+    },
+    setActiveCards(a) {
+      this.activeCards = a
     },
     incrementPostLikes() {
       this.socialPostLikes++

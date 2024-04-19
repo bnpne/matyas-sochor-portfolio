@@ -20,8 +20,8 @@
   min-height: calc(100vh - desktop-vw(20px));
   @include sans-serif-regular;
   font-size: desktop-vw(28px);
-  line-height: desktop-vw(20px);
-  gap: desktop-vw(20px);
+  line-height: desktop-vw(44px);
+  //gap: desktop-vw(20px);
 
   @include mobile() {
     min-height: calc(100vh - mobile-vw(20px));
@@ -31,11 +31,15 @@
   }
 
   &-button {
+    @include body-type();
+    margin-top: desktop-vw(20px);
     @include button-default-black();
     font-size: desktop-vw(14px);
     line-height: desktop-vw(20px);
 
     @include mobile() {
+      @include body-type();
+      margin-top: mobile-vw(20px);
       font-size: mobile-vw(14px);
       line-height: mobile-vw(20px);
     }

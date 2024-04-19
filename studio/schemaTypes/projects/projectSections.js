@@ -51,10 +51,7 @@ export default defineType({
               title: 'Grid Image',
               name: 'gridImage',
               type: 'array',
-              of: [
-                {type: 'image', name: 'image'},
-                {type: 'file', name: 'video'},
-              ],
+              of: [{type: 'imageOption', name: 'imageOption'}],
               validation: rule => rule.required(),
             }),
           ],

@@ -97,7 +97,16 @@ onMounted(() => {
         <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
         <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
       notifications.list.length }}</div>
-        <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>X</div>
+        <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
+          <svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+              fill="#1E1E1E" fill-opacity=".75" />
+            <path
+              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+              fill="#1E1E1E" fill-opacity=".75" />
+          </svg>
+        </div>
       </nav>
     </template>
     <template v-else>
@@ -153,7 +162,7 @@ onMounted(() => {
       <div v-if='!isMobile' class='work-layout-notification-container'>
         <div v-for='no, index in notifications.list' class='work-layout-notification'>
           <div v-if='no.notificationImage' class='work-layout-notification-img'>
-            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
+            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='300' w='300' />
           </div>
           <div class='work-layout-notification-info'>
             <div class="work-layout-notification-heading">

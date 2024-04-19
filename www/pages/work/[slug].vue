@@ -15,6 +15,7 @@ definePageMeta({
       gsap.to('.t-o', {
         opacity: 0, duration: .75, delay: .25, ease: 'circ.out',
         onComplete: () => {
+          app.$scrollStart()
           done()
         }
       })
@@ -49,6 +50,7 @@ const { data } = storeToRefs(store)
 const work = ref(null)
 const loading = ref(true)
 const called = ref(false)
+const video = ref([])
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -72,8 +74,6 @@ async function getIndex() {
 
 watch(() => called.value, () => {
   if (called.value === true) {
-
-    // console.log('hit')
     setTimeout(async () => {
       await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
         { redirectCode: 301 })
@@ -101,6 +101,17 @@ watch([() => store.isFetched, () => loading.value], async () => {
       .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     intro.play()
     ScrollTrigger.refresh(true)
+
+
+    if (Array.isArray(toRaw(video.value))) {
+      toRaw(video.value).forEach(v => {
+        v.currentTime = 0
+        v.load()
+      })
+    } else {
+      toRaw(video.value).currentTime = 0
+      toRaw(video.value).load()
+    }
 
     /// SCROLL ANIMATIONS
     /// Fade In
@@ -167,7 +178,6 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
         if (t === 100) {
           called.value = true
-          app.$scrollStop()
         }
       } else {
         t = 0
@@ -180,7 +190,10 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
 onMounted(() => {
   loading.value = false
-  app.$scrollStart()
+  if (app.$lenis.isStopped) {
+    console.log(' scroll stopped')
+    // app.$scrollStart()
+  }
 })
 
 onBeforeUnmount(() => {
@@ -203,18 +216,22 @@ onBeforeUnmount(() => {
             <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
                 <template #default="{ src }">
-                  <video class='intro-anima' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                  <video ref='video' class='intro-anima' autoplay='true' playsinline='true' loop='true' muted
+                    :src='src'></video>
                 </template>
               </SanityFile>
             </template>
             <div v-if='work.projectDetails' class='work-hero-details'>
               <div class='work-hero-details-client detail-anima'>
                 <p>Client</p>
-                <NuxtLink v-for='client in work.projectDetails?.clients' :to='client.clientLink'
-                  class='work-hero-details-client-link' target="_blank" rel="noreferrer">
-                  {{ client.clientName }}
-                </NuxtLink>
-                <div class="work-hero-details-client-footer"></div>
+                <template v-for='client in work.projectDetails?.clients'>
+                  <NuxtLink :to='client.clientLink'
+                    :class='client.clientLink ? "work-hero-details-client-link" : "work-hero-details-client-nolink"'
+                    target="_blank" rel="noreferrer">
+                    {{ client.clientName }}
+                  </NuxtLink>
+                  <div v-if='client.clientLink' class="work-hero-details-client-footer"></div>
+                </template>
               </div>
               <div class='work-hero-details-info '>
                 <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectYear &&
@@ -309,7 +326,8 @@ onBeforeUnmount(() => {
                     v-else-if="data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
                     <SanityFile :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.video.asset?._ref">
                       <template #default="{ src }">
-                        <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                        <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                          :src='src'></video>
                       </template>
                     </SanityFile>
                   </template>
@@ -417,11 +435,13 @@ onBeforeUnmount(() => {
         &-link {
           color: $white;
           display: flex;
-          gap: desktop-vw(4px);
+          //gap: desktop-vw(4px);
           align-content: center;
+          margin-bottom: desktop-vw(4px);
 
           @include mobile() {
-            gap: mobile-vw(4px);
+            //gap: mobile-vw(4px);
+            margin-bottom: mobile-vw(4px);
           }
 
           &::after {
@@ -438,6 +458,20 @@ onBeforeUnmount(() => {
               width: mobile-vw(13px);
               height: mobile-vw(13px);
             }
+          }
+        }
+
+
+        &-nolink {
+          color: $white;
+          display: flex;
+          //gap: desktop-vw(4px);
+          align-content: center;
+          margin-bottom: desktop-vw(4px);
+
+          @include mobile() {
+            //gap: mobile-vw(4px);
+            margin-bottom: mobile-vw(4px);
           }
         }
 

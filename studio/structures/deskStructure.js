@@ -46,6 +46,7 @@ export const deskStructure = S =>
             'articles',
             'showTags',
             'showFilters',
+            'imageOption',
           ].includes(listItem.getId()),
       ),
     ])

@@ -1,5 +1,14 @@
 <script setup lang='ts'>
 defineProps(['data'])
+
+const video = ref(null)
+
+onMounted(() => {
+  if (video.value) {
+    video.value.currentTime = 0
+    video.value.load()
+  }
+})
 </script>
 
 <template v-if='data'>
@@ -10,7 +19,7 @@ defineProps(['data'])
         <!-- todo fix video -->
         <SanityFile v-else-if='data.video' :asset-id="data.video.asset?._ref">
           <template #default="{ src }">
-            <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+            <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
           </template>
         </SanityFile>
       </div>

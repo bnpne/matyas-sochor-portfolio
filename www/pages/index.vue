@@ -34,6 +34,7 @@ const snippets = ref([])
 const cursor = ref([])
 const app = useNuxtApp()
 const loading = ref(true)
+const video = ref([])
 
 const main = useStore()
 const store = useData()
@@ -55,6 +56,14 @@ watch([() => store.isFetched, () => loading.value], async () => {
     await nextTick()
     ScrollTrigger.refresh(true)
     /// Image Mask
+
+    if (video.value) {
+      // console.log(video.value)
+      toRaw(video.value).forEach(v => {
+        v.currentTime = 0
+        v.load()
+      })
+    }
 
     let st = gsap.utils.toArray('.s-t')
     st.forEach(t => {
@@ -123,7 +132,7 @@ onBeforeUnmount(() => {
             <template v-else-if="project.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="project.projectCaseImage?.video.asset?._ref">
                 <template #default="{ src }">
-                  <video class='s' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                  <video ref='video' class='s' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
                 </template>
               </SanityFile>
             </template>
@@ -134,7 +143,11 @@ onBeforeUnmount(() => {
               <p v-if='project.projectDetails?.projectYear'>{{ project.projectDetails?.projectYear.split('-')[0] }},
               </p>
               <p v-if='project.projectDetails?.awards'>{{ project.projectDetails?.awards.length }} Awards</p>
-              <p v-else>{{ project.projectDetails?.agencies[0] }} +{{ project.projectDetails?.agencies.length - 1 }}
+              <p v-else>
+                <span>{{ project.projectDetails?.agencies[0] }}</span>
+                <span v-if='project.projectDetails?.agencies.length > 1'>
+                  +{{ project.projectDetails?.agencies.length - 1 }}
+                </span>
               </p>
             </div>
             <div class='home-project-details-snippet'>
@@ -244,7 +257,7 @@ onBeforeUnmount(() => {
         overflow: hidden;
         position: relative;
         width: 100%;
-        border: $white50 1px solid;
+        border: $white25 1px solid;
         border-radius: 100px;
         max-width: desktop-vw(245px);
 

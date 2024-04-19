@@ -5,8 +5,8 @@ defineProps(['data'])
 <template v-if='data'>
   <span class='anima-scale'>
     <section class='section-image-grid'>
-      <div v-for="image in data.gridImage" class='section-image-grid-image'>
-        <SanityImage class='a' :asset-id="image.asset?._ref" auto="format" w='1000' fit='clip' />
+      <div v-for="image in data.gridImage" class='section-image-grid-image' :class='{ "with-border": image.addBorder }'>
+        <SanityImage class='a' :asset-id="image.image.asset?._ref" auto="format" w='1000' fit='clip' />
       </div>
     </section>
   </span>
@@ -42,6 +42,15 @@ defineProps(['data'])
       width: 100%;
       vertical-align: top;
       object-fit: contain;
+    }
+
+    &.with-border {
+      border: 1px rgba(30, 30, 30, 0.3) solid;
+      border-radius: desktop-vw(12px);
+
+      @include mobile() {
+        border-radius: mobile-vw(12px);
+      }
     }
   }
 }

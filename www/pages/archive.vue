@@ -2,6 +2,7 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+
 definePageMeta({
   pageTransition: {
     css: false,
@@ -28,23 +29,38 @@ definePageMeta({
   },
 })
 
-const query = groq`*[_type == 'articles'][0]{..., articleList[]{..., project->{projectSlug, projectType, projectFilters{filter[]->}},'articleType':articleTypeFilters.showFilter[]->}}`
-const { data: archive } = useSanityQuery(query)
-
-const store = useStore()
-const { activeFilters, activeProjectFilters } = storeToRefs(store)
+const main = useStore()
+const { activeFilters, activeCards } = storeToRefs(main)
 const router = useRouter()
 const route = useRoute()
 const params = reactive({ value: [] })
-
-useHead({
-  title: 'Archive | Matyas Sochor'
-})
-
 const { isMobile } = useDevice()
 const filtersIsOpen = reactive({ isOpen: false })
 const cardsActive = ref(false)
 const grid = ref()
+const store = useData()
+const loading = ref(true)
+const archiveData = reactive({ value: null })
+const ca = reactive({ value: [] })
+
+watch([() => store.isFetched, () => loading.value], async () => {
+  if (!loading || store.isFetched) {
+    await nextTick()
+    archiveData.value = store.data.articles.articleList
+
+    // Set Head
+    useHead({
+      title: 'Archive | Matyas Sochor'
+    })
+
+    // Set Grid
+    if (grid.value) {
+      cardsActive.value = true
+    }
+
+    ca.value = archiveData.value
+  }
+})
 
 const toggleFilter = () => {
   if (filtersIsOpen.isOpen) {
@@ -53,6 +69,10 @@ const toggleFilter = () => {
     filtersIsOpen.isOpen = true
   }
 }
+
+watch(activeCards.value, () => {
+  ca.value = activeCards.value
+})
 
 watch(activeFilters.value, async () => {
   const temp = activeFilters.value.map(a => {
@@ -91,11 +111,8 @@ watch(activeFilters.value, async () => {
 })
 
 onMounted(async () => {
+  loading.value = false
   if (grid.value) {
-    cardsActive.value = true
-    await navigateTo({
-      path: '/archive',
-    })
   }
 })
 
@@ -108,11 +125,23 @@ onBeforeUnmount(() => {
 <template>
   <div class='archive' id='page'>
     <NuxtLayout name='archive'>
-      <div v-if='archive?.articleList' ref='grid' class='archive-container'>
-        <template v-if='cardsActive'>
-          <ArchiveCard v-for='card in archive.articleList' :card='card' />
-        </template>
-      </div>
+      <ClientOnly>
+        <div class='archive-container'>
+          <template v-if='archiveData.value'>
+            <template v-if='!isMobile'>
+              <masonry-wall :items="ca.value" :ssr-columns="1" :column-width="300" :gap="24" :max-columns='3'
+                :min-columns='3'>
+                <template #default="{ item, index }">
+                  <ArchiveCard :card='item' />
+                </template>
+              </masonry-wall>
+            </template>
+            <template v-else>
+              <ArchiveCard v-for='card in archiveData.value' :card='card' />
+            </template>
+          </template>
+        </div>
+      </ClientOnly>
       <div v-if='isMobile' class='archive-mobile'>
         <div @click='toggleFilter' v-if='!filtersIsOpen.isOpen' class="archive-mobile-pill">
           Filter
@@ -138,17 +167,16 @@ onBeforeUnmount(() => {
 
   &-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: desktop-vw(24px);
-    column-gap: desktop-vw(24px);
-    grid-gap: 24px;
+    display: block;
     padding: desktop-vw(90px) 0 0;
+    margin-right: desktop-vw(14px);
 
     @include mobile() {
       display: flex;
       flex-direction: column;
       gap: mobile-vw(20px);
       padding: mobile-vw(84px) mobile-vw(20px);
+      margin-right: 0;
     }
   }
 

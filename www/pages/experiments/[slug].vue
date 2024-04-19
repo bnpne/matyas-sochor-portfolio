@@ -1,4 +1,4 @@
-<!-- EXPERIMENTS PAGE -->
+<!-- Experiment PAGE -->
 <!-- https://plasticbionic.com/project/days-2-->
 <script setup lang='ts'>
 import gsap from 'gsap'
@@ -7,20 +7,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 definePageMeta({
   pageTransition: {
     css: false,
-    name: 'experiments',
+    name: 'experiment',
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
 
-      const tl = gsap.timeline({
-        defaults: { duration: 1, ease: 'circ.out' },
+      gsap.to('.t-o', {
+        opacity: 0, duration: .75, delay: .25, ease: 'circ.out',
         onComplete: () => {
           app.$scrollStart()
           done()
         }
       })
-
-      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
     },
     onLeave(el, done) {
       const app = useNuxtApp()
@@ -51,6 +49,8 @@ const store = useData()
 const { data } = storeToRefs(store)
 const work = ref(null)
 const loading = ref(true)
+const called = ref(false)
+const video = ref([])
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -72,8 +72,17 @@ async function getIndex() {
   await nextTick()
 }
 
+watch(() => called.value, () => {
+  if (called.value === true) {
+    setTimeout(async () => {
+      await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`,
+        { redirectCode: 301 })
+    }, 500)
+  }
+})
+
 watch([() => store.isFetched, () => loading.value], async () => {
-  if (data.value || !loading || store.isFetched) {
+  if (!loading || store.isFetched) {
     toRaw(data.value)?.projects.forEach(p => {
       if (p.projectSlug.current === route.params.slug) {
         work.value = p
@@ -92,6 +101,17 @@ watch([() => store.isFetched, () => loading.value], async () => {
       .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     intro.play()
     ScrollTrigger.refresh(true)
+
+    if (Array.isArray(toRaw(video.value))) {
+      toRaw(video.value).forEach(v => {
+        v.currentTime = 0
+        v.load()
+      })
+    } else {
+      toRaw(video.value).currentTime = 0
+      toRaw(video.value).load()
+    }
+
 
     /// SCROLL ANIMATIONS
     /// Fade In
@@ -149,15 +169,15 @@ watch([() => store.isFetched, () => loading.value], async () => {
     let t = 0
     window.addEventListener('wheel', (e) => {
       if (lenisProgress.value === 1) {
-        t += e.deltaY / 20
-        t = Math.min(Math.max(t, 0), 100)
-        gsap.to(progress, { value: t, ease: 'circ.out' })
+        if (t < 100) {
+
+          t += e.deltaY / 20
+          t = Math.min(Math.max(t, 0), 100)
+          gsap.to(progress, { value: t, ease: 'circ.out' })
+        }
 
         if (t === 100) {
-          setTimeout(async () => {
-            await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`,
-              { redirectCode: 301, replace: true })
-          }, 500)
+          called.value = true
         }
       } else {
         t = 0
@@ -170,6 +190,10 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
 onMounted(() => {
   loading.value = false
+  if (app.$lenis.isStopped) {
+    console.log(' scroll stopped')
+    // app.$scrollStart()
+  }
 })
 
 onBeforeUnmount(() => {
@@ -181,9 +205,9 @@ onBeforeUnmount(() => {
 <template>
   <div class='work' id='page'>
     <NuxtLayout name='work' :data='work'>
-      <div v-if='work' class='work-container'>
-        <div class='work-hero'>
-          <div class='work-hero-img'>
+      <div v-if='work' class='work-container '>
+        <div class='work-hero pre-project'>
+          <div class='work-hero-img pre-image'>
             <div class='work-hero-img-overlay'></div>
             <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
               <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
@@ -192,18 +216,22 @@ onBeforeUnmount(() => {
             <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
                 <template #default="{ src }">
-                  <video class='intro-anima' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                  <video ref='video' class='intro-anima' autoplay='true' playsinline='true' loop='true' muted
+                    :src='src'></video>
                 </template>
               </SanityFile>
             </template>
             <div v-if='work.projectDetails' class='work-hero-details'>
               <div class='work-hero-details-client detail-anima'>
                 <p>Client</p>
-                <NuxtLink v-for='client in work.projectDetails?.clients' :to='client.clientLink'
-                  class='work-hero-details-client-link' target="_blank" rel="noreferrer">
-                  {{ client.clientName }}
-                </NuxtLink>
-                <div class="work-hero-details-client-footer"></div>
+                <template v-for='client in work.projectDetails?.clients'>
+                  <NuxtLink :to='client.clientLink'
+                    :class='client.clientLink ? "work-hero-details-client-link" : "work-hero-details-client-nolink"'
+                    target="_blank" rel="noreferrer">
+                    {{ client.clientName }}
+                  </NuxtLink>
+                  <div v-if='client.clientLink' class="work-hero-details-client-footer"></div>
+                </template>
               </div>
               <div class='work-hero-details-info '>
                 <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectYear &&
@@ -298,7 +326,8 @@ onBeforeUnmount(() => {
                     v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
                     <SanityFile :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
                       <template #default="{ src }">
-                        <video class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                        <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                          :src='src'></video>
                       </template>
                     </SanityFile>
                   </template>
@@ -406,11 +435,13 @@ onBeforeUnmount(() => {
         &-link {
           color: $white;
           display: flex;
-          gap: desktop-vw(4px);
+          // gap: desktop-vw(4px);
           align-content: center;
+          margin-bottom: desktop-vw(4px);
 
           @include mobile() {
-            gap: mobile-vw(4px);
+            //gap: mobile-vw(4px);
+            margin-bottom: mobile-vw(4px);
           }
 
           &::after {

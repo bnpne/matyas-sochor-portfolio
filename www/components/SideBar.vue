@@ -67,7 +67,7 @@ onMounted(() => {
         <div class='sidebar-avatar-container'>
           <div class='sidebar-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
             <NuxtLink to='/' v-if='data.home.avatar' class='sidebar-avatar-info-img'>
-              <SanityImage :asset-id="data.home.avatar?.asset?._ref" auto='format' w='80' />
+              <SanityImage :asset-id="data.home.avatar?.asset?._ref" auto='format' w='300' />
             </NuxtLink>
             <div class='sidebar-avatar-info-email'>
               <p v-if='data.home.name' class='sidebar-avatar-info-email-text'>{{ data.home.name }}</p>

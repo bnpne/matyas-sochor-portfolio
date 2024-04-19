@@ -20,7 +20,7 @@ export const useData = defineStore('data', {
     {
       'home': *[_type=='home'][0]{...,selectedProjects[]->{..., 'filters':projectFilters.filter[]->}, selectedExperiments[]->{..., 'filters':projectFilters.filter[]->}}, 
       'about': *[_type=='about'][0], 
-      'articles': *[_type=='articles'][0]{..., articleList[]{...,project->{projectSlug, projectType, projectFilter{filter[]->}}, 'articleType': articleTypeFilters.showFilter[]->{'title': showTagTitle}}}, 
+      'articles': *[_type=='articles'][0]{..., articleList[]{...,project->{projectSlug, projectType, projectFilters{filter[]->}}, 'articleType': articleTypeFilters.showFilter[]->{'title': showTagTitle}}}, 
       'projects': *[_type=='projects'],
       'links': *[_type=='links'][0]
     }`
