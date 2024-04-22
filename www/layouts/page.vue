@@ -64,7 +64,7 @@ onMounted(() => {
       <div v-if='!notificationActive.isActive' @click='toggleNotification' class='page-layout-nav-notifications'>{{
       notifications.list.length }}</div>
       <div v-else @click='toggleNotification' class='page-layout-nav-notifications-active'>
-        <svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
             fill="#1E1E1E" fill-opacity=".75" />
@@ -128,6 +128,12 @@ onMounted(() => {
       text-align: center;
 
       &-active {
+
+        &>svg {
+          width: desktop-vw(10px);
+          height: desktop-vw(10px);
+        }
+
         @include button-default-white();
         border-radius: 50%;
         height: desktop-vw(42px);
