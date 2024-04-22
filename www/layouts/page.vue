@@ -141,7 +141,7 @@ onMounted(() => {
     &.about-nav {
       .page-layout-nav-archive {
         @include button-second-black();
-        box-shadow: 0px 2px 12px 0px #0000001F;
+        //box-shadow: 0px 2px 12px 0px #0000001F;
       }
 
       .page-layout-nav-notifications {
@@ -153,7 +153,6 @@ onMounted(() => {
         align-items: center;
         justify-content: center;
         text-align: center;
-        box-shadow: 0px 2px 12px 0px #0000001F;
 
         @include mobile {
           height: mobile-vw(42px);

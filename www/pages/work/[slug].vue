@@ -481,8 +481,6 @@ onBeforeUnmount(() => {
           }
 
           &:hover {
-            color: $white50;
-
             &::after {
               margin-left: 10px;
             }

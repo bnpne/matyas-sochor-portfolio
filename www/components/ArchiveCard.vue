@@ -152,7 +152,7 @@ onMounted(() => {
   <div v-if='card' ref='article' class='card' :class='{
     project: isProject, base: !isProject, active:
       isActive
-  }'>
+  }' :data-active='isActive ? "true" : "false"'>
     <div class='card-heading'>
       <p class='card-type'>{{ card.articleType[0]?.title }}</p>
       <div v-if='isProject' class='card-tag'>{{

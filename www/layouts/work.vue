@@ -303,7 +303,6 @@ onMounted(() => {
 
     &-archive {
       @include button-second-black();
-      box-shadow: 0px 2px 12px 0px #0000001F;
     }
 
     &-more {
@@ -330,7 +329,6 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       text-align: center;
-      box-shadow: 0px 2px 12px 0px #0000001F;
 
       @include mobile {
         height: mobile-vw(42px);

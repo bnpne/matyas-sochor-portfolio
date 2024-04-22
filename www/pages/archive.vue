@@ -42,6 +42,7 @@ const store = useData()
 const loading = ref(true)
 const archiveData = reactive({ value: null })
 const ca = reactive({ value: [] })
+const cards = ref([])
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
@@ -69,10 +70,6 @@ const toggleFilter = () => {
     filtersIsOpen.isOpen = true
   }
 }
-
-watch(activeCards.value, () => {
-  ca.value = activeCards.value
-})
 
 watch(activeFilters.value, async () => {
   const temp = activeFilters.value.map(a => {
@@ -124,10 +121,12 @@ watch(activeFilters.value, async () => {
   }
 })
 
-onMounted(async () => {
+const append = () => {
+  ca.value = archiveData.value
+}
+
+onMounted(() => {
   loading.value = false
-  if (grid.value) {
-  }
 })
 
 onBeforeUnmount(() => {
@@ -149,12 +148,11 @@ onBeforeUnmount(() => {
         <div class='archive-container'>
           <template v-if='archiveData.value'>
             <template v-if='!isMobile'>
-              <masonry-wall :items="ca.value" :ssr-columns="1" :column-width="300" :gap="24" :max-columns='3'
-                :min-columns='3'>
-                <template #default="{ item, index }">
+              <MasonryWall :items="ca.value" :column-width="412" :gap="24">
+                <template #default="{ item }">
                   <ArchiveCard :card='item' />
                 </template>
-              </masonry-wall>
+              </MasonryWall>
             </template>
             <template v-else>
               <ArchiveCard v-for='card in archiveData.value' :card='card' />

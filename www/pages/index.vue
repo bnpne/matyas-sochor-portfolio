@@ -72,13 +72,14 @@ watch([() => store.isFetched, () => loading.value], async () => {
     st.forEach(t => {
       let s = gsap.utils.toArray('.s', t)
       gsap.to(s, {
-        y: '30%',
+        y: '20%',
         ease: ' circ.out',
         scrollTrigger: {
           trigger: t,
           scrub: 0,
           start: 'top top',
-          end: 'bottom top',
+          invalidateOnRefresh: true,
+          end: 'max',
         }
       })
     })
