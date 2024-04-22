@@ -88,9 +88,13 @@ watch([() => store.isFetched, () => loading.value], async () => {
     let cp = gsap.utils.toArray('.cursor-object')
     st.forEach((s, i) => {
       let timeout
+      s.addEventListener('mouseenter', () => {
+        setTimeout(() => {
+          cp[i].style.opacity = 1
+        }, 500)
+      })
       s.addEventListener('mousemove', e => {
         setCursorPosition(s, e, cp[i])
-        cp[i].style.opacity = 1
         // clearTimeout(timeout)
         // timeout = setTimeout(() => {
         //   cp[i].style.opacity === 1 ?
