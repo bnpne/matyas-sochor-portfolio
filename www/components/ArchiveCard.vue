@@ -14,12 +14,14 @@ const cardProjectFilters = reactive({ value: [] })
 const cardExperimentFilters = reactive({ value: [] })
 const isConfigured = ref(false)
 
-const resizeGridItem = (item) => {
+const resizeGridItem = async (item) => {
   const grid = document.querySelector(".archive-container");
   const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
   const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('row-gap'));
   const rowSpan = Math.ceil((item.getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
   item.style.gridRowEnd = "span " + rowSpan;
+
+  await nextTick()
 }
 
 watch([() => route.query.filter, () => route.query.project, () => route.query.experiment], async () => {
@@ -119,7 +121,7 @@ watch(() => isConfigured.value, async () => {
   }
 })
 
-const configureCard = () => {
+const configureCard = async () => {
   if (props.card.isProject && props.card.project.projectType === 'selectedProject') {
     isProject.value = true
   }
@@ -141,6 +143,12 @@ const configureCard = () => {
     }
   }
   isConfigured.value = true
+
+  if (!isMobile) {
+    await nextTick()
+    window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
+    window.addEventListener('resize', resizeGridItem(article.value))
+  }
 }
 
 onMounted(() => {
@@ -234,12 +242,12 @@ onMounted(() => {
 
 .card {
   padding: desktop-vw(16px);
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: desktop-vw(12px);
   height: fit-content;
   display: none;
+  position: relative;
 
   @include mobile() {
     gap: mobile-vw(12px);

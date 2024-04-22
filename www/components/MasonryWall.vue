@@ -100,10 +100,18 @@ async function redraw(force = false) {
 }
 
 const resizeObserver = new ResizeObserver(() => redraw())
+const displayObserver = new MutationObserver(mutations => {
+  mutations.forEach(m => {
+    if (m.attributeName === 'data-active') {
+      console.log(m)
+    }
+  })
+})
 
 onMounted(async () => {
   redraw()
   resizeObserver.observe(wall.value)
+  displayObserver.observe(wall.value, { attributes: true, subtree: true })
 })
 
 onBeforeUnmount(() => resizeObserver.unobserve(wall.value))

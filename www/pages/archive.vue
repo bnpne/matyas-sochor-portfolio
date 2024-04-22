@@ -148,11 +148,12 @@ onBeforeUnmount(() => {
         <div class='archive-container'>
           <template v-if='archiveData.value'>
             <template v-if='!isMobile'>
-              <MasonryWall :items="ca.value" :column-width="412" :gap="24">
-                <template #default="{ item }">
-                  <ArchiveCard :card='item' />
-                </template>
-              </MasonryWall>
+              <!-- <MasonryWall :items="ca.value" :column-width="412" :gap="24"> -->
+              <!--   <template #default="{ item }"> -->
+              <!--     <ArchiveCard :card='item' /> -->
+              <!--   </template> -->
+              <!-- </MasonryWall> -->
+              <ArchiveCard v-for='card in archiveData.value' :card='card' />
             </template>
             <template v-else>
               <ArchiveCard v-for='card in archiveData.value' :card='card' />
@@ -185,7 +186,10 @@ onBeforeUnmount(() => {
 
   &-container {
     display: grid;
-    display: block;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: desktop-vw(4px);
+    gap: 12px;
+    //display: block;
     padding: desktop-vw(90px) 0 0;
     margin-right: desktop-vw(14px);
 
