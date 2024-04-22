@@ -2,6 +2,9 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+useHead({
+  title: 'Matyas Sochor | Digital Graphic Designer'
+})
 definePageMeta({
   pageTransition: {
     css: false,

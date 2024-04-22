@@ -2,6 +2,14 @@
 useHead({
   title: 'Matyas Sochor | Digital Graphic Designer'
 })
+useSeoMeta({
+  title: 'Matyas Sochor | Digital Graphic Designer',
+  ogTitle: 'Matyas Sochor | Digital Graphic Designer',
+  description: 'Matyas Sochor | Digital Graphic Designer',
+  ogDescription: 'Matyas Sochor | Digital Graphic Designer',
+  ogImage: 'https://www.sochor.xyz/og-image.png',
+  twitterCard: 'summary_large_image',
+})
 
 const app = useNuxtApp()
 

@@ -80,12 +80,6 @@ const navigate = async () => {
 
 watch(() => called.value, () => {
   if (called.value === true) {
-
-    // setTimeout(async () => {
-    //   await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
-    //     { redirectCode: 301 })
-    // }, 500)
-    console.log(scrollImage.value)
     let tl = gsap.timeline({ default: { ease: 'circ.out', duration: .75 }, onComplete: () => navigate() })
     tl.to(scrollImage.value, {
       width: '100%', top: '-40vh', delay: .5, duration: .8

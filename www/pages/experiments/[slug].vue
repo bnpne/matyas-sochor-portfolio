@@ -34,6 +34,7 @@ const ellipse = ref()
 const progress = reactive({ value: 0 })
 const lenisProgress = reactive({ value: 0 })
 const caseImage = ref(null)
+const scrollImage = ref(null)
 
 const testProgress = () => {
   progress.value += 25
@@ -73,14 +74,20 @@ async function getIndex() {
   await nextTick()
 }
 
+const navigate = async () => {
+  await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+}
+
 watch(() => called.value, () => {
   if (called.value === true) {
-    setTimeout(async () => {
-      await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`,
-        { redirectCode: 301 })
-    }, 500)
+    let tl = gsap.timeline({ default: { ease: 'circ.out', duration: .75 }, onComplete: () => navigate() })
+    tl.to(scrollImage.value, {
+      width: '100%', top: '-40vh', delay: .5, duration: .8
+    })
+      .to('.t-o', { opacity: 1 }, '<+=20%')
   }
 })
+
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
@@ -327,7 +334,7 @@ onBeforeUnmount(() => {
                 </div>
               </span>
               <span class='anima-scale'>
-                <div v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
                   <template
                     v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
                     <SanityImage class='a'
