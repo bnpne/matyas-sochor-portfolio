@@ -11,7 +11,6 @@ definePageMeta({
     mode: 'out-in',
     onEnter(el, done) {
       const app = useNuxtApp()
-
       gsap.to('.t-o', {
         opacity: 0, duration: .75, delay: .25, ease: 'circ.out',
         onComplete: () => {
@@ -74,17 +73,21 @@ async function getIndex() {
   await nextTick()
 }
 
-const navigate = async () => {
-  await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+const navigate = () => {
+  setTimeout(async () => {
+    await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+  }, 200)
 }
 
 watch(() => called.value, () => {
   if (called.value === true) {
-    let tl = gsap.timeline({ default: { ease: 'circ.out', duration: .75 }, onComplete: () => navigate() })
+    let child = scrollImage.value.children[0]
+    let tl = gsap.timeline({ default: { ease: 'expo.out' }, onComplete: () => navigate() })
     tl.to(scrollImage.value, {
-      width: '100%', top: '-40vh', delay: .5, duration: .8
+      width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
     })
-      .to('.t-o', { opacity: 1 }, '<+=20%')
+    tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
+    tl.to(child, { scale: 1.1, duration: 1.2, ease: 'expo.out' }, '<')
   }
 })
 
@@ -368,6 +371,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(10px);
+    position: relative;
 
     @include mobile() {
       gap: mobile-vw(6px);
@@ -628,7 +632,7 @@ onBeforeUnmount(() => {
     &-scroll {
       display: flex;
       flex-direction: column;
-      position: relative;
+      //position: relative;
       align-items: center;
       gap: desktop-vw(24px);
       padding: 0 desktop-vw(60px);
@@ -704,9 +708,11 @@ onBeforeUnmount(() => {
       &-image {
         position: absolute;
         top: calc(100% - desktop-vw(74px));
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(100% - desktop-vw(120px));
+        height: calc(100vh - desktop-vw(20px));
+        //left: 50%;
+        //transform: translate(-50%, 0);
+        left: 0;
+        width: 100%;
         z-index: 10;
 
         @include rounded();

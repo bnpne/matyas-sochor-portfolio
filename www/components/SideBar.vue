@@ -344,6 +344,7 @@ onMounted(() => {
       &.active {
         display: flex;
         opacity: 1;
+        transition: opacity 300ms 300ms ease-out;
       }
     }
 
