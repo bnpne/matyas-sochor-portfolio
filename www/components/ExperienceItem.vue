@@ -70,6 +70,14 @@ const { isMobile } = useDevice()
       align-content: center;
       justify-content: space-between;
 
+      &>a {
+        transition: color 300ms ease-out;
+
+        &:hover {
+          color: $black50;
+        }
+      }
+
       &-right {
         color: $black50;
         display: flex;

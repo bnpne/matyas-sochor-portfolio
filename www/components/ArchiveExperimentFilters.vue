@@ -3,8 +3,7 @@ const query = groq`*[_type == 'articles'][0]{'filters':articleList[].project->{p
 const { data: filters } = useSanityQuery(query)
 
 const store = useStore()
-const { experimentFilters, experimentFilterLengths, activeFilters } = storeToRefs(store)
-
+const { experimentFilters, activeFilterTypes, experimentFilterLengths, activeFilters } = storeToRefs(store)
 const reset = ref(false)
 const isActive = ref(false)
 const route = useRoute()
@@ -86,6 +85,15 @@ const selectFilter = (event) => {
     }
   }
 }
+
+watch(filtersArr.value, () => {
+  if (route.query.filter) {
+    let splt = route.query.filter.split(';')
+    if (splt.includes('Experiments')) {
+      isActive.value = true
+    }
+  }
+})
 
 watch(filters, () => {
   if (filters.value?.filters) {

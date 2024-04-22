@@ -33,6 +33,8 @@ const router = useRouter()
 const ellipse = ref()
 const progress = reactive({ value: 0 })
 const lenisProgress = reactive({ value: 0 })
+const caseImage = ref(null)
+const scrollImage = ref(null)
 
 const testProgress = () => {
   progress.value += 25
@@ -72,12 +74,23 @@ async function getIndex() {
   await nextTick()
 }
 
+const navigate = async () => {
+  await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+}
+
 watch(() => called.value, () => {
   if (called.value === true) {
-    setTimeout(async () => {
-      await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
-        { redirectCode: 301 })
-    }, 500)
+
+    // setTimeout(async () => {
+    //   await navigateTo(`/work/${toRaw(data.value).home?.selectedProjects?.[isNext.value].projectSlug.current}`,
+    //     { redirectCode: 301 })
+    // }, 500)
+    console.log(scrollImage.value)
+    let tl = gsap.timeline({ default: { ease: 'circ.out', duration: .75 }, onComplete: () => navigate() })
+    tl.to(scrollImage.value, {
+      width: '100%', top: '-40vh', delay: .5, duration: .8
+    })
+      .to('.t-o', { opacity: 1 }, '<+=20%')
   }
 })
 
@@ -111,6 +124,19 @@ watch([() => store.isFetched, () => loading.value], async () => {
     } else {
       toRaw(video.value).currentTime = 0
       toRaw(video.value).load()
+    }
+
+    if (caseImage.value) {
+      gsap.to(caseImage.value, {
+        y: '30%',
+        ease: ' circ.out',
+        scrollTrigger: {
+          trigger: caseImage.value,
+          scrub: 0,
+          start: 'top top',
+          end: 'bottom top',
+        }
+      })
     }
 
     /// SCROLL ANIMATIONS
@@ -191,7 +217,6 @@ watch([() => store.isFetched, () => loading.value], async () => {
 onMounted(() => {
   loading.value = false
   if (app.$lenis.isStopped) {
-    console.log(' scroll stopped')
     // app.$scrollStart()
   }
 })
@@ -204,13 +229,13 @@ onBeforeUnmount(() => {
 
 <template>
   <div class='work' id='page'>
-    <NuxtLayout name='work' :data='work'>
+    <NuxtLayout name='work'>
       <div v-if='work' class='work-container '>
         <div class='work-hero pre-project'>
-          <div class='work-hero-img pre-image'>
+          <div class='work-hero-img pre-image' ref='caseImage'>
             <div class='work-hero-img-overlay'></div>
             <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
-              <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
+              <SanityImage class='intro-anima s-t' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
                 w='1000' fit='clip' />
             </template>
             <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
@@ -235,7 +260,7 @@ onBeforeUnmount(() => {
               </div>
               <div class='work-hero-details-info '>
                 <div class='work-hero-details-info-section detail-anima' v-if='work.projectDetails?.projectYear &&
-      work.projectDetails?.projectType'>
+        work.projectDetails?.projectType'>
                   <p>Type/Year</p>
                   <p v-for='type in work.projectDetails?.projectType'>{{ type }}</p>
                 </div>
@@ -315,7 +340,7 @@ onBeforeUnmount(() => {
                 </div>
               </span>
               <span class='anima-scale'>
-                <div v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
+                <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
                   <template
                     v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
                     <SanityImage class='a'
@@ -438,6 +463,7 @@ onBeforeUnmount(() => {
           //gap: desktop-vw(4px);
           align-content: center;
           margin-bottom: desktop-vw(4px);
+          transition: color 300ms ease-out;
 
           @include mobile() {
             //gap: mobile-vw(4px);
@@ -450,13 +476,21 @@ onBeforeUnmount(() => {
             height: desktop-vw(13px);
             display: inline-block;
             margin-left: 4px;
-            margin-top: 2px;
-            margin-bottom: -2px;
+            margin-top: 0;
             overflow: hidden;
+            transition: all 300ms ease-out;
 
             @include mobile() {
               width: mobile-vw(13px);
               height: mobile-vw(13px);
+            }
+          }
+
+          &:hover {
+            color: $white50;
+
+            &::after {
+              margin-left: 10px;
             }
           }
         }
@@ -681,6 +715,7 @@ onBeforeUnmount(() => {
         left: 50%;
         transform: translateX(-50%);
         width: calc(100% - desktop-vw(120px));
+        z-index: 10;
 
         @include rounded();
         overflow: hidden;
@@ -698,8 +733,6 @@ onBeforeUnmount(() => {
           @include image-default();
         }
       }
-
-
     }
   }
 }

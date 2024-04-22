@@ -11,6 +11,7 @@ type Store = {
   activeProjectFilters: HTMLElement[] | []
   allProjects: [] | null
   activeCards: [] | null
+  activeFilterTypes: []
 }
 
 export const useStore = defineStore('main', {
@@ -27,8 +28,16 @@ export const useStore = defineStore('main', {
     activeProjectFilters: [],
     allProjects: [],
     activeCards: [],
+    activeFilterTypes: [],
   }),
   actions: {
+    addFilterType(t: any) {
+      this.activeFilterTypes.push(t)
+    },
+    removeFilterType(t: any) {
+      let index = this.activeFilterTypes.indexOf(t)
+      this.activeFilterTypes.splice(index, 1)
+    },
     addProjects(projects: any) {
       this.allProjects = projects
     },

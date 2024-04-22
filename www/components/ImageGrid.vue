@@ -45,7 +45,7 @@ defineProps(['data'])
     }
 
     &.with-border {
-      border: 1px rgba(30, 30, 30, 0.3) solid;
+      border: 1px rgba(30, 30, 30, 0.1) solid;
       border-radius: desktop-vw(12px);
 
       @include mobile() {

@@ -4,23 +4,20 @@ defineProps(['projects'])
 const store = useStore()
 const route = useRoute()
 const { activeProject } = storeToRefs(store)
-
-onMounted(() => {
-  // console.log(activeProject)
-})
 </script>
 
 <template>
   <div v-if='projects' class='sidebar-projects pre-anima'>
     <div class='sidebar-projects-heading'>
       <div>Selected Work</div>
-      <NuxtLink to='/archive' class='sidebar-projects-heading-work'>
+      <nuxt-link :to='{ path: "/archive", query: { filter: "Projects;", project: "", experiment: "" } }'
+        class='sidebar-projects-heading-work'>
         <span>All Work</span>
         <svg viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M0.75 9.25L4.5 5.5L0.75 1.75L2 0.5L7 5.5L2 10.5L0.75 9.25Z"
             fill="currentColor" />
         </svg>
-      </NuxtLink>
+      </nuxt-link>
     </div>
     <NuxtLink :to="`/work/${project.projectSlug?.current}`" v-for='project, index in projects'
       class="sidebar-projects-card"
@@ -72,6 +69,7 @@ onMounted(() => {
       gap: desktop-vw(8px);
       color: $black50;
       align-items: center;
+      transition: color 300ms ease-out;
 
       @include mobile() {
         gap: mobile-vw(8px);

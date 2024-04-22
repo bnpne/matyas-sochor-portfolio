@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class='about' id='page'>
-    <NuxtLayout name='work'>
+    <NuxtLayout name='page'>
       <div v-if='data' class='about-container'>
         <div class='about-container-flex'>
           <div v-if='!isMobile' class='about-avatar'>
@@ -388,7 +388,6 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(24px);
-    // margin-right: desktop-vw(14px);
 
     @include mobile() {
       gap: mobile-vw(24px);
@@ -452,6 +451,7 @@ onBeforeUnmount(() => {
     }
 
     &-links {
+      margin-right: desktop-vw(14px);
       display: flex;
       justify-content: space-between;
       flex-direction: row;
@@ -464,6 +464,7 @@ onBeforeUnmount(() => {
         justify-content: flex-start;
         gap: mobile-vw(40px);
         padding: 0 mobile-vw(14px);
+        margin-right: 0;
       }
     }
 
@@ -473,6 +474,12 @@ onBeforeUnmount(() => {
 
       @include mobile() {
         display: none;
+      }
+
+      &>a {
+        &:hover {
+          color: $black75;
+        }
       }
     }
 

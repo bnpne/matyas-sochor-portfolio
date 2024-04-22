@@ -33,6 +33,7 @@ const router = useRouter()
 const ellipse = ref()
 const progress = reactive({ value: 0 })
 const lenisProgress = reactive({ value: 0 })
+const caseImage = ref(null)
 
 const testProgress = () => {
   progress.value += 25
@@ -112,6 +113,18 @@ watch([() => store.isFetched, () => loading.value], async () => {
       toRaw(video.value).load()
     }
 
+    if (caseImage.value) {
+      gsap.to(caseImage.value, {
+        y: '30%',
+        ease: ' circ.out',
+        scrollTrigger: {
+          trigger: caseImage.value,
+          scrub: 0,
+          start: 'top top',
+          end: 'bottom top',
+        }
+      })
+    }
 
     /// SCROLL ANIMATIONS
     /// Fade In
@@ -191,7 +204,6 @@ watch([() => store.isFetched, () => loading.value], async () => {
 onMounted(() => {
   loading.value = false
   if (app.$lenis.isStopped) {
-    console.log(' scroll stopped')
     // app.$scrollStart()
   }
 })
@@ -207,7 +219,7 @@ onBeforeUnmount(() => {
     <NuxtLayout name='work' :data='work'>
       <div v-if='work' class='work-container '>
         <div class='work-hero pre-project'>
-          <div class='work-hero-img pre-image'>
+          <div class='work-hero-img pre-image' ref='caseImage'>
             <div class='work-hero-img-overlay'></div>
             <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
               <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
@@ -292,7 +304,7 @@ onBeforeUnmount(() => {
             <div class='work-footer-divider'></div>
             <div class='work-footer-scroll'>
               <span class='anima-fade'>
-                <p class='work-footer-scroll-heading'>Scroll to next project</p>
+                <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
               </span>
               <span class='anima-fade'>
                 <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
@@ -450,8 +462,8 @@ onBeforeUnmount(() => {
             height: desktop-vw(13px);
             display: inline-block;
             margin-left: 4px;
-            margin-top: 2px;
-            margin-bottom: -2px;
+            //margin-top: 2px;
+            // margin-bottom: -2px;
             overflow: hidden;
 
             @include mobile() {

@@ -2,7 +2,7 @@
 const props = defineProps(['card',])
 
 const store = useStore()
-const { activeFilters } = storeToRefs(store)
+const { activeFilters, activeFilterTypes } = storeToRefs(store)
 const { isMobile } = useDevice();
 const article = ref()
 const route = useRoute()
@@ -10,6 +10,8 @@ const routeParams = reactive({ params: route.query.filter })
 const isActive = ref(true)
 const isProject = ref(false)
 const cardFilters = reactive({ value: [] })
+const cardProjectFilters = reactive({ value: [] })
+const cardExperimentFilters = reactive({ value: [] })
 const isConfigured = ref(false)
 
 const resizeGridItem = (item) => {
@@ -20,26 +22,36 @@ const resizeGridItem = (item) => {
   item.style.gridRowEnd = "span " + rowSpan;
 }
 
-watch(() => route.query.filter, async () => {
-  routeParams.params = route.query.filter ? route.query.filter : ''
+watch([() => route.query.filter, () => route.query.project, () => route.query.experiment], async () => {
+  routeParams.params = route.query.filter ? route.query : ''
   if (routeParams.params !== '') {
-    let splt = route.query.filter.split(';')
+    let filterSplt = route.query.filter.split(';')
+    let projectSplt = route.query.project.split(';')
+    let experimentSplt = route.query.experiment.split(';')
 
     if (cardFilters.value.length > 0) {
       let isThere = false
       cardFilters.value.forEach(c => {
-        if (splt.includes(c)) {
+        if (filterSplt.includes(c)) {
           isThere = true
         }
       })
 
-      if (cardFilters.value.includes('Projects') && splt.includes('Projects')) {
-        let index = cardFilters.value.indexOf('Projects')
-        let temp = cardFilters.value
-        temp.splice(index, 1)
+      // filter projects
+      if (cardFilters.value.includes('Projects') && routeParams.params.project !== '') {
+        cardProjectFilters.value.forEach(t => {
+          if (projectSplt.includes(t)) {
+            isThere = true
+          } else {
+            isThere = false
+          }
+        })
+      }
 
-        temp.forEach(t => {
-          if (splt.includes(t)) {
+      // filter experiments
+      if (cardFilters.value.includes('Experiments') && routeParams.params.experiment !== '') {
+        cardExperimentFilters.value.forEach(t => {
+          if (experimentSplt.includes(t)) {
             isThere = true
           } else {
             isThere = false
@@ -60,9 +72,50 @@ watch(() => route.query.filter, async () => {
 
 watch(() => isConfigured.value, async () => {
   await nextTick()
-  if (!isMobile) {
-    // window.addEventListener('DOMContentLoaded', resizeGridItem(article.value))
-    // window.addEventListener('resize', resizeGridItem(article.value))
+  routeParams.params = route.query.filter ? route.query : ''
+  if (routeParams.params !== '') {
+    let filterSplt = route.query.filter ? route.query.filter.split(';') : ''
+    let projectSplt = route.query.project ? route.query.project.split(';') : ''
+    let experimentSplt = route.query.experiment ? route.query.experiment.split(';') : ''
+
+    if (cardFilters.value.length > 0) {
+      let isThere = false
+      cardFilters.value.forEach(c => {
+        if (filterSplt.includes(c)) {
+          isThere = true
+        }
+      })
+
+      // filter projects
+      if (cardFilters.value.includes('Projects') && routeParams.params.project !== '') {
+        cardProjectFilters.value.forEach(t => {
+          if (projectSplt.includes(t)) {
+            isThere = true
+          } else {
+            isThere = false
+          }
+        })
+      }
+
+      // filter experiments
+      if (cardFilters.value.includes('Experiments') && routeParams.params.experiment !== '') {
+        cardExperimentFilters.value.forEach(t => {
+          if (experimentSplt.includes(t)) {
+            isThere = true
+          } else {
+            isThere = false
+          }
+        })
+      }
+
+      if (isThere) {
+        isActive.value = true
+      } else {
+        isActive.value = false
+      }
+    }
+  } else {
+    isActive.value = true
   }
 })
 
@@ -70,16 +123,24 @@ const configureCard = () => {
   if (props.card.isProject && props.card.project.projectType === 'selectedProject') {
     isProject.value = true
   }
+
   props.card.articleType.forEach(a => {
     cardFilters.value.push(a.title)
   })
+
   if (props.card.isProject) {
-    props.card.project.projectFilters.filter.forEach(f => {
-      cardFilters.value.push(f.tagTitle)
-    })
+    if (props.card.project.projectType === 'selectedProject') {
+      props.card.project.projectFilters.filter.forEach(f => {
+        cardProjectFilters.value.push(f.tagTitle)
+      })
+    }
+    if (props.card.project.projectType === 'experiment') {
+      props.card.project.projectFilters.filter.forEach(f => {
+        cardExperimentFilters.value.push(f.tagTitle)
+      })
+    }
   }
   isConfigured.value = true
-
 }
 
 onMounted(() => {

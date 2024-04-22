@@ -10,13 +10,14 @@ const { activeProject } = storeToRefs(store)
   <div v-if='experiments' class='sidebar-experiments pre-anima'>
     <div class='sidebar-experiments-heading'>
       <div>Selected Experiments</div>
-      <NuxtLink to='/archive' class='sidebar-experiments-heading-work'>
+      <nuxt-link :to='{ path: "/archive", query: { filter: "Experiments;", project: "", experiment: "" } }'
+        class='sidebar-experiments-heading-work'>
         <span>All Experiments</span>
         <svg viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M0.75 9.25L4.5 5.5L0.75 1.75L2 0.5L7 5.5L2 10.5L0.75 9.25Z"
             fill="currentColor" />
         </svg>
-      </NuxtLink>
+      </nuxt-link>
     </div>
     <NuxtLink :to="`/experiments/${experiment.projectSlug?.current}`" v-for='experiment, index in experiments'
       class='sidebar-experiments-card'
@@ -68,6 +69,7 @@ const { activeProject } = storeToRefs(store)
       gap: desktop-vw(8px);
       color: $black50;
       align-items: center;
+      transition: color 300ms ease-out;
 
       @include mobile() {
         gap: mobile-vw(8px);

@@ -77,7 +77,7 @@ watch(activeCards.value, () => {
 watch(activeFilters.value, async () => {
   const temp = activeFilters.value.map(a => {
     let html = a.el.children[0].innerHTML
-    return html
+    return { t: a.type, s: html }
   })
 
   if (temp.length > 0) {
@@ -87,13 +87,23 @@ watch(activeFilters.value, async () => {
   }
 
   let s = ''
+  let j = ''
+  let e = ''
 
   if (params.value.length > 0) {
     params.value.forEach((p, i) => {
-      let str = p
-      s += str
-      if (i < params.value.length - 1) {
+      let str = p.s
+      if (p.t === 'show') {
+        s += str
         s += ';'
+      }
+      if (p.t === 'project') {
+        j += str
+        j += ';'
+      }
+      if (p.t === 'experiment') {
+        e += str
+        e += ';'
       }
     })
 
@@ -101,11 +111,15 @@ watch(activeFilters.value, async () => {
       path: '/archive',
       query: {
         filter: s,
-      }
+        project: j,
+        experiment: e
+      },
+      replace: true
     })
   } else {
     await navigateTo({
       path: '/archive',
+      replace: true
     })
   }
 })
@@ -118,6 +132,12 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   // Revert gsap context
+  main.clearActiveShowFilters()
+  main.clearActiveProjectFilters()
+  main.clearActiveExperimentFilters()
+  if (route.query) {
+    router.replace({ query: '' })
+  }
   ScrollTrigger.killAll()
 })
 </script>

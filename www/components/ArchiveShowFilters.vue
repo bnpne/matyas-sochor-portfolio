@@ -4,6 +4,7 @@ const { data: filters } = useSanityQuery(query)
 
 const store = useStore()
 const { showFilters, showFilterLengths, activeFilters } = storeToRefs(store)
+const route = useRoute()
 
 const reset = ref(false)
 const filterButton = ref([])
@@ -71,11 +72,24 @@ watch(filters, () => {
       store.addShowFilter(f.title)
     })
   }
+
+})
+
+watch(filterButton.value, () => {
+  if (route.query.filter) {
+    let splt = route.query.filter.split(';')
+    toRaw(filterButton.value).forEach((b, i) => {
+      let s = b.children[0].innerHTML
+      if (splt.includes(s)) {
+        b.classList.toggle('active')
+        store.addActiveFilter({ type: 'show', el: b })
+      }
+    })
+  }
 })
 
 
 onMounted(() => {
-  // These are the filters of each article on the archive page
 })
 
 onUnmounted(() => {

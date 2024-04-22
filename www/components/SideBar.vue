@@ -206,6 +206,11 @@ onMounted(() => {
 
     &-about {
       @include small-type();
+
+      &>a {
+        transition: all 300ms ease-out;
+
+      }
     }
 
     &-container {
@@ -254,6 +259,11 @@ onMounted(() => {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        transition: opacity 300ms ease-out;
+
+        &:hover {
+          opacity: .5;
+        }
 
         @include mobile() {
           max-width: mobile-vw(42px);
@@ -283,6 +293,7 @@ onMounted(() => {
       @include small-type();
       color: rgba(30, 30, 30, .5);
       padding-bottom: desktop-vw(10px);
+      transition: color 300ms ease-out;
 
       &::after {
         content: '+';
@@ -291,7 +302,7 @@ onMounted(() => {
         top: 0;
         left: calc(100% + 6px);
         color: rgba(30, 30, 30, .5);
-        transition: transform 200ms ease-out;
+        transition: transform 300ms ease-out;
       }
 
       &.active {
@@ -309,7 +320,7 @@ onMounted(() => {
       position: absolute;
       @include rounded();
       background: $black;
-      color: $white;
+      color: $white50;
       top: calc(100%);
       left: desktop-vw(-55px);
       width: desktop-vw(200px);
@@ -321,8 +332,7 @@ onMounted(() => {
       font-size: desktop-vw(12px);
       opacity: 0;
       z-index: 4;
-
-      transition: opacity 500ms ease-out;
+      transition: all 500ms ease-out;
 
       @include mobile() {
         left: mobile-vw(-55px);
@@ -334,16 +344,13 @@ onMounted(() => {
       &.active {
         display: flex;
         opacity: 1;
-
-      }
-
-      &:hover .sidebar-dropdown-link:not(:hover) {
-        color: $white50;
-
       }
     }
 
-    &-link {}
+    &-link:hover {
+      transition: color 300ms ease-out;
+      color: $white;
+    }
   }
 
   &-toggle {

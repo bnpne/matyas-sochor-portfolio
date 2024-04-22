@@ -1,3 +1,31 @@
+<script setup>
+import gsap from 'gsap'
+
+definePageMeta({
+  pageTransition: {
+    css: false,
+    name: 'work',
+    mode: 'out-in',
+    onEnter(el, done) {
+      const app = useNuxtApp()
+
+      gsap.to('.t-o', {
+        opacity: 0, duration: .75, delay: .25, ease: 'circ.out',
+        onComplete: () => {
+          app.$scrollStart()
+          done()
+        }
+      })
+    },
+    onLeave(el, done) {
+      const app = useNuxtApp()
+      app.$scrollStop()
+      gsap.to('.t-o', { opacity: 1, duration: .75, ease: 'circ.out', onComplete: () => { done() } })
+    },
+  },
+})
+</script>
+
 <template>
   <div id='page' class='error'>
     <p> 🙊 Whoops,</p>

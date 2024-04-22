@@ -4,7 +4,7 @@ const { data: filters } = useSanityQuery(query)
 
 const route = useRoute()
 const store = useStore()
-const { projectFilters, projectFilterLengths, activeFilters } = storeToRefs(store)
+const { projectFilters, activeFilterTypes, projectFilterLengths, activeFilters } = storeToRefs(store)
 const reset = ref(false)
 const isActive = ref(false)
 const filtersArr = ref([])
@@ -85,6 +85,15 @@ const selectFilter = (event) => {
     }
   }
 }
+
+watch(filtersArr.value, () => {
+  if (route.query.filter) {
+    let splt = route.query.filter.split(';')
+    if (splt.includes('Projects')) {
+      isActive.value = true
+    }
+  }
+})
 
 watch(filters, () => {
   if (filters.value?.filters) {

@@ -3,8 +3,7 @@ import gsap from 'gsap'
 
 const query = groq`*[_type == 'projects']{notifications, projectSlug}`
 const { data } = useSanityQuery<Project>(query)
-// const store = useData()
-// store.$subscribe(state => console.log(state.data))
+const route = useRoute()
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
@@ -59,16 +58,26 @@ onMounted(() => {
 
 <template>
   <div id='page' class='page-layout'>
-    <nav class='page-layout-nav'>
+    <nav class='page-layout-nav' :class='{ "about-nav": route.path === "/about" }'>
+
       <NuxtLink to='/archive' class='page-layout-nav-archive'>Archive</NuxtLink>
       <div v-if='!notificationActive.isActive' @click='toggleNotification' class='page-layout-nav-notifications'>{{
-        notifications.list.length }}</div>
-      <div v-else @click='toggleNotification' class='page-layout-nav-notifications-active'>X</div>
+      notifications.list.length }}</div>
+      <div v-else @click='toggleNotification' class='page-layout-nav-notifications-active'>
+        <svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+            fill="#1E1E1E" fill-opacity=".75" />
+          <path
+            d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+            fill="#1E1E1E" fill-opacity=".75" />
+        </svg>
+      </div>
     </nav>
     <div class='page-layout-container'>
       <div class='page-layout-notification-container'>
-        <NuxtLink :to="`/work/${notificationsLink.list[index].current}`" v-for='no, index in notifications.list'
-          class='page-layout-notification'>
+        <NuxtLink :to="`/work/${notificationsLink.list[index].current}`"
+          v-for='   no, index    in    notifications.list   ' class='page-layout-notification'>
           <div v-if='no.notificationImage' class='page-layout-notification-img'>
             <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
           </div>
@@ -129,6 +138,45 @@ onMounted(() => {
       }
     }
 
+    &.about-nav {
+      .page-layout-nav-archive {
+        @include button-second-black();
+        box-shadow: 0px 2px 12px 0px #0000001F;
+      }
+
+      .page-layout-nav-notifications {
+        @include button-second-black();
+        border-radius: 50%;
+        height: desktop-vw(42px);
+        width: desktop-vw(42px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 0px 2px 12px 0px #0000001F;
+
+        @include mobile {
+          height: mobile-vw(42px);
+          width: mobile-vw(42px);
+        }
+
+        &-active {
+          @include button-default-white();
+          box-shadow: 0px 2px 12px 0px #0000001F;
+          border-radius: 50%;
+          height: desktop-vw(42px);
+          width: desktop-vw(42px);
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+
+          @include mobile {
+            height: mobile-vw(42px);
+            width: mobile-vw(42px);
+          }
+        }
+      }
+    }
   }
 
   &-notification {

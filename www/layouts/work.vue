@@ -1,23 +1,43 @@
 <script setup lang='ts'>
 import gsap from 'gsap'
 
-const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
-const { data: avatar } = useSanityQuery<HomeData>(query)
-const linkQuery = groq`*[_type == 'links'][0]{linkArray}`
-const { data: links } = useSanityQuery(linkQuery)
+// const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
+// const { data: avatar } = useSanityQuery<HomeData>(query)
+// const linkQuery = groq`*[_type == 'links'][0]{linkArray}`
+// const { data: links } = useSanityQuery(linkQuery)
 
 const { isMobile } = useDevice()
-const data = reactive({ data: toRaw(useAttrs().data) })
+// const data = reactive({ data: toRaw(useAttrs().data) })
+const route = useRoute()
 const dropdown = ref()
 const toggler = ref()
 const toggle = ref()
 let isOpen = false
 const toggleIsOpen = reactive({ isOpen: false })
 
-let notifications: { list: any[] } = reactive({ list: [] })
-let notificationActive: { isActive: boolean } = reactive({ isActive: false })
+const store = useData()
+const { data } = storeToRefs(store)
+const loading = ref(true)
+const notifications: { list: any[] } = reactive({ list: [] })
+const notificationActive: { isActive: boolean } = reactive({ isActive: false })
 const isNotif = computed(() => {
   return notifications.list.length > 0
+})
+
+watch([() => store.isFetched, () => loading.value, () => route.path], async () => {
+  if (!loading || store.isFetched) {
+    let str = route.path.split('/')
+    let project
+    toRaw(data.value).projects.forEach(p => {
+      if (p.projectSlug.current === str[2]) {
+        project = p
+      }
+    })
+    if (project.notifications) {
+      notifications.list = project.notifications
+    }
+
+  }
 })
 
 const toggleNotification = () => {
@@ -51,6 +71,8 @@ const openDropdown = () => {
 }
 
 onMounted(() => {
+  loading.value = false
+
   watch(() => notificationActive.isActive, () => {
     if (notificationActive.isActive === true) {
       gsap.to('.work-layout-notification', {
@@ -73,19 +95,11 @@ onMounted(() => {
     }
   })
 
-  watch(isNotif, () => {
-    setTimeout(() => {
+  setTimeout(() => {
+    if (notifications.list.length > 0) {
       toggleNotification()
-    }, 2000)
-  })
-
-  if (data.data?.notifications !== undefined || data.data?.notifications !== null) {
-    if (data.data?.notifications !== null) {
-      data.data?.notifications?.forEach((no: any) => {
-        notifications.list.push(no)
-      })
     }
-  }
+  }, 5000)
 })
 
 </script>
@@ -94,19 +108,22 @@ onMounted(() => {
   <div class='work-layout'>
     <template v-if='!isMobile'>
       <nav class='work-layout-nav'>
-        <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
-        <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
+        <template v-if='notifications.list'>
+          <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
+          <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
       notifications.list.length }}</div>
-        <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
-          <svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
-              fill="#1E1E1E" fill-opacity=".75" />
-            <path
-              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
-              fill="#1E1E1E" fill-opacity=".75" />
-          </svg>
-        </div>
+          <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
+            <svg width="10" height="10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+                fill="#1E1E1E" fill-opacity=".75" />
+              <path
+                d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+                fill="#1E1E1E" fill-opacity=".75" />
+            </svg>
+          </div>
+
+        </template>
       </nav>
     </template>
     <template v-else>
@@ -286,6 +303,7 @@ onMounted(() => {
 
     &-archive {
       @include button-second-black();
+      box-shadow: 0px 2px 12px 0px #0000001F;
     }
 
     &-more {
@@ -312,6 +330,7 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       text-align: center;
+      box-shadow: 0px 2px 12px 0px #0000001F;
 
       @include mobile {
         height: mobile-vw(42px);
@@ -320,6 +339,7 @@ onMounted(() => {
 
       &-active {
         @include button-default-white();
+        box-shadow: 0px 2px 12px 0px #0000001F;
         border-radius: 50%;
         height: desktop-vw(42px);
         width: desktop-vw(42px);
