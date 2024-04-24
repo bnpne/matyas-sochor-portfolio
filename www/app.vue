@@ -3,6 +3,9 @@ useHead({
   title: 'Matyas Sochor | Digital Graphic Designer',
   meta: [
     {
+      'charset': 'UTF-8'
+    },
+    {
       "name": 'viewport',
       'content': "width=device-width, minimum-scale=1, maximum-scale=1"
     },
