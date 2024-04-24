@@ -202,8 +202,8 @@ onMounted(() => {
     width: 100vw;
     box-sizing: border-box;
 
-    background: white;
-    box-shadow: 0px 2px 12px 0px #0000001F;
+    //background: white;
+    //box-shadow: 0px 2px 12px 0px #0000001F;
 
     &-about {
       @include small-type();

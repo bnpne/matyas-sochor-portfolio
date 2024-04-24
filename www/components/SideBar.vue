@@ -47,15 +47,17 @@ const mobileDropdownToggle = () => {
 }
 
 onMounted(() => {
-  const lenis = new Lenis({
-    wrapper: wrapper.value!,
-    content: container.value!
-  })
+  if (!isMobile) {
+    const lenis = new Lenis({
+      wrapper: wrapper.value!,
+      content: container.value!
+    })
 
-  // @ts-ignore
-  R.add(time => {
-    lenis.raf(time)
-  }, 0)
+    // @ts-ignore
+    R.add(time => {
+      lenis.raf(time)
+    }, 0)
+  }
 })
 </script>
 
@@ -155,18 +157,28 @@ onMounted(() => {
 <style lang='scss'>
 .sidebar {
   max-width: desktop-vw(372px);
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: block;
-  position: fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
+
+  @include desktop() {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+  }
 
   @include mobile() {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    //padding-bottom: mobile-vw(20px);
     max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
   }
 
   &-overlay {

@@ -35,6 +35,7 @@ const progress = reactive({ value: 0 })
 const lenisProgress = reactive({ value: 0 })
 const caseImage = ref(null)
 const scrollImage = ref(null)
+const { isMobile } = useDevice()
 
 const testProgress = () => {
   progress.value += 25
@@ -76,7 +77,7 @@ async function getIndex() {
 
 const navigate = () => {
   setTimeout(async () => {
-    await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments?.[isNext.value].projectSlug.current}`, { redirectCode: 301 })
+    await navigateTo(`/experiments/${toRaw(data.value).home?.selectedExperiments[isNext.value]?.projectSlug.current}`, { redirectCode: 301 })
   }, 200)
 }
 
@@ -204,24 +205,26 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
     let t = 0
-    window.addEventListener('wheel', (e) => {
-      if (lenisProgress.value === 1) {
-        if (t < 100) {
+    if (!isMobile) {
+      window.addEventListener('wheel', (e) => {
+        if (lenisProgress.value === 1) {
+          if (t < 100) {
 
-          t += e.deltaY / 20
-          t = Math.min(Math.max(t, 0), 100)
-          gsap.to(progress, { value: t, ease: 'circ.out' })
+            t += e.deltaY / 20
+            t = Math.min(Math.max(t, 0), 100)
+            gsap.to(progress, { value: t, ease: 'circ.out' })
+          }
+
+          if (t === 100) {
+            called.value = true
+          }
+        } else {
+          t = 0
+          gsap.to(progress, { value: 0, ease: 'circ.out' })
+
         }
-
-        if (t === 100) {
-          called.value = true
-        }
-      } else {
-        t = 0
-        gsap.to(progress, { value: 0, ease: 'circ.out' })
-
-      }
-    })
+      })
+    }
   }
 })
 
@@ -326,51 +329,103 @@ onBeforeUnmount(() => {
               </span>
             </div>
             <div class='work-footer-divider'></div>
-            <div class='work-footer-scroll'>
-              <span class='anima-fade'>
-                <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
-              </span>
-              <span class='anima-fade'>
-                <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
-              </span>
-              <span class='anima-fade'>
-                <div class='work-footer-scroll-spinner'>
-                  <div class='work-footer-scroll-spinner-base'>
-                    <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
-                        fill="black" />
-                    </svg>
+            <template v-if='!isMobile'>
+              <div class='work-footer-scroll'>
+                <span class='anima-fade'>
+                  <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
+                </span>
+                <span class='anima-fade'>
+                  <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
+                </span>
+                <span class='anima-fade'>
+                  <div class='work-footer-scroll-spinner'>
+                    <div class='work-footer-scroll-spinner-base'>
+                      <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z"
+                          fill="black" />
+                      </svg>
+                    </div>
+                    <div class='work-footer-scroll-spinner-progress'>
+                      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
+                          :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
+                      </svg>
+                    </div>
                   </div>
-                  <div class='work-footer-scroll-spinner-progress'>
-                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
-                        :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
-                    </svg>
+                </span>
+                <span>
+                  <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                    <div class='work-footer-scroll-image-overlay'></div>
+                    <template
+                      v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                      <SanityImage class='a'
+                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
+                        auto="format" w='1000' fit='clip' />
+                    </template>
+                    <template
+                      v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                      <SanityFile
+                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
+                        <template #default="{ src }">
+                          <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                            :src='src'></video>
+                        </template>
+                      </SanityFile>
+                    </template>
                   </div>
-                </div>
-              </span>
-              <span>
-                <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
-                  <div class='work-footer-scroll-image-overlay'></div>
-                  <template
-                    v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                    <SanityImage class='a'
-                      :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
-                      auto="format" w='1000' fit='clip' />
-                  </template>
-                  <template
-                    v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                    <SanityFile :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
-                      <template #default="{ src }">
-                        <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
-                          :src='src'></video>
-                      </template>
-                    </SanityFile>
-                  </template>
-                </div>
-              </span>
-            </div>
+                </span>
+              </div>
+            </template>
+            <template v-else>
+              <NuxtLink :to='`/experiments/${data.home?.selectedExperiments[isNext].projectSlug.current}`'
+                class='work-footer-scroll'>
+                <span class='anima-fade'>
+                  <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
+                </span>
+                <span class='anima-fade'>
+                  <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
+                </span>
+                <!-- <span class='anima-fade'> -->
+                <!--   <div class='work-footer-scroll-spinner'> -->
+                <!--     <div class='work-footer-scroll-spinner-base'> -->
+                <!--       <svg viewBox="0 0 46 45" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
+                <!--         <path -->
+                <!--           d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z" -->
+                <!--           fill="black" /> -->
+                <!--       </svg> -->
+                <!--     </div> -->
+                <!--     <div class='work-footer-scroll-spinner-progress'> -->
+                <!--       <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
+                <!--         <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black' -->
+                <!--           :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" /> -->
+                <!--       </svg> -->
+                <!--     </div> -->
+                <!--   </div> -->
+                <!-- </span> -->
+                <span>
+                  <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                    <div class='work-footer-scroll-image-overlay'></div>
+                    <template
+                      v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                      <SanityImage class='a'
+                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
+                        auto="format" w='1000' fit='clip' />
+                    </template>
+                    <template
+                      v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                      <SanityFile
+                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
+                        <template #default="{ src }">
+                          <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                            :src='src'></video>
+                        </template>
+                      </SanityFile>
+                    </template>
+                  </div>
+                </span>
+              </NuxtLink>
+            </template>
           </div>
         </template>
       </div>
@@ -388,6 +443,7 @@ onBeforeUnmount(() => {
     gap: desktop-vw(10px);
 
     @include mobile() {
+      overflow: hidden;
       gap: mobile-vw(6px);
     }
   }

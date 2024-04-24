@@ -40,6 +40,7 @@ const loading = ref(true)
 const video = ref([])
 const projectImage = ref([])
 const homeContainer = ref(null)
+const { isMobile } = useDevice()
 
 const main = useStore()
 const store = useData()

@@ -172,8 +172,8 @@ onBeforeUnmount(() => {
       <div v-if='isMobile' class='archive-overlay' :class='{ open: filtersIsOpen.isOpen }'>
         <ClientOnly>
           <ArchiveShowFilters />
-          <ArchiveProjectFilters />
-          <ArchiveExperimentFilters />
+          <!-- <ArchiveProjectFilters /> -->
+          <!-- <ArchiveExperimentFilters /> -->
         </ClientOnly>
       </div>
     </NuxtLayout>

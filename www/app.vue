@@ -1,6 +1,20 @@
 <script setup lang='ts'>
 useHead({
-  title: 'Matyas Sochor | Digital Graphic Designer'
+  title: 'Matyas Sochor | Digital Graphic Designer',
+  meta: [
+    {
+      "name": 'viewport',
+      'content': "width=device-width, minimum-scale=1, maximum-scale=1"
+    },
+    {
+      'name': 'apple-mobile-web-app-capable',
+      'content': 'yes'
+    },
+    {
+      'name': 'apple-mobile-web-app-status-bar-style',
+      'content': 'black'
+    }
+  ]
 })
 useSeoMeta({
   title: 'Matyas Sochor | Digital Graphic Designer',
