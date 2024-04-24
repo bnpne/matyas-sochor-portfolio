@@ -13,7 +13,7 @@
   overflow: hidden;
   background: $white;
   pointer-events: none;
-  touch-action: none;
+  touch-action: unset;
   top: 0;
   opacity: 0;
   z-index: 999;

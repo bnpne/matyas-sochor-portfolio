@@ -79,12 +79,14 @@ onMounted(() => {
       color: $white;
       font-size: desktop-vw(32px);
       line-height: desktop-vw(36px);
+
     }
 
     &:last-child {
       color: $white50;
       font-size: desktop-vw(32px);
       line-height: desktop-vw(36px);
+
     }
 
   }

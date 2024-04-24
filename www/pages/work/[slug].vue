@@ -80,14 +80,16 @@ const navigate = () => {
 }
 
 watch(() => called.value, () => {
-  if (called.value === true) {
-    let child = scrollImage.value.children[0]
-    let tl = gsap.timeline({ default: { ease: 'expo.out' }, onComplete: () => navigate() })
-    tl.to(scrollImage.value, {
-      width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
-    })
-    tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
-    tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
+  if (!isMobile) {
+    if (called.value === true) {
+      let child = scrollImage.value.children[0]
+      let tl = gsap.timeline({ default: { ease: 'expo.out' }, onComplete: () => navigate() })
+      tl.to(scrollImage.value, {
+        width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
+      })
+      tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
+      tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
+    }
   }
 })
 
@@ -123,7 +125,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
       toRaw(video.value).load()
     }
 
-    if (caseImage.value) {
+    if (caseImage.value && !isMobile) {
       gsap.to(caseImage.value, {
         y: '30%',
         ease: ' circ.out',
@@ -730,6 +732,7 @@ onBeforeUnmount(() => {
         width: 100%;
         flex-grow: 1;
 
+
         &-overlay {
           position: absolute;
           height: 100%;
@@ -744,7 +747,7 @@ onBeforeUnmount(() => {
 
         @include mobile() {
           top: calc(100% - mobile-vw(74px));
-          width: calc(100% - mobile-vw(10px));
+          //width: calc(100% - mobile-vw(10px));
         }
 
         img {

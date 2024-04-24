@@ -325,26 +325,31 @@ onMounted(() => {
       left: desktop-vw(-55px);
       width: desktop-vw(200px);
       padding: desktop-vw(12px);
-      display: none;
+      //display: none;
+      display: flex;
       flex-direction: column;
       gap: desktop-vw(6px);
       @include small-type();
       font-size: desktop-vw(12px);
       opacity: 0;
       z-index: 4;
-      transition: all 500ms ease-out;
+      //transition: all 500ms ease-out;
+      visibility: hidden;
+      transition: visibility 0s, opacity 300ms ease-out;
 
       @include mobile() {
         left: mobile-vw(-55px);
         font-size: mobile-vw(12px);
         padding: mobile-vw(12px);
         gap: mobile-vw(6px);
+        width: mobile-vw(200px);
       }
 
       &.active {
-        display: flex;
+        //display: flex;
+
         opacity: 1;
-        transition: opacity 300ms 300ms ease-out;
+        visibility: visible;
       }
     }
 

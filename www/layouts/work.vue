@@ -7,13 +7,14 @@ import gsap from 'gsap'
 // const { data: links } = useSanityQuery(linkQuery)
 
 const { isMobile } = useDevice()
-// const data = reactive({ data: toRaw(useAttrs().data) })
 const route = useRoute()
 const dropdown = ref()
 const toggler = ref()
 const toggle = ref()
 let isOpen = false
 const toggleIsOpen = reactive({ isOpen: false })
+const avatar = reactive({ value: null })
+const links = ref(null)
 
 const store = useData()
 const { data } = storeToRefs(store)
@@ -26,6 +27,8 @@ const isNotif = computed(() => {
 
 watch([() => store.isFetched, () => loading.value, () => route.path], async () => {
   if (!loading || store.isFetched) {
+    avatar.value = data.value.home
+    links.value = data.value.links
     let str = route.path.split('/')
     let project
     toRaw(data.value).projects.forEach(p => {
@@ -101,7 +104,6 @@ onMounted(() => {
   //   }
   // }, 5000)
 })
-
 </script>
 
 <template>
@@ -122,22 +124,21 @@ onMounted(() => {
                 fill="#1E1E1E" fill-opacity=".75" />
             </svg>
           </div>
-
         </template>
       </nav>
     </template>
     <template v-else>
-      <div v-if='avatar' class='work-layout-avatar'>
+      <div v-if='avatar.value' class='work-layout-avatar'>
         <div class='work-layout-avatar-container'>
           <div class='work-layout-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
-            <NuxtLink to='/' v-if='avatar.avatar' class='work-layout-avatar-info-img'>
-              <SanityImage :asset-id="avatar.avatar?.asset?._ref" auto='format' w='80' />
+            <NuxtLink to='/' v-if='avatar.value.avatar' class='work-layout-avatar-info-img'>
+              <SanityImage :asset-id="avatar.value.avatar?.asset?._ref" auto='format' w='80' />
             </NuxtLink>
             <div class='work-layout-avatar-info-email'>
-              <p v-if='avatar.name' class='work-layout-avatar-info-email-text'>{{ avatar.name }}</p>
-              <div @click='openDropdown' v-if='avatar.emailForm' class='work-layout-avatar-info-email-link'
+              <p v-if='avatar.value.name' class='work-layout-avatar-info-email-text'>{{ avatar.value.name }}</p>
+              <div @click='openDropdown' v-if='avatar.value.emailForm' class='work-layout-avatar-info-email-link'
                 target='_blank'>
-                {{ avatar.emailForm?.emailText }} +
+                {{ avatar.value.emailForm?.emailText }} +
               </div>
               <div ref='dropdown' v-if='links' class='work-layout-link-dropdown'>
                 <NuxtLink v-for='link in links.linkArray' :to='link.linkURL' class='work-layout-link-dropdown-link'>
@@ -223,7 +224,7 @@ onMounted(() => {
     }
 
     &-container {
-      padding: desktop-vw(24px) desktop-vw(20px) 0;
+      padding: desktop-vw(20px) desktop-vw(20px) 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -249,6 +250,7 @@ onMounted(() => {
       gap: desktop-vw(10px);
       align-items: center;
       position: relative;
+      transition: opacity 300ms ease-out;
 
       &.open {
         opacity: .5;
@@ -275,7 +277,7 @@ onMounted(() => {
       }
 
       &-email {
-        @include small-type();
+        //@include small-type();
         cursor: pointer;
 
         &-link {
@@ -450,34 +452,42 @@ onMounted(() => {
   &-link-dropdown {
     position: absolute;
     top: calc(100% + 6px);
+    z-index: 4;
     @include rounded();
     background: $black;
-    color: $white;
+    color: $white50;
+    width: desktop-vw(200px);
     padding: desktop-vw(12px);
+    //display: none;
     display: flex;
     flex-direction: column;
     gap: desktop-vw(6px);
     @include small-type();
     font-size: desktop-vw(12px);
-    pointer-events: none;
     opacity: 0;
     z-index: 4;
+    //transition: all 500ms ease-out;
+    visibility: hidden;
+    transition: visibility 0s, opacity 300ms ease-out;
 
     @include mobile() {
+      left: 0;
       font-size: mobile-vw(12px);
       padding: mobile-vw(12px);
       gap: mobile-vw(6px);
+      width: mobile-vw(200px);
     }
 
     &.active {
+      //display: flex;
+
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
     }
 
-    &-link {
-      &:hover {
-        color: $white50;
-      }
+    &-link:hover {
+      transition: color 300ms ease-out;
+      color: $white;
     }
   }
 
@@ -493,11 +503,10 @@ onMounted(() => {
     justify-content: center;
     position: relative;
     z-index: 5;
+    transition: background 300ms ease-out;
 
     &.open {
       background: $black;
-
-
     }
 
     &-hamburger {

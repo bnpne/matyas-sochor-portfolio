@@ -81,14 +81,16 @@ const navigate = () => {
 }
 
 watch(() => called.value, () => {
-  if (called.value === true) {
-    let child = scrollImage.value.children[0]
-    let tl = gsap.timeline({ default: { ease: 'expo.out' }, onComplete: () => navigate() })
-    tl.to(scrollImage.value, {
-      width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
-    })
-    tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
-    tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
+  if (!isMobile) {
+    if (called.value === true) {
+      let child = scrollImage.value.children[0]
+      let tl = gsap.timeline({ default: { ease: 'expo.out' }, onComplete: () => navigate() })
+      tl.to(scrollImage.value, {
+        width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
+      })
+      tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
+      tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
+    }
   }
 })
 
@@ -724,7 +726,7 @@ onBeforeUnmount(() => {
 
         @include mobile() {
           top: calc(100% - mobile-vw(74px));
-          width: calc(100% - mobile-vw(10px));
+          //width: calc(100% - mobile-vw(10px));
         }
 
         img {

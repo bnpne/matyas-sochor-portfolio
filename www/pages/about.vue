@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
 
     @include mobile() {
       gap: mobile-vw(40px);
-      //padding: mobile-vw(14px);
+      padding: mobile-vw(6px);
     }
 
     &-flex {
@@ -332,6 +332,17 @@ onBeforeUnmount(() => {
       max-width: desktop-vw(726px);
       margin-bottom: desktop-vw(120px);
 
+      strong {
+        @include sans-serif-medium();
+        font-size: inherit;
+        line-height: inherit;
+
+        @include mobile() {
+          font-size: mobile-vw(18px);
+          line-height: mobile-vw(28px);
+        }
+      }
+
       @include mobile() {
         padding: 0 mobile-vw(14px);
         margin-top: mobile-vw(84px);
@@ -341,11 +352,6 @@ onBeforeUnmount(() => {
         margin-bottom: mobile-vw(40px);
       }
 
-      strong {
-        @include sans-serif-medium();
-        font-size: inherit;
-        line-height: inherit;
-      }
     }
 
     &-carousel {
@@ -399,6 +405,8 @@ onBeforeUnmount(() => {
       @include rounded();
       overflow: hidden;
       min-height: 100vh;
+
+      @include mobile() {}
 
       &>img {
         @include image-default();
