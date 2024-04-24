@@ -95,11 +95,11 @@ onMounted(() => {
     }
   })
 
-  setTimeout(() => {
-    if (notifications.list.length > 0) {
-      toggleNotification()
-    }
-  }, 5000)
+  // setTimeout(() => {
+  //   if (notifications.list.length > 0) {
+  //     toggleNotification()
+  //   }
+  // }, 5000)
 })
 
 </script>

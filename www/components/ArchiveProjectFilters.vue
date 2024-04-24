@@ -154,6 +154,7 @@ onUnmounted(() => {
   flex-direction: column;
   gap: desktop-vw(12px);
   display: none;
+  transition: all 300ms ease-out;
 
   @include mobile() {
     padding: mobile-vw(12px);

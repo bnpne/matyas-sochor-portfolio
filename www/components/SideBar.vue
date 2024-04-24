@@ -143,8 +143,8 @@ onMounted(() => {
         <template v-else>
           <ClientOnly>
             <ArchiveShowFilters />
-            <ArchiveProjectFilters />
-            <ArchiveExperimentFilters />
+            <!-- <ArchiveProjectFilters /> -->
+            <!-- <ArchiveExperimentFilters /> -->
           </ClientOnly>
         </template>
       </div>
@@ -292,7 +292,7 @@ onMounted(() => {
     &-email {
       @include small-type();
       color: rgba(30, 30, 30, .5);
-      padding-bottom: desktop-vw(10px);
+      padding-bottom: desktop-vw(5px);
       transition: color 300ms ease-out;
 
       &::after {

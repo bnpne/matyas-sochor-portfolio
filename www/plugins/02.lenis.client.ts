@@ -19,7 +19,7 @@ export default defineNuxtPlugin(() => {
 
   const scroll = useScroll()
 
-  const lenis = new Lenis({lerp: 0.1})
+  const lenis = new Lenis({lerp: 0.2})
 
   // @ts-ignore
   R.add(time => {

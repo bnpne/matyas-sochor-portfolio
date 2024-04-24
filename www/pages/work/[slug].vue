@@ -87,7 +87,7 @@ watch(() => called.value, () => {
       width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
     })
     tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
-    tl.to(child, { scale: 1.1, duration: 1.2, ease: 'expo.out' }, '<')
+    tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
   }
 })
 
@@ -107,7 +107,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
     let intro = gsap.timeline({ defaults: { duration: 1, ease: 'circ.out' }, paused: true })
     intro
       .from('.work-hero', { opacity: 0 }, '>-.5')
-      .from('.intro-anima', { scale: 1.2 }, '>-.9')
+      // .from('.intro-anima', { scale: 1.2 }, '>-.9')
       .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     intro.play()
     ScrollTrigger.refresh(true)
@@ -184,6 +184,16 @@ watch([() => store.isFetched, () => loading.value], async () => {
       })
     })
 
+    gsap.from('.work-footer-scroll-image', {
+      y: '50%',
+      duration: .8,
+      ease: 'circ.out',
+      scrollTrigger: {
+        trigger: '.work-footer-scroll',
+        start: 'bottom bottom'
+      }
+    })
+
 
     app.$lenis.on('scroll', (e) => {
       lenisProgress.value = e.progress
@@ -238,8 +248,8 @@ onBeforeUnmount(() => {
             <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
                 <template #default="{ src }">
-                  <video ref='video' class='intro-anima' autoplay='true' playsinline='true' loop='true' muted
-                    :src='src'></video>
+                  <video ref='video' class='intro-anima' preload='true' autoplay='true' playsinline='true' loop='true'
+                    muted :src='src'></video>
                 </template>
               </SanityFile>
             </template>
@@ -336,8 +346,9 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </span>
-              <span class='anima-scale'>
+              <span>
                 <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
+                  <div class='work-footer-scroll-image-overlay'></div>
                   <template
                     v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
                     <SanityImage class='a'
@@ -714,6 +725,19 @@ onBeforeUnmount(() => {
         left: 0;
         width: 100%;
         z-index: 10;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex-grow: 1;
+
+        &-overlay {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          z-index: 11;
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%),
+            linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%);
+        }
 
         @include rounded();
         overflow: hidden;
@@ -725,10 +749,12 @@ onBeforeUnmount(() => {
 
         img {
           @include image-default();
+          flex-grow: 1;
         }
 
         video {
           @include image-default();
+          flex-grow: 1;
         }
       }
     }
