@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
             </ul>
             <div v-if='data?.about.bioImage' class='about-avatar-image'>
               <span class='anima-scale'>
-                <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='1000' fit='clip' />
+                <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000' fit='clip' />
               </span>
             </div>
           </div>
@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
               </ul>
               <div v-if='data?.about.bioImage' class='about-avatar-image'>
                 <span class='anima-scale'>
-                  <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='1000'
+                  <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000'
                     fit='clip' />
                 </span>
               </div>
@@ -186,7 +186,7 @@ onBeforeUnmount(() => {
           <div v-if='data?.about.footerImage' class='about-footer-image anima-scale'>
             <div class='about-footer-image-overlay'></div>
             <SanityImage class='a' v-if='data?.about?.footerImage?.image'
-              :asset-id="data?.about?.footerImage?.image.asset?._ref" auto="format" w='1000' fit='clip' />
+              :asset-id="data?.about?.footerImage?.image.asset?._ref" auto="format" w='2000' fit='clip' />
             <!-- todo fix video -->
             <SanityFile v-else-if='data?.about?.footerImage?.video'
               :asset-id="data?.about?.footerImage?.video.asset?._ref">

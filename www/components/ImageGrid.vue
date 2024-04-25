@@ -6,7 +6,7 @@ defineProps(['data'])
   <span class='anima-scale'>
     <section class='section-image-grid'>
       <div v-for="image in data.gridImage" class='section-image-grid-image' :class='{ "with-border": image.addBorder }'>
-        <SanityImage class='a' :asset-id="image.image.asset?._ref" auto="format" w='1000' fit='clip' />
+        <SanityImage class='a' :asset-id="image.image.asset?._ref" auto="format" w='2000' fit='clip' />
       </div>
     </section>
   </span>

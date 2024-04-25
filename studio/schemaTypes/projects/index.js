@@ -86,6 +86,13 @@ export default defineType({
       validation: rule => rule.required(),
     }),
     defineField({
+      title: 'Project Detail Image',
+      name: 'projectDetailImage',
+      type: 'image',
+      description:
+        'The image that appears on the project detail hero, rather than the home page.',
+    }),
+    defineField({
       title: 'Project Filters',
       name: 'projectFilters',
       type: 'filters',

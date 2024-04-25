@@ -15,7 +15,7 @@ onMounted(() => {
   <span class='anima-scale'>
     <section class='section-full-width'>
       <div class='section-full-width-image'>
-        <SanityImage class='a' v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" w='1000' fit='clip' />
+        <SanityImage class='a' v-if='data.image' :asset-id="data.image.asset?._ref" auto="format" w='2000' fit='clip' />
         <!-- todo fix video -->
         <SanityFile v-else-if='data.video' :asset-id="data.video.asset?._ref">
           <template #default="{ src }">

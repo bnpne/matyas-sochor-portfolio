@@ -3,7 +3,7 @@ import gsap from 'gsap'
 defineProps(['images', 'containerClass', 'slideClass'])
 const app = useNuxtApp()
 const swiperContainer = ref(null)
-const { isMobile } = useDevice()
+const { isMobile, isSafari } = useDevice()
 
 let setCursorPosition = function (s, e, cp) {
   let bounds = s.getBoundingClientRect()
@@ -18,7 +18,7 @@ let setCursorPosition = function (s, e, cp) {
 };
 
 onMounted(() => {
-  if (!isMobile) {
+  if (!isMobile && !isSafari) {
     let cp = gsap.utils.toArray('.cursor-carousel-object')
     if (swiperContainer.value) {
       let timeout
@@ -53,7 +53,7 @@ onMounted(() => {
         </svg>
       </div>
       <SwiperSlide :class='slideClass' v-for='image in images'>
-        <SanityImage class='swiper-image' :asset-id='image.asset?._ref' auto='format' w='1000' fit='clip' />
+        <SanityImage class='swiper-image' :asset-id='image.asset?._ref' auto='format' w='2000' fit='clip' />
       </SwiperSlide>
     </Swiper>
   </div>

@@ -168,7 +168,7 @@ onMounted(() => {
     </div>
     <p class='card-title'>{{ card.articleTitle }}</p>
     <div class='card-image'>
-      <SanityImage :asset-id='card.articleImage?.asset?._ref' auto='format' w='1000' fit='clip' />
+      <SanityImage :asset-id='card.articleImage?.asset?._ref' auto='format' w='2000' fit='clip' />
     </div>
     <p class='card-desc'>{{ card.articleDesc }}</p>
     <!-- Has article Link, but not a project -->

@@ -40,7 +40,7 @@ const loading = ref(true)
 const video = ref([])
 const projectImage = ref([])
 const homeContainer = ref(null)
-const { isMobile } = useDevice()
+const { isMobile, isSafari } = useDevice()
 
 const main = useStore()
 const store = useData()
@@ -49,7 +49,7 @@ const { data } = storeToRefs(store)
 let setCursorPosition = function (s, e, cp) {
   let bounds = s.getBoundingClientRect()
   let xPosition = (e.clientX - bounds.left) - cp.clientWidth / 2 + "px";
-  let yPosition = (e.clientY - bounds.top) - cp.clientHeight / 2 + "px";
+  let yPosition = (e.clientY) - cp.clientHeight / 2 + "px";
   cp.style.transform =
     "translate(" + xPosition + "," + yPosition + ") scale(1)";
   return {
@@ -117,16 +117,16 @@ watch([() => store.isFetched, () => loading.value], async () => {
       })
     }
 
-    if (!isMobile) {
+    if (!isMobile && !isSafari) {
       let cp = gsap.utils.toArray('.cursor-object')
 
       if (homeContainer.value) {
         let timeout
-        homeContainer.value.addEventListener('mouseenter', () => {
-          setTimeout(() => {
-            cp[0].style.opacity = 1
-          }, 500)
-        })
+        // homeContainer.value.addEventListener('mouseenter', () => {
+        //   setTimeout(() => {
+        //     cp[0].style.opacity = 1
+        //   }, 500)
+        // })
         homeContainer.value.addEventListener('mousemove', (e) => {
           cp[0].style.opacity = 1
           setCursorPosition(homeContainer.value, e, cp[0])
@@ -185,7 +185,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // Revert gsap context
-  ScrollTrigger.killAll()
+  // ScrollTrigger.killAll()
 })
 </script>
 
@@ -207,7 +207,7 @@ onBeforeUnmount(() => {
             <div class='home-project-img-overlay'></div>
             <template v-if='project.projectCaseImage?.projectCaseSelection === "image"'>
               <SanityImage class='s' data-speed='1' :asset-id="project.projectCaseImage?.image.asset?._ref"
-                auto="format" w='1000' fit='clip' />
+                auto="format" w='2000' fit='clip' />
             </template>
             <template v-else-if="project.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="project.projectCaseImage?.video.asset?._ref">
@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
 
 <style lang='scss'>
 .cursor-object {
-  position: absolute;
+  position: fixed;
   display: block;
   opacity: 0;
   top: 0;
@@ -387,6 +387,8 @@ onBeforeUnmount(() => {
           z-index: 1;
           white-space: nowrap;
         }
-      }}  }
+      }
+    }
+  }
 }
 </style>

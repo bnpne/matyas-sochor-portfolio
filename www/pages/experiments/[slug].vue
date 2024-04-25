@@ -35,7 +35,7 @@ const progress = reactive({ value: 0 })
 const lenisProgress = reactive({ value: 0 })
 const caseImage = ref(null)
 const scrollImage = ref(null)
-const { isMobile } = useDevice()
+const { isMobile, isSafari } = useDevice()
 
 const testProgress = () => {
   progress.value += 25
@@ -99,7 +99,7 @@ watch(() => called.value, () => {
 let setCursorPosition = function (s, e, cp) {
   let bounds = s.getBoundingClientRect()
   let xPosition = (e.clientX - bounds.left) - cp.clientWidth / 2 + "px";
-  let yPosition = (e.clientY - bounds.top) - cp.clientHeight / 2 + "px";
+  let yPosition = (e.clientY) - cp.clientHeight / 2 + "px";
   cp.style.transform =
     "translate(" + xPosition + "," + yPosition + ") scale(1)";
   return {
@@ -132,14 +132,14 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     let cp = gsap.utils.toArray('.cursor-experiment-object')
 
-    if (!isMobile) {
+    if (!isMobile && !isSafari) {
       if (workContainer.value) {
         let timeout
-        workContainer.value.addEventListener('mouseenter', () => {
-          setTimeout(() => {
-            cp[0].style.opacity = 1
-          }, 500)
-        })
+        // workContainer.value.addEventListener('mouseenter', () => {
+        //   setTimeout(() => {
+        //     cp[0].style.opacity = 1
+        //   }, 500)
+        // })
         workContainer.value.addEventListener('mousemove', (e) => {
           cp[0].style.opacity = 1
           setCursorPosition(workContainer.value, e, cp[0])
@@ -277,7 +277,7 @@ onBeforeUnmount(() => {
 <template>
   <div class='work' id='page'>
     <NuxtLayout name='work' :data='work'>
-      <div v-if='work' ref='workContainer' class='work-container '>
+      <div v-if='work' class='work-container '>
         <div class='cursor-experiment-object'>
           <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 30">
             <g filter="url(#a)">
@@ -297,20 +297,26 @@ onBeforeUnmount(() => {
             </defs>
           </svg>
         </div>
-        <div class='work-hero pre-project'>
+        <div ref='workContainer' class='work-hero pre-project'>
           <div class='work-hero-img pre-image' ref='caseImage'>
             <div class='work-hero-img-overlay'></div>
-            <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
-              <SanityImage class='intro-anima' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
-                w='1000' fit='clip' />
+            <template v-if='!work.projectDetailImage'>
+              <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
+                <SanityImage class='intro-anima s-t' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
+                  w='2000' fit='clip' />
+              </template>
+              <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
+                <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
+                  <template #default="{ src }">
+                    <video ref='video' class='intro-anima' preload='true' autoplay='true' playsinline='true' loop='true'
+                      muted :src='src'></video>
+                  </template>
+                </SanityFile>
+              </template>
             </template>
-            <template v-else-if="work.projectCaseImage?.projectCaseSelection === 'video'">
-              <SanityFile :asset-id="work.projectCaseImage?.video.asset?._ref">
-                <template #default="{ src }">
-                  <video ref='video' class='intro-anima' preload='true' autoplay='true' playsinline='true' loop='true'
-                    muted :src='src'></video>
-                </template>
-              </SanityFile>
+            <template v-else>
+              <SanityImage class='intro-anima s-t' :asset-id="work.projectDetailImage?.asset?._ref" auto="format"
+                w='2000' fit='clip' />
             </template>
             <div v-if='work.projectDetails' class='work-hero-details'>
               <div class='work-hero-details-client detail-anima'>
@@ -407,23 +413,30 @@ onBeforeUnmount(() => {
                   </div>
                 </span>
                 <span>
-                  <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                  <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
                     <div class='work-footer-scroll-image-overlay'></div>
-                    <template
-                      v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                      <SanityImage class='a'
-                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
-                        auto="format" w='1000' fit='clip' />
+                    <template v-if='!data.home.selectedProjects[isNext].projectDetailImage'>
+                      <template
+                        v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                        <SanityImage class='a'
+                          :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.image.asset?._ref"
+                          auto="format" w='2000' fit='clip' />
+                      </template>
+                      <template
+                        v-else-if="data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                        <SanityFile
+                          :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                          <template #default="{ src }">
+                            <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                              :src='src'></video>
+                          </template>
+                        </SanityFile>
+                      </template>
                     </template>
-                    <template
-                      v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                      <SanityFile
-                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
-                        <template #default="{ src }">
-                          <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
-                            :src='src'></video>
-                        </template>
-                      </SanityFile>
+                    <template v-else>
+                      <SanityImage class='intro-anima s-t'
+                        :asset-id="data.home?.selectedProjects[isNext]?.projectDetailImage?.asset?._ref" auto="format"
+                        w='2000' fit='clip' />
                     </template>
                   </div>
                 </span>
@@ -466,27 +479,36 @@ onBeforeUnmount(() => {
                     <!-- </div> -->
                   </div>
                 </span>
+
                 <span>
-                  <div ref='scrollImage' v-if='data.home?.selectedExperiments[isNext]' class='work-footer-scroll-image'>
+                  <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
                     <div class='work-footer-scroll-image-overlay'></div>
-                    <template
-                      v-if='data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
-                      <SanityImage class='a'
-                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.image.asset?._ref"
-                        auto="format" w='1000' fit='clip' />
+                    <template v-if='!data.home?.selectedProjects[isNext]?.projectDetailImage'>
+                      <template
+                        v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
+                        <SanityImage class='a'
+                          :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.image.asset?._ref"
+                          auto="format" w='2000' fit='clip' />
+                      </template>
+                      <template
+                        v-else-if="data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
+                        <SanityFile
+                          :asset-id="data.home?.selectedProjects[isNext]?.projectCaseImage?.video.asset?._ref">
+                          <template #default="{ src }">
+                            <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
+                              :src='src'></video>
+                          </template>
+                        </SanityFile>
+                      </template>
                     </template>
-                    <template
-                      v-else-if="data.home?.selectedExperiments[isNext]?.projectCaseImage?.projectCaseSelection === 'video'">
-                      <SanityFile
-                        :asset-id="data.home?.selectedExperiments[isNext]?.projectCaseImage?.video.asset?._ref">
-                        <template #default="{ src }">
-                          <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted
-                            :src='src'></video>
-                        </template>
-                      </SanityFile>
+                    <template v-else>
+                      <SanityImage class='intro-anima s-t'
+                        :asset-id="data.home?.selectedProjects[isNext]?.projectDetailImage?.asset?._ref" auto="format"
+                        w='2000' fit='clip' />
                     </template>
                   </div>
                 </span>
+
               </NuxtLink>
             </template>
           </div>
