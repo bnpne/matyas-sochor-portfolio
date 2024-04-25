@@ -1,47 +1,24 @@
 <script setup lang='ts'>
 import gsap from 'gsap'
 
-// const query = groq`*[_type == 'home'][0]{...,selectedProjects[]->{..., "filters":projectFilters.filter[]->}, selectedExperiments[]->{..., "filters":projectFilters.filter[]->}}`
-// const { data: avatar } = useSanityQuery<HomeData>(query)
-// const linkQuery = groq`*[_type == 'links'][0]{linkArray}`
-// const { data: links } = useSanityQuery(linkQuery)
-
-const { isMobile } = useDevice()
+const query = groq`*[_type == 'projects']{notifications, projectSlug}`
+const { data } = useSanityQuery<Project>(query)
 const route = useRoute()
-const dropdown = ref()
-const toggler = ref()
-const toggle = ref()
-let isOpen = false
-const toggleIsOpen = reactive({ isOpen: false })
+const { isMobile } = useDevice()
 const avatar = reactive({ value: null })
 const links = ref(null)
-
 const store = useData()
-const { data } = storeToRefs(store)
+const { data: storeData } = storeToRefs(store)
 const loading = ref(true)
-const notifications: { list: any[] } = reactive({ list: [] })
-const notificationActive: { isActive: boolean } = reactive({ isActive: false })
-const isNotif = computed(() => {
-  return notifications.list.length > 0
-})
+let isOpen = false
+const toggleIsOpen = reactive({ isOpen: false })
+const toggler = ref()
+const toggle = ref()
+const dropdown = ref()
 
-watch([() => store.isFetched, () => loading.value, () => route.path], async () => {
-  if (!loading || store.isFetched) {
-    avatar.value = data.value.home
-    links.value = data.value.links
-    let str = route.path.split('/')
-    let project
-    toRaw(data.value).projects.forEach(p => {
-      if (p.projectSlug.current === str[2]) {
-        project = p
-      }
-    })
-    if (project.notifications) {
-      notifications.list = project.notifications
-    }
-
-  }
-})
+let notifications: { list: any[] } = reactive({ list: [] })
+let notificationActive: { isActive: boolean } = reactive({ isActive: false })
+let notificationsLink: { list: any[] } = reactive({ list: [] })
 
 const toggleNotification = () => {
   notificationActive.isActive =
@@ -73,9 +50,15 @@ const openDropdown = () => {
   }
 }
 
+watch([() => store.isFetched, () => loading.value, () => route.path], async () => {
+  if (!loading || store.isFetched) {
+    avatar.value = storeData.value.home
+    links.value = storeData.value.links
+  }
+})
+
 onMounted(() => {
   loading.value = false
-
   watch(() => notificationActive.isActive, () => {
     if (notificationActive.isActive === true) {
       gsap.to('.work-layout-notification', {
@@ -98,33 +81,36 @@ onMounted(() => {
     }
   })
 
-  // setTimeout(() => {
-  //   if (notifications.list.length > 0) {
-  //     toggleNotification()
-  //   }
-  // }, 5000)
+  if (data) {
+    toRaw(data.value)?.forEach((n: any) => {
+      if (n.notifications !== null) {
+        n.notifications.forEach((no: any) => {
+          notifications.list.push(no)
+          notificationsLink.list.push(n.projectSlug)
+        })
+      }
+    })
+  }
 })
 </script>
 
 <template>
-  <div class='work-layout'>
+  <div id='page' class='work-layout'>
     <template v-if='!isMobile'>
-      <nav class='work-layout-nav'>
-        <template v-if='notifications.list'>
-          <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
-          <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
+      <nav class='work-layout-nav' :class='{ "about-nav": route.path === "/about" }'>
+        <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
+        <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
       notifications.list.length }}</div>
-          <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
-            <svg fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
-                fill="#1E1E1E" fill-opacity=".75" />
-              <path
-                d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
-                fill="#1E1E1E" fill-opacity=".75" />
-            </svg>
-          </div>
-        </template>
+        <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
+          <svg fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+              fill="#1E1E1E" fill-opacity=".75" />
+            <path
+              d="M8.293 9.39 5 6.098 1.706 9.391.608 8.293 3.902 5 .608 1.706 1.706.608 5 3.902 8.293.608l1.098 1.098L6.097 5l3.294 3.293-1.098 1.098Z"
+              fill="#1E1E1E" fill-opacity=".75" />
+          </svg>
+        </div>
       </nav>
     </template>
     <template v-else>
@@ -178,9 +164,10 @@ onMounted(() => {
     </template>
     <div class='work-layout-container'>
       <div v-if='!isMobile' class='work-layout-notification-container'>
-        <div v-for='no, index in notifications.list' class='work-layout-notification'>
+        <NuxtLink :to="`/work/${notificationsLink.list[index].current}`" v-for='no, index in  notifications.list'
+          class='work-layout-notification'>
           <div v-if='no.notificationImage' class='work-layout-notification-img'>
-            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='300' w='300' />
+            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
           </div>
           <div class='work-layout-notification-info'>
             <div class="work-layout-notification-heading">
@@ -190,7 +177,7 @@ onMounted(() => {
               <SanityContent :blocks='no.notificationDesc'></SanityContent>
             </div>
           </div>
-        </div>
+        </NuxtLink>
       </div>
       <slot />
     </div>

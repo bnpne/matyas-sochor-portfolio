@@ -72,20 +72,62 @@ watch([() => store.isFetched, () => loading.value], async () => {
     }
 
     let st = gsap.utils.toArray('.s-t')
+    await nextTick()
     st.forEach(t => {
       let s = gsap.utils.toArray('.s', t)
-      gsap.to(s, {
-        y: '20%',
-        ease: ' circ.out',
-        scrollTrigger: {
-          trigger: t,
-          scrub: 0,
-          start: 'top top',
-          invalidateOnRefresh: true,
-          end: 'max',
-        }
-      })
+      gsap.timeline().fromTo(s, { y: '-20%' }, {
+        y: '0%', scrollTrigger: { trigger: t, scrub: true, start: 'top-=20% bottom', end: 'center 70%' }
+      }).fromTo(s, { y: '0%' }, { y: '20%', scrollTrigger: { trigger: t, scrub: true, start: 'center 30%', end: 'bottom-=20% top' } })
+
+      // gsap.from(s, {
+      //   y: '-20%',
+      //   // y: (i, el) =>
+      //   //   (1 - .5) *
+      //   //   ScrollTrigger.maxScroll(window),
+      //   // ease: ' circ.out',
+      //   // backgroundPosition: '50% 0%',
+      //   ease: 'none',
+      //   scrollTrigger: {
+      //     trigger: t,
+      //     scrub: true,
+      //     start: 'top bottom',
+      //     invalidateOnRefresh: true,
+      //     end: 'bottom bottom',
+      //   }
+      // })
+      // gsap.to(s, {
+      //   keyframes: {
+      //     y: ['-20%', '20%'],
+      //   },
+      //   // y: (i, el) =>
+      //   //   (1 - .5) *
+      //   //   ScrollTrigger.maxScroll(window),
+      //   // ease: ' circ.out',
+      //   // backgroundPosition: '50% 0%',
+      //   ease: 'none',
+      //   scrollTrigger: {
+      //     trigger: t,
+      //     scrub: true,
+      //     start: 'top-=20% top',
+      //     invalidateOnRefresh: true,
+      //     end: 'bottom-=20% top',
+      //     markers: true
+      //   }
+      // })
     })
+
+    // gsap.to('[data-speed]', {
+    //   y: (i, el) =>
+    //     (1 - parseFloat(el.getAttribute('data-speed'))) *
+    //     ScrollTrigger.maxScroll(window),
+    //   ease: 'none',
+    //   scrollTrigger: {
+    //     start: 0,
+    //     end: 'max',
+    //     invalidateOnRefresh: true,
+    //     scrub: 0,
+    //   },
+    // })
 
     let cp = gsap.utils.toArray('.cursor-object')
 
@@ -174,8 +216,8 @@ onBeforeUnmount(() => {
           <div ref='projects' class='home-project-img pre-image' :data-index='index'>
             <div class='home-project-img-overlay'></div>
             <template v-if='project.projectCaseImage?.projectCaseSelection === "image"'>
-              <SanityImage class='s' :asset-id="project.projectCaseImage?.image.asset?._ref" auto="format" w='1000'
-                fit='clip' />
+              <SanityImage class='s' data-speed='1' :asset-id="project.projectCaseImage?.image.asset?._ref"
+                auto="format" w='1000' fit='clip' />
             </template>
             <template v-else-if="project.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="project.projectCaseImage?.video.asset?._ref">
@@ -355,8 +397,6 @@ onBeforeUnmount(() => {
           z-index: 1;
           white-space: nowrap;
         }
-      }
-    }
-  }
+      }}  }
 }
 </style>

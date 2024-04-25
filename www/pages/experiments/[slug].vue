@@ -54,6 +54,7 @@ const work = ref(null)
 const loading = ref(true)
 const called = ref(false)
 const video = ref([])
+const workContainer = ref(null)
 
 // Get next index
 const nextIndex = reactive({ value: null })
@@ -95,6 +96,18 @@ watch(() => called.value, () => {
   }
 })
 
+let setCursorPosition = function (s, e, cp) {
+  let bounds = s.getBoundingClientRect()
+  let xPosition = (e.clientX - bounds.left) - cp.clientWidth / 2 + "px";
+  let yPosition = (e.clientY - bounds.top) - cp.clientHeight / 2 + "px";
+  cp.style.transform =
+    "translate(" + xPosition + "," + yPosition + ") scale(1)";
+  return {
+    x: xPosition,
+    y: yPosition
+  };
+};
+
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
@@ -116,6 +129,24 @@ watch([() => store.isFetched, () => loading.value], async () => {
       .from('.detail-anima', { y: '50%', opacity: 0, stagger: 0.17 }, '>-.5')
     intro.play()
     ScrollTrigger.refresh(true)
+
+    let cp = gsap.utils.toArray('.cursor-experiment-object')
+
+    if (workContainer.value) {
+      let timeout
+      workContainer.value.addEventListener('mouseenter', () => {
+        setTimeout(() => {
+          cp[0].style.opacity = 1
+        }, 500)
+      })
+      workContainer.value.addEventListener('mousemove', (e) => {
+        cp[0].style.opacity = 1
+        setCursorPosition(workContainer.value, e, cp[0])
+      })
+      workContainer.value.addEventListener('mouseleave', () => {
+        cp[0].style.opacity = 0
+      })
+    }
 
     if (Array.isArray(toRaw(video.value))) {
       toRaw(video.value).forEach(v => {
@@ -244,7 +275,26 @@ onBeforeUnmount(() => {
 <template>
   <div class='work' id='page'>
     <NuxtLayout name='work' :data='work'>
-      <div v-if='work' class='work-container '>
+      <div v-if='work' ref='workContainer' class='work-container '>
+        <div class='cursor-experiment-object'>
+          <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 30">
+            <g filter="url(#a)">
+              <rect width="80" height="30" rx="15" fill="#fff" />
+              <path
+                d="m19.933 15.087-1.222-.351c-.611-.195-1.092-.507-1.456-.936-.364-.429-.546-.962-.546-1.599 0-.689.26-1.274.78-1.742.52-.468 1.157-.702 1.898-.702.676 0 1.248.169 1.716.507a2.73 2.73 0 0 1 1.001 1.365l-.923.377a1.953 1.953 0 0 0-.624-.923 1.663 1.663 0 0 0-1.092-.377c-.494 0-.897.13-1.222.39-.325.26-.481.611-.481 1.053 0 .78.442 1.3 1.339 1.573l.975.299c.715.208 1.261.546 1.625 1.001.364.455.546 1.001.546 1.638s-.26 1.209-.793 1.716c-.533.507-1.209.754-2.028.754-.767 0-1.404-.195-1.898-.585a3.335 3.335 0 0 1-1.066-1.443l.936-.416c.195.481.468.845.806 1.105s.741.39 1.196.39c.533 0 .975-.143 1.326-.429.351-.286.52-.65.52-1.079 0-.767-.442-1.3-1.313-1.586Zm9.895 1.313.91.377c-.221.728-.572 1.313-1.053 1.742-.482.429-1.105.65-1.86.65-1.13 0-1.988-.442-2.573-1.313s-.871-2.002-.871-3.393c0-1.365.299-2.483.896-3.367.598-.884 1.456-1.326 2.561-1.326.767 0 1.404.221 1.912.663.506.442.858 1.027 1.04 1.742l-.936.338c-.143-.533-.377-.962-.715-1.287a1.737 1.737 0 0 0-1.248-.494c-.793 0-1.404.338-1.82 1.027-.417.689-.625 1.586-.625 2.691 0 1.079.221 1.963.663 2.665.442.702 1.04 1.053 1.781 1.053.494 0 .91-.156 1.235-.481.326-.325.56-.754.703-1.287Zm7.84 2.6-1.976-3.328h-1.781v3.354H32.91V9.913h2.652c.936 0 1.677.26 2.236.78.559.52.832 1.222.832 2.093 0 .676-.169 1.235-.507 1.69-.338.455-.806.78-1.404.975L38.786 19h-1.118Zm-1.976-8.138h-1.794v3.874h1.781c.559 0 1.027-.169 1.391-.494.364-.325.546-.806.546-1.443 0-.611-.182-1.092-.546-1.43-.364-.338-.819-.507-1.378-.507Zm8.023 7.345c.78 0 1.352-.338 1.716-1.027.364-.689.546-1.599.546-2.743 0-1.131-.182-2.041-.546-2.73-.364-.689-.936-1.027-1.716-1.027-.78 0-1.352.338-1.716 1.027-.364.689-.546 1.599-.546 2.743 0 1.131.182 2.041.546 2.73.364.689.936 1.027 1.716 1.027Zm0 .936v.013c-1.131 0-1.963-.442-2.51-1.313-.545-.871-.818-2.002-.818-3.393 0-.676.065-1.287.195-1.846.13-.559.325-1.053.585-1.482.26-.429.61-.767 1.053-1.014.442-.247.949-.364 1.534-.364 1.13 0 1.963.429 2.509 1.3.546.871.819 2.002.819 3.393 0 .676-.065 1.287-.195 1.846a5.043 5.043 0 0 1-.585 1.482c-.26.429-.611.767-1.053 1.014-.442.247-.95.364-1.534.364ZM49.293 19V9.887h1.001v8.164h4.55V19h-5.55Zm8.062 0V9.887h1v8.164h4.55V19h-5.55Z"
+                fill="#000" />
+            </g>
+            <defs>
+              <filter id="a" x="-200" y="-200" width="480" height="430" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feGaussianBlur in="BackgroundImageFix" stdDeviation="100" />
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_484_20180" />
+                <feBlend in="SourceGraphic" in2="effect1_backgroundBlur_484_20180" result="shape" />
+              </filter>
+            </defs>
+          </svg>
+        </div>
         <div class='work-hero pre-project'>
           <div class='work-hero-img pre-image' ref='caseImage'>
             <div class='work-hero-img-overlay'></div>
@@ -445,6 +495,26 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang='scss'>
+.cursor-experiment-object {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  top: 0;
+  z-index: 100;
+  transition: all 100ms ease-out;
+  cursor: pointer;
+  pointer-events: none;
+
+  &>svg {
+    width: desktop-vw(80px);
+    height: desktop-vw(30px);
+  }
+
+  @include mobile() {
+    display: none;
+  }
+}
+
 .work {
   position: relative;
 
