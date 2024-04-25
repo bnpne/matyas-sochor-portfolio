@@ -132,20 +132,22 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     let cp = gsap.utils.toArray('.cursor-experiment-object')
 
-    if (workContainer.value) {
-      let timeout
-      workContainer.value.addEventListener('mouseenter', () => {
-        setTimeout(() => {
+    if (!isMobile) {
+      if (workContainer.value) {
+        let timeout
+        workContainer.value.addEventListener('mouseenter', () => {
+          setTimeout(() => {
+            cp[0].style.opacity = 1
+          }, 500)
+        })
+        workContainer.value.addEventListener('mousemove', (e) => {
           cp[0].style.opacity = 1
-        }, 500)
-      })
-      workContainer.value.addEventListener('mousemove', (e) => {
-        cp[0].style.opacity = 1
-        setCursorPosition(workContainer.value, e, cp[0])
-      })
-      workContainer.value.addEventListener('mouseleave', () => {
-        cp[0].style.opacity = 0
-      })
+          setCursorPosition(workContainer.value, e, cp[0])
+        })
+        workContainer.value.addEventListener('mouseleave', () => {
+          cp[0].style.opacity = 0
+        })
+      }
     }
 
     if (Array.isArray(toRaw(video.value))) {

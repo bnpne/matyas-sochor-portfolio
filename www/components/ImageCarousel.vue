@@ -3,6 +3,7 @@ import gsap from 'gsap'
 defineProps(['images', 'containerClass', 'slideClass'])
 const app = useNuxtApp()
 const swiperContainer = ref(null)
+const { isMobile } = useDevice()
 
 let setCursorPosition = function (s, e, cp) {
   let bounds = s.getBoundingClientRect()
@@ -17,21 +18,23 @@ let setCursorPosition = function (s, e, cp) {
 };
 
 onMounted(() => {
-  let cp = gsap.utils.toArray('.cursor-carousel-object')
-  if (swiperContainer.value) {
-    let timeout
-    swiperContainer.value.addEventListener('mouseenter', () => {
-      setTimeout(() => {
+  if (!isMobile) {
+    let cp = gsap.utils.toArray('.cursor-carousel-object')
+    if (swiperContainer.value) {
+      let timeout
+      swiperContainer.value.addEventListener('mouseenter', () => {
+        setTimeout(() => {
+          cp[0].style.opacity = 1
+        }, 500)
+      })
+      swiperContainer.value.addEventListener('mousemove', (e) => {
         cp[0].style.opacity = 1
-      }, 500)
-    })
-    swiperContainer.value.addEventListener('mousemove', (e) => {
-      cp[0].style.opacity = 1
-      setCursorPosition(swiperContainer.value, e, cp[0])
-    })
-    swiperContainer.value.addEventListener('mouseleave', () => {
-      cp[0].style.opacity = 0
-    })
+        setCursorPosition(swiperContainer.value, e, cp[0])
+      })
+      swiperContainer.value.addEventListener('mouseleave', () => {
+        cp[0].style.opacity = 0
+      })
+    }
   }
 })
 </script>

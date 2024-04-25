@@ -72,79 +72,69 @@ watch([() => store.isFetched, () => loading.value], async () => {
     }
 
     let st = gsap.utils.toArray('.s-t')
-    await nextTick()
-    st.forEach(t => {
-      let s = gsap.utils.toArray('.s', t)
-      gsap.timeline().fromTo(s, { y: '-20%' }, {
-        y: '0%', scrollTrigger: { trigger: t, scrub: true, start: 'top-=20% bottom', end: 'center 70%' }
-      }).fromTo(s, { y: '0%' }, { y: '20%', scrollTrigger: { trigger: t, scrub: true, start: 'center 30%', end: 'bottom-=20% top' } })
+    if (!isMobile) {
+      st.forEach(t => {
+        let s = gsap.utils.toArray('.s', t)
+        gsap.timeline().fromTo(s, { y: '-20%' }, {
+          y: '0%', scrollTrigger: { trigger: t, scrub: true, start: 'top-=20% bottom', end: 'center 70%' }
+        }).fromTo(s, { y: '0%' }, { y: '20%', scrollTrigger: { trigger: t, scrub: true, start: 'center 30%', end: 'bottom-=20% top' } })
 
-      // gsap.from(s, {
-      //   y: '-20%',
-      //   // y: (i, el) =>
-      //   //   (1 - .5) *
-      //   //   ScrollTrigger.maxScroll(window),
-      //   // ease: ' circ.out',
-      //   // backgroundPosition: '50% 0%',
-      //   ease: 'none',
-      //   scrollTrigger: {
-      //     trigger: t,
-      //     scrub: true,
-      //     start: 'top bottom',
-      //     invalidateOnRefresh: true,
-      //     end: 'bottom bottom',
-      //   }
-      // })
-      // gsap.to(s, {
-      //   keyframes: {
-      //     y: ['-20%', '20%'],
-      //   },
-      //   // y: (i, el) =>
-      //   //   (1 - .5) *
-      //   //   ScrollTrigger.maxScroll(window),
-      //   // ease: ' circ.out',
-      //   // backgroundPosition: '50% 0%',
-      //   ease: 'none',
-      //   scrollTrigger: {
-      //     trigger: t,
-      //     scrub: true,
-      //     start: 'top-=20% top',
-      //     invalidateOnRefresh: true,
-      //     end: 'bottom-=20% top',
-      //     markers: true
-      //   }
-      // })
-    })
+        // gsap.from(s, {
+        //   y: '-20%',
+        //   // y: (i, el) =>
+        //   //   (1 - .5) *
+        //   //   ScrollTrigger.maxScroll(window),
+        //   // ease: ' circ.out',
+        //   // backgroundPosition: '50% 0%',
+        //   ease: 'none',
+        //   scrollTrigger: {
+        //     trigger: t,
+        //     scrub: true,
+        //     start: 'top bottom',
+        //     invalidateOnRefresh: true,
+        //     end: 'bottom bottom',
+        //   }
+        // })
+        // gsap.to(s, {
+        //   keyframes: {
+        //     y: ['-20%', '20%'],
+        //   },
+        //   // y: (i, el) =>
+        //   //   (1 - .5) *
+        //   //   ScrollTrigger.maxScroll(window),
+        //   // ease: ' circ.out',
+        //   // backgroundPosition: '50% 0%',
+        //   ease: 'none',
+        //   scrollTrigger: {
+        //     trigger: t,
+        //     scrub: true,
+        //     start: 'top-=20% top',
+        //     invalidateOnRefresh: true,
+        //     end: 'bottom-=20% top',
+        //     markers: true
+        //   }
+        // })
+      })
+    }
 
-    // gsap.to('[data-speed]', {
-    //   y: (i, el) =>
-    //     (1 - parseFloat(el.getAttribute('data-speed'))) *
-    //     ScrollTrigger.maxScroll(window),
-    //   ease: 'none',
-    //   scrollTrigger: {
-    //     start: 0,
-    //     end: 'max',
-    //     invalidateOnRefresh: true,
-    //     scrub: 0,
-    //   },
-    // })
+    if (!isMobile) {
+      let cp = gsap.utils.toArray('.cursor-object')
 
-    let cp = gsap.utils.toArray('.cursor-object')
-
-    if (homeContainer.value) {
-      let timeout
-      homeContainer.value.addEventListener('mouseenter', () => {
-        setTimeout(() => {
+      if (homeContainer.value) {
+        let timeout
+        homeContainer.value.addEventListener('mouseenter', () => {
+          setTimeout(() => {
+            cp[0].style.opacity = 1
+          }, 500)
+        })
+        homeContainer.value.addEventListener('mousemove', (e) => {
           cp[0].style.opacity = 1
-        }, 500)
-      })
-      homeContainer.value.addEventListener('mousemove', (e) => {
-        cp[0].style.opacity = 1
-        setCursorPosition(homeContainer.value, e, cp[0])
-      })
-      homeContainer.value.addEventListener('mouseleave', () => {
-        cp[0].style.opacity = 0
-      })
+          setCursorPosition(homeContainer.value, e, cp[0])
+        })
+        homeContainer.value.addEventListener('mouseleave', () => {
+          cp[0].style.opacity = 0
+        })
+      }
     }
 
     app.$scrollStart()

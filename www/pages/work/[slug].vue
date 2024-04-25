@@ -140,22 +140,25 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     let cp = gsap.utils.toArray('.cursor-work-object')
 
-    if (workContainer.value) {
-      let timeout
-      workContainer.value.addEventListener('mouseenter', () => {
-        setTimeout(() => {
+    if (!isMobile) {
+      if (workContainer.value) {
+        let timeout
+        workContainer.value.addEventListener('mouseenter', () => {
+          setTimeout(() => {
+            cp[0].style.opacity = 1
+          }, 500)
+        })
+        workContainer.value.addEventListener('mousemove', (e) => {
           cp[0].style.opacity = 1
-        }, 500)
-      })
-      workContainer.value.addEventListener('mousemove', (e) => {
-        cp[0].style.opacity = 1
-        let p = setCursorPosition(workContainer.value, e, cp[0])
-        cursorPosition.value.x = p.x
-        cursorPosition.value.y = p.y
-      })
-      workContainer.value.addEventListener('mouseleave', () => {
-        cp[0].style.opacity = 0
-      })
+          let p = setCursorPosition(workContainer.value, e, cp[0])
+          cursorPosition.value.x = p.x
+          cursorPosition.value.y = p.y
+        })
+        workContainer.value.addEventListener('mouseleave', () => {
+          cp[0].style.opacity = 0
+        })
+      }
+
     }
 
     app.$lenis.on('scroll', (e) => {
