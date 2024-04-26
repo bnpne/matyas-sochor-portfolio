@@ -126,6 +126,10 @@ const configureCard = async () => {
     isProject.value = true
   }
 
+  if (props.card.articleType[0].title === 'Experiments' || props.card.articleType[0].title === 'Projects') {
+    cardFilters.value.push(toRaw(props.card).articleCategory)
+  }
+
   props.card.articleType.forEach(a => {
     cardFilters.value.push(a.title)
   })
@@ -163,8 +167,16 @@ onMounted(() => {
   }' :data-active='isActive ? "true" : "false"'>
     <div class='card-heading'>
       <p class='card-type'>{{ card.articleType[0]?.title }}</p>
-      <div v-if='isProject' class='card-tag'>{{
+      <template v-if='isProject'>
+        <div class='card-tag'>{{
     card.project?.projectFilters?.filter[0].tagTitle }}</div>
+      </template>
+      <template v-else>
+        <div
+          v-if='(card.articleType[0].title === "Experiments" || card.articleType[0].title === "Projects") && card.articleCategory'
+          class='card-tag'>{{
+    card.articleCategory }}</div>
+      </template>
     </div>
     <p class='card-title'>{{ card.articleTitle }}</p>
     <div class='card-image'>

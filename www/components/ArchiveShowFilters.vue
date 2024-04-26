@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-const query = groq`*[_type == 'articles'][0]{'filters':articleList[].articleTypeFilters.showFilter[]->{'title': showTagTitle}}`
+const query = groq`*[_type == 'articles'][0]{'filters':articleList[].articleTypeFilters.showFilter[]->{'title': showTagTitle}, 'categories':articleList[].articleCategory}`
 const { data: filters } = useSanityQuery(query)
 
 const store = useStore()
@@ -72,7 +72,13 @@ watch(filters, () => {
       store.addShowFilter(f.title)
     })
   }
-
+  if (filters.value?.categories) {
+    toRaw(filters.value.categories).forEach(c => {
+      if (c) {
+        store.addShowFilter(c)
+      }
+    })
+  }
 })
 
 watch(filterButton.value, () => {

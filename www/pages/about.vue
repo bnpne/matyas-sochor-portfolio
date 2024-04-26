@@ -478,7 +478,7 @@ onBeforeUnmount(() => {
 
     &-link {
       display: block;
-      min-width: 20%;
+      //min-width: 20%;
 
       @include mobile() {
         display: none;
@@ -535,11 +535,20 @@ onBeforeUnmount(() => {
             display: inline-block;
             margin-left: desktop-vw(4px);
             margin-bottom: 1px;
+            position: relative;
+            left: 0;
+            transition: left 300ms ease-out;
 
             @include mobile() {
               margin-left: mobile-vw(4px);
               width: mobile-vw(8px);
               height: mobile-vw(9px);
+            }
+          }
+
+          &:hover {
+            &::after {
+              left: 5px;
             }
           }
         }

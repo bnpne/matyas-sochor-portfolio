@@ -17,6 +17,13 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'articleCategory',
+      title: 'Article Category',
+      description:
+        'If an article is a project, this wont show. This is the category that the card falls under. Only Projects and Experiments have this',
+      type: 'string',
+    }),
+    defineField({
       name: 'articleImage',
       title: 'Article Image',
       type: 'image',
