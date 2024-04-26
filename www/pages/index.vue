@@ -208,7 +208,7 @@ onBeforeUnmount(() => {
         <NuxtLink ref='projectImage' :to="`/work/${project.projectSlug?.current}`"
           v-for="project, index in data?.home.selectedProjects" class='home-project pre-project s-t'>
           <div ref='projects' class='home-project-img pre-image' :data-index='index'>
-            <div class='home-project-img-overlay'></div>
+            <!-- <div class='home-project-img-overlay'></div> -->
             <template v-if='project.projectCaseImage?.projectCaseSelection === "image"'>
               <SanityImage class='s' data-speed='1' :asset-id="project.projectCaseImage?.image.asset?._ref"
                 auto="format" w='2000' fit='clip' />

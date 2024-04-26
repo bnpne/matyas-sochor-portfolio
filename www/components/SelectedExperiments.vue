@@ -23,7 +23,7 @@ const { activeProject } = storeToRefs(store)
       class='sidebar-experiments-card'
       :class="{ active: activeProject == index + indexStart && $device.isDesktop && route.path === '/' }">
       <div class='sidebar-experiments-card-img'>
-        <SanityImage :asset-id='experiment.projectCardImage?.asset?._ref' auto='format' fit='crop' h='56' w='56' />
+        <SanityImage :asset-id='experiment.projectCardImage?.asset?._ref' auto='format' fit='crop' h='300' w='300' />
       </div>
       <div class='sidebar-experiments-card-info'>
         <div class="sidebar-experiments-card-heading">
@@ -130,6 +130,8 @@ const { activeProject } = storeToRefs(store)
 
     &-img {
       min-width: desktop-vw(56px);
+      width: desktop-vw(56px);
+      height: desktop-vw(56px);
       aspect-ratio: 1/1;
       border-radius: desktop-vw(8px);
       overflow: hidden;
