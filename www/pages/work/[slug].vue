@@ -93,7 +93,7 @@ watch(() => called.value, () => {
         width: '100%', top: '100%', y: '-100%', delay: .5, duration: 1.2, ease: 'expo.out'
       })
       tl.to(['.work-credits', '.work-sections'], { opacity: 0, ease: 'expo.out', duration: 1.2 }, '<')
-      tl.to(child, { duration: 1.2, ease: 'expo.out' }, '<')
+      tl.to(child, { duration: 1.2, y: '0%', ease: 'expo.out' }, '<')
     }
   }
 })
@@ -138,7 +138,6 @@ watch([() => store.isFetched, () => loading.value], async () => {
     intro.play()
     ScrollTrigger.refresh(true)
 
-    console.log(toRaw(work.value))
 
     let cp = gsap.utils.toArray('.cursor-work-object')
 
@@ -151,7 +150,10 @@ watch([() => store.isFetched, () => loading.value], async () => {
         //   }, 500)
         // })
         workContainer.value.addEventListener('mousemove', (e) => {
-          cp[0].style.opacity = 1
+          // cp[0].style.opacity = 1
+          setTimeout(() => {
+            cp[0].style.opacity = 1
+          }, 500)
           let p = setCursorPosition(workContainer.value, e, cp[0])
           cursorPosition.value.x = p.x
           cursorPosition.value.y = p.y
@@ -311,7 +313,7 @@ onBeforeUnmount(() => {
         </div>
         <div ref='workContainer' class='work-hero pre-project'>
           <div class='work-hero-img pre-image' ref='caseImage'>
-            <div class='work-hero-img-overlay'></div>
+            <!-- <div class='work-hero-img-overlay'></div> -->
             <template v-if='!work.projectDetailImage'>
               <template v-if='work.projectCaseImage?.projectCaseSelection === "image"'>
                 <SanityImage class='intro-anima s-t' :asset-id="work.projectCaseImage?.image.asset?._ref" auto="format"
@@ -426,7 +428,7 @@ onBeforeUnmount(() => {
                 </span>
                 <span>
                   <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
-                    <div class='work-footer-scroll-image-overlay'></div>
+                    <!-- <div class='work-footer-scroll-image-overlay'></div> -->
                     <template v-if='!data.home.selectedProjects[isNext].projectDetailImage'>
                       <template
                         v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
@@ -499,7 +501,7 @@ onBeforeUnmount(() => {
                 </span>
                 <span>
                   <div ref='scrollImage' v-if='data.home?.selectedProjects[isNext]' class='work-footer-scroll-image'>
-                    <div class='work-footer-scroll-image-overlay'></div>
+                    <!-- <div class='work-footer-scroll-image-overlay'></div> -->
                     <template v-if='!data.home.selectedProjects[isNext].projectDetailImage'>
                       <template
                         v-if='data.home?.selectedProjects[isNext]?.projectCaseImage?.projectCaseSelection === "image"'>
@@ -539,7 +541,7 @@ onBeforeUnmount(() => {
   position: fixed;
   display: block;
   opacity: 0;
-  top: 0;
+  top: 5%;
   z-index: 100;
   transition: all 100ms ease-out;
   cursor: pointer;
@@ -932,6 +934,7 @@ onBeforeUnmount(() => {
         img {
           @include image-default();
           flex-grow: 1;
+          transform: translateY(-20%);
         }
 
         video {

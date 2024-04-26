@@ -128,7 +128,11 @@ watch([() => store.isFetched, () => loading.value], async () => {
         //   }, 500)
         // })
         homeContainer.value.addEventListener('mousemove', (e) => {
-          cp[0].style.opacity = 1
+          setTimeout(() => {
+            cp[0].style.opacity = 1
+          }, 500)
+
+          // cp[0].style.opacity = 1
           setCursorPosition(homeContainer.value, e, cp[0])
         })
         homeContainer.value.addEventListener('mouseleave', () => {
@@ -252,7 +256,7 @@ onBeforeUnmount(() => {
   position: fixed;
   display: block;
   opacity: 0;
-  top: 0;
+  top: 5%;
   z-index: 100;
   transition: all 100ms ease-out;
   cursor: pointer;
