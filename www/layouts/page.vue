@@ -300,8 +300,10 @@ onMounted(() => {
       &-active {
 
         &>svg {
-          width: desktop-vw(10px);
-          height: desktop-vw(10px);
+          // width: desktop-vw(10px);
+          // height: desktop-vw(10px);
+          width: 100%;
+          height: 100%;
         }
 
         @include button-default-white();

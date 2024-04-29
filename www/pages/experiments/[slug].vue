@@ -141,9 +141,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
         //   }, 500)
         // })
         workContainer.value.addEventListener('mousemove', (e) => {
-          setTimeout(() => {
-            cp[0].style.opacity = 1
-          }, 500)
+          cp[0].style.opacity = 1
           // cp[0].style.opacity = 1
           setCursorPosition(workContainer.value, e, cp[0])
         })

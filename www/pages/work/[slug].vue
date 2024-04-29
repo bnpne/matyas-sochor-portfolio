@@ -151,9 +151,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
         // })
         workContainer.value.addEventListener('mousemove', (e) => {
           // cp[0].style.opacity = 1
-          setTimeout(() => {
-            cp[0].style.opacity = 1
-          }, 500)
+          cp[0].style.opacity = 1
           let p = setCursorPosition(workContainer.value, e, cp[0])
           cursorPosition.value.x = p.x
           cursorPosition.value.y = p.y
@@ -679,6 +677,8 @@ onBeforeUnmount(() => {
           }
 
           &:hover {
+            color: #ffffff;
+
             &::after {
               margin-left: 10px;
             }
