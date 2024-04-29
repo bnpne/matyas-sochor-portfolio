@@ -118,7 +118,7 @@ onMounted(() => {
         <div class='work-layout-avatar-container'>
           <div class='work-layout-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
             <NuxtLink to='/' v-if='avatar.value.avatar' class='work-layout-avatar-info-img'>
-              <SanityImage :asset-id="avatar.value.avatar?.asset?._ref" auto='format' w='80' />
+              <SanityImage :asset-id="avatar.value.avatar?.asset?._ref" auto='format' w='300' />
             </NuxtLink>
             <div class='work-layout-avatar-info-email'>
               <p v-if='avatar.value.name' class='work-layout-avatar-info-email-text'>{{ avatar.value.name }}</p>
@@ -167,7 +167,7 @@ onMounted(() => {
         <NuxtLink :to="`/work/${notificationsLink.list[index].current}`" v-for='no, index in  notifications.list'
           class='work-layout-notification'>
           <div v-if='no.notificationImage' class='work-layout-notification-img'>
-            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='56' w='56' />
+            <SanityImage :asset-id="no.notificationImage.asset._ref" auto='format' fit='crop' h='300' w='300' />
           </div>
           <div class='work-layout-notification-info'>
             <div class="work-layout-notification-heading">

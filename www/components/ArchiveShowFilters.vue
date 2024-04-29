@@ -72,13 +72,6 @@ watch(filters, () => {
       store.addShowFilter(f.title)
     })
   }
-  if (filters.value?.categories) {
-    toRaw(filters.value.categories).forEach(c => {
-      if (c) {
-        store.addShowFilter(c)
-      }
-    })
-  }
 })
 
 watch(filterButton.value, () => {
