@@ -519,7 +519,7 @@ onBeforeUnmount(() => {
 
 <style lang='scss'>
 .cursor-experiment-object {
-  position: absolute;
+  position: fixed;
   display: block;
   opacity: 0;
   top: 5%;
