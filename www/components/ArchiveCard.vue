@@ -309,6 +309,8 @@ onMounted(() => {
     }
 
     &-rounded {
+      @include small-type();
+
       &>a {
         @include button-third();
       }

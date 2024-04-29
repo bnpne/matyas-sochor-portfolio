@@ -21,6 +21,9 @@ onMounted(() => {
   if (!isMobile && !isSafari) {
     let cp = gsap.utils.toArray('.cursor-carousel-object')
     if (swiperContainer.value) {
+      // swiperContainer.value.on('swiperMove', (s, e) => {
+      //   console.log(s, e)
+      // })
       let timeout
       swiperContainer.value.addEventListener('drag', e => {
         console.log('here')
@@ -92,6 +95,7 @@ onMounted(() => {
   position: relative;
   //cursor: url('~/assets/svg/grab-svg.svg') 50 50, pointer;
   cursor: none;
+  padding-right: desktop-vw(10px);
   //cursor: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IkRyYWciPgo8cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIyNCIgZmlsbD0id2hpdGUiLz4KPGcgaWQ9ImljX2RyYWciPgo8cGF0aCBkPSJNMjAuMDQ4NiAyMEwyMSAyMC45NEwxNy45MDk2IDI0TDIxIDI3LjA2TDIwLjA0ODYgMjhMMTYgMjRMMjAuMDQ4NiAyMFoiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGQ9Ik0yNy45NTE0IDI4TDI3IDI3LjA2TDMwLjA5MDQgMjRMMjcgMjAuOTRMMjcuOTUxNCAyMEwzMiAyNEwyNy45NTE0IDI4WiIgZmlsbD0iYmxhY2siLz4KPC9nPgo8L2c+Cjwvc3ZnPgo='), pointer;
 }
 

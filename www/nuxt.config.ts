@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['sanity', 'rxjs', 'lenis', 'nuxt-swiper', 'masonry-layout'],
   },
+  swiper: {},
   device: {
     refreshOnResize: true,
   },
