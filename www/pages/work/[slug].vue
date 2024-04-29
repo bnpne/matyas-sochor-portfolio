@@ -681,6 +681,7 @@ onBeforeUnmount(() => {
 
             &::after {
               margin-left: 10px;
+              fill: #fff;
             }
           }
         }

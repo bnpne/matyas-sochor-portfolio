@@ -354,9 +354,10 @@ onMounted(() => {
     align-items: center;
     gap: desktop-vw(12px);
     padding: desktop-vw(8px) desktop-vw(10px);
-    @include rounded-border();
+    @include rounded();
     background: $white;
     max-width: desktop-vw(300px);
+    box-shadow: 0px 2px 12px 0px #0000001F;
 
     // for Animation
     transform: translateX(150%);
