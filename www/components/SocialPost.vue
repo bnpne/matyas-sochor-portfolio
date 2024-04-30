@@ -106,8 +106,8 @@ onMounted(() => {
   height: desktop-vw(16px);
 
   @include mobile() {
-    width: desktop-vw(15px);
-    height: desktop-vw(16px);
+    width: mobile-vw(15px);
+    height: mobile-vw(16px);
   }
 }
 
@@ -116,8 +116,8 @@ onMounted(() => {
   height: desktop-vw(20px);
 
   @include mobile() {
-    width: desktop-vw(15px);
-    height: desktop-vw(16px);
+    width: mobile-vw(15px);
+    height: mobile-vw(16px);
   }
 }
 

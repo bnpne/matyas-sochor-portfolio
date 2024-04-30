@@ -88,6 +88,12 @@ const { activeProject } = storeToRefs(store)
         opacity: .5;
         height: desktop-vw(11px);
         width: desktop-vw(7px);
+
+        @include mobile() {
+
+          height: mobile-vw(11px);
+          width: mobile-vw(7px);
+        }
       }
     }
   }
@@ -139,6 +145,8 @@ const { activeProject } = storeToRefs(store)
       @include mobile() {
         min-width: mobile-vw(56px);
         border-radius: mobile-vw(8px);
+        width: mobile-vw(56px);
+        height: mobile-vw(56px);
       }
 
       img {

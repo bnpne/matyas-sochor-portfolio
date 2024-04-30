@@ -391,7 +391,8 @@ onBeforeUnmount(() => {
             <template v-if='!isMobile'>
               <div class='work-footer-scroll'>
                 <span class='anima-fade'>
-                  <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
+                  <p v-if='!isMobile' class='work-footer-scroll-heading'>Scroll to next project</p>
+                  <p v-else class='work-footer-scroll-heading'>To next project</p>
                 </span>
                 <span class='anima-fade'>
                   <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
@@ -406,7 +407,7 @@ onBeforeUnmount(() => {
                       </svg>
                     </div>
                     <div class='work-footer-scroll-spinner-progress'>
-                      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle v-if='da.c' ref='ellipse' cx="22" cy="22" r="21.5" stroke='black'
                           :stroke-dasharray="`${(da?.c - da?.p)} ${da?.p}`" />
                       </svg>
@@ -446,7 +447,7 @@ onBeforeUnmount(() => {
               <NuxtLink :to='`/experiments/${data.home?.selectedExperiments[isNext].projectSlug.current}`'
                 class='work-footer-scroll'>
                 <span class='anima-fade'>
-                  <p class='work-footer-scroll-heading'>Scroll to next experiment</p>
+                  <p class='work-footer-scroll-heading'>To next experiment</p>
                 </span>
                 <span class='anima-fade'>
                   <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
@@ -459,7 +460,7 @@ onBeforeUnmount(() => {
                       <!--     d="M22.9992 26.9004L22.5763 27.3234L22.9992 27.7451L23.4222 27.3234L22.9992 26.9004ZM23.4222 26.4775L18.6431 21.6985L17.7972 22.5443L22.5763 27.3234L23.4222 26.4775ZM23.4222 27.3234L28.2012 22.5443L27.3553 21.6985L22.5763 26.4775L23.4222 27.3234ZM23.5966 26.9004L23.5966 16.3953L22.4018 16.3953L22.4018 26.9004L23.5966 26.9004Z" -->
                       <!--     fill="black" /> -->
                       <!-- </svg> -->
-                      <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M42.054 13.0789C43.2463 15.6468 43.9212 18.4245 44.0401 21.2533C44.1589 24.0821 43.7195 26.9066 42.7468 29.5655C41.7741 32.2244 40.2872 34.6658 38.371 36.7501C36.4548 38.8344 34.1468 40.5208 31.5788 41.7132C29.0109 42.9055 26.2332 43.5804 23.4044 43.6993C20.5756 43.8181 17.7512 43.3787 15.0922 42.4059C12.4333 41.4332 9.99196 39.9463 7.90766 38.0301C5.82336 36.1139 4.13689 33.806 2.94455 31.238C1.7522 28.6701 1.07733 25.8924 0.958462 23.0636C0.839595 20.2348 1.27906 17.4103 2.25177 14.7514C3.22448 12.0925 4.71138 9.65114 6.62758 7.56684C8.54377 5.48254 10.8517 3.79607 13.4197 2.60373C15.9877 1.41138 18.7653 0.736509 21.5941 0.617642C24.4229 0.498775 27.2474 0.938242 29.9063 1.91095C32.5653 2.88366 35.0066 4.37056 37.0909 6.28676C39.1752 8.20295 40.8616 10.5109 42.054 13.0789L42.054 13.0789Z"
                           stroke="black" />
@@ -561,7 +562,7 @@ onBeforeUnmount(() => {
     @include rounded-border();
 
     @include mobile() {
-      min-height: calc(100vh - mobile-vw(20px));
+      height: calc(100vh - mobile-vw(96px));
     }
 
     &-img {
@@ -851,8 +852,8 @@ onBeforeUnmount(() => {
             width: desktop-vw(44px);
 
             @include mobile() {
-              height: mobile-vw(44px);
-              width: mobile-vw(44px);
+              height: mobile-vw(40px);
+              width: mobile-vw(40px);
             }
           }
         }

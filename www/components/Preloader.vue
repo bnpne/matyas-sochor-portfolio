@@ -57,6 +57,7 @@ onMounted(() => {
   overflow: hidden;
   box-sizing: border-box;
 
+
   &-overlay {
     display: flex;
     position: absolute;
@@ -72,6 +73,11 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       gap: desktop-vw(12px);
+
+      @include mobile() {
+        padding: mobile-vw(58px);
+        flex: 1;
+      }
     }
 
     &:first-child {
@@ -80,6 +86,10 @@ onMounted(() => {
       font-size: desktop-vw(32px);
       line-height: desktop-vw(36px);
 
+      @include mobile() {
+        font-size: mobile-vw(20px);
+        line-height: mobile-vw(28px);
+      }
     }
 
     &:last-child {
@@ -87,6 +97,10 @@ onMounted(() => {
       font-size: desktop-vw(32px);
       line-height: desktop-vw(36px);
 
+      @include mobile() {
+        font-size: mobile-vw(20px);
+        line-height: mobile-vw(28px);
+      }
     }
 
   }

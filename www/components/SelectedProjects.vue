@@ -87,6 +87,12 @@ const { activeProject } = storeToRefs(store)
         opacity: .5;
         height: desktop-vw(11px);
         width: desktop-vw(7px);
+
+        @include mobile() {
+
+          height: mobile-vw(11px);
+          width: mobile-vw(7px);
+        }
       }
     }
   }

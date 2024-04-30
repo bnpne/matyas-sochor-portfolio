@@ -100,6 +100,7 @@ onMounted(() => {
 
 <template>
   <div id='page' class='page-layout'>
+    <!-- DESKTOP -->
     <template v-if='!isMobile'>
       <nav class='page-layout-nav' :class='{ "about-nav": route.path === "/about" }'>
         <NuxtLink to='/archive' class='page-layout-nav-archive'>Archive</NuxtLink>
@@ -117,6 +118,7 @@ onMounted(() => {
         </div>
       </nav>
     </template>
+    <!-- MOBILE -->
     <template v-else>
       <div v-if='avatar.value' class='page-layout-avatar'>
         <div class='page-layout-avatar-container'>
@@ -138,24 +140,30 @@ onMounted(() => {
             </div>
           </div>
           <div class='page-layout-avatar-about'>
-            <div ref='toggler' @click='openToggle' class='page-layout-toggle'>
-              <div class='page-layout-toggle-hamburger'>
-                <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.142578" y="0.25" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                  <rect x="0.142578" y="3.46387" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                  <rect x="0.142578" y="6.67871" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                </svg>
-                <svg v-else viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
-                    fill="white" />
-                  <path
-                    d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z"
-                    fill="white" />
-                </svg>
-              </div>
-              <div class='page-layout-toggle-index'>2</div>
+            <div ref='toggler' @click='openToggle' class='sidebar-toggle'>
+              <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0.142578" y="0.25" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+                <rect x="0.142578" y="3.46387" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+                <rect x="0.142578" y="6.67871" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+              </svg>
+              <svg v-else viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8.29395 9.39174L5.00056 6.09835L1.70717 9.39174L0.609376 8.29394L3.90276 5.00056L0.609375 1.70717L1.70717 0.609375L5.00056 3.90276L8.29394 0.609375L9.39174 1.70717L6.09835 5.00056L9.39174 8.29395L8.29395 9.39174Z"
+                  fill="white" />
+                <path
+                  d="M8.29395 9.39174L5.00056 6.09835L1.70717 9.39174L0.609376 8.29394L3.90276 5.00056L0.609375 1.70717L1.70717 0.609375L5.00056 3.90276L8.29394 0.609375L9.39174 1.70717L6.09835 5.00056L9.39174 8.29395L8.29395 9.39174Z"
+                  fill="white" />
+              </svg>
+              <!-- <svg v-else viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
+              <!--   <path -->
+              <!--     d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z" -->
+              <!--     fill="white" /> -->
+              <!--   <path -->
+              <!--     d="M7.68457 9.39076L4.39118 6.09738L1.0978 9.39076L7.76351e-07 8.29297L3.29339 4.99958L0 1.70619L1.0978 0.608398L4.39118 3.90179L7.68457 0.608399L8.78237 1.70619L5.48898 4.99958L8.78237 8.29297L7.68457 9.39076Z" -->
+              <!--     fill="white" /> -->
+              <!-- </svg> -->
             </div>
+
             <div ref='toggle' class='page-layout-toggle-menu'>
               <div class='page-layout-toggle-menu-links'>
                 <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
@@ -215,6 +223,8 @@ onMounted(() => {
       justify-content: space-between;
       align-items: center;
       width: 100%;
+
+      background: white;
 
       @include mobile() {
         padding: mobile-vw(24px) mobile-vw(20px) mobile-vw(20px);
@@ -482,6 +492,11 @@ onMounted(() => {
     z-index: 5;
     transition: background 300ms ease-out;
 
+    &>svg {
+      height: mobile-vw(8px);
+      width: mobile-vw(12px);
+    }
+
     &.open {
       background: $black;
     }
@@ -517,11 +532,11 @@ onMounted(() => {
       @include small-type();
       display: none;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: mobile-vw(18px);
+      justify-content: flex-start;
+      padding: mobile-vw(12px);
       box-shadow: 0px 2px 12px 0px #0000001F;
       position: absolute;
-      top: mobile-vw(16px);
+      top: mobile-vw(77px);
       right: mobile-vw(14px);
 
       &.open {
@@ -529,12 +544,11 @@ onMounted(() => {
       }
 
       &-links {
-        margin-top: mobile-vw(47px);
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: mobile-vw(12px);
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: mobile-vw(6px);
         text-align: center;
 
         font-size: mobile-vw(12px);
