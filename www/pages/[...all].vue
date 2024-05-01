@@ -54,8 +54,7 @@ definePageMeta({
   @include mobile() {
     min-height: calc(100vh - mobile-vw(20px));
     font-size: mobile-vw(28px);
-    line-height: mobile-vw(44px);
-    gap: mobile-vw(20px);
+    line-height: mobile-vw(40px);
   }
 
   &-button {
@@ -67,6 +66,7 @@ definePageMeta({
 
     @include mobile() {
       @include body-type();
+      padding: mobile-vw(12px) mobile-vw(15px);
       margin-top: mobile-vw(20px);
       font-size: mobile-vw(14px);
       line-height: mobile-vw(20px);

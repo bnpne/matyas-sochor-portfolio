@@ -317,6 +317,10 @@ onMounted(() => {
         left: calc(100% + 6px);
         color: rgba(30, 30, 30, .5);
         transition: transform 300ms ease-out;
+
+        @include mobile() {
+          font-size: mobile-vw(16px);
+        }
       }
 
       &.active {
@@ -426,8 +430,8 @@ onMounted(() => {
       padding: mobile-vw(12px);
       box-shadow: 0px 2px 12px 0px #0000001F;
       position: absolute;
-      top: mobile-vw(77px);
-      right: mobile-vw(14px);
+      top: mobile-vw(72px);
+      right: mobile-vw(20px);
 
       &.open {
         display: flex;

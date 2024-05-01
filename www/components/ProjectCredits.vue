@@ -41,7 +41,7 @@ defineProps(['data'])
 
   @include mobile() {
     margin-top: mobile-vw(30px);
-    margin-bottom: mobile-vw(100px);
+    margin-bottom: 0;
     padding: 0 mobile-vw(14px);
   }
 

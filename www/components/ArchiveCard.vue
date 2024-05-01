@@ -313,6 +313,12 @@ onMounted(() => {
 
       &>a {
         @include button-third();
+        min-width: desktop-vw(80px);
+        text-align: center;
+
+        @include mobile() {
+          min-width: mobile-vw(80px);
+        }
       }
     }
   }
