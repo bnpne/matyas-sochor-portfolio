@@ -33,10 +33,17 @@ const { isMobile } = useDevice()
 const store = useData()
 const { data } = storeToRefs(store)
 const loading = ref(true)
+const cleanBio = reactive({ value: null })
+const trunc = reactive({ value: null })
+const readMore = ref(false)
 // const query = groq`*[_type == 'about'][0]`
 // const linkQuery = groq`*[_type == 'links'][0].linkArray`
 // const { data: about } = useSanityQuery(query)
 // const { data: links } = useSanityQuery(linkQuery)
+
+const read = () => {
+  readMore.value ? readMore.value = false : readMore.value = true
+}
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
@@ -45,6 +52,16 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
     await nextTick()
+
+    let t = gsap.utils.toArray('.temp-bio')[0]
+    console.log(t)
+    cleanBio.value = t.innerHTML.replace(/<\/?[^>]+(>|$)/g, "")
+    let length = cleanBio.value.split('').length
+    let median = Math.floor(length / 2) - 30
+    trunc.value = cleanBio.value.slice(0, median)
+    console.log(trunc.value)
+
+    // console.log(cleanBio.value, splt)
 
     ScrollTrigger.refresh(true)
     /// Fade In
@@ -139,7 +156,25 @@ onBeforeUnmount(() => {
           </div>
           <div class='about-info'>
             <div v-if='data?.about.bio' class='about-info-bio anima-fade'>
-              <SanityContent :blocks='data?.about.bio' />
+              <div class='temp-bio'>
+                <SanityContent :blocks='data?.about.bio' />
+              </div>
+              <template v-if='!isMobile'>
+                <SanityContent v-if='!cleanBio.value' :blocks='data?.about.bio' />
+              </template>
+              <template v-else>
+                <template v-if='!trunc.value'>
+                  <SanityContent class='bio-main' :blocks='data?.about.bio' />
+                </template>
+                <template v-else>
+                  <SanityContent class='bio-main' v-if='readMore' :blocks='data?.about.bio' />
+                  <p v-if='!readMore' class='about-info-bio-trunc'>{{ trunc.value }}</p>
+                  <div class='about-info-bio-readMore'>
+                    <p @click='read' v-if='!readMore' class='about-info-bio-readMore-el'>Read More</p>
+                    <p @click='read' v-if='readMore' class='about-info-bio-readMore-el active'>Read Less</p>
+                  </div>
+                </template>
+              </template>
             </div>
             <div v-if='isMobile' class='about-avatar'>
               <ul class='about-avatar-list anima-fade'>
@@ -215,6 +250,7 @@ onBeforeUnmount(() => {
               </NuxtLink>
             </div>
             <div class='about-footer-copyright'>
+              <NuxtLink v-if='isMobile' to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
               <p>©Matyas Sochor 2024</p>
             </div>
           </div>
@@ -225,6 +261,12 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang='scss'>
+.temp-bio {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
 .about {
   position: relative;
   @include small-type();
@@ -350,6 +392,51 @@ onBeforeUnmount(() => {
         line-height: mobile-vw(28px);
         max-width: 100%;
         margin-bottom: mobile-vw(40px);
+        display: flex;
+        flex-direction: column;
+        gap: mobile-vw(10px);
+      }
+
+      &-trunc {
+        text-overflow: ellipsis;
+
+        &::after {
+          content: '...'
+        }
+      }
+
+      &-readMore {
+        @include body-type();
+        @include small-type();
+        color: $black50;
+
+
+        &-el {
+          width: auto;
+          display: flex;
+          max-width: fit-content;
+          position: relative;
+
+          &::after {
+            content: '+';
+            position: absolute;
+            top: 0;
+            font-size: mobile-vw(13px);
+            left: calc(100% + 6px);
+            color: rgba(30, 30, 30, .5);
+            transition: transform 300ms ease-out;
+
+            @include mobile() {
+              font-size: mobile-vw(13px);
+            }
+          }
+
+          &.active {
+            &::after {
+              transform: rotate(45deg);
+            }
+          }
+        }
       }
 
     }
@@ -470,7 +557,7 @@ onBeforeUnmount(() => {
         margin-bottom: mobile-vw(40px);
         flex-direction: column;
         justify-content: flex-start;
-        gap: mobile-vw(40px);
+        gap: mobile-vw(20px);
         padding: 0 mobile-vw(14px);
         margin-right: 0;
       }
@@ -562,7 +649,13 @@ onBeforeUnmount(() => {
       justify-content: flex-end;
 
       @include mobile() {
+        &>a {
+          color: $black;
+        }
+
         min-width: mobile-vw(180px);
+        flex-direction: column;
+        align-items: flex-end;
         justify-content: flex-end;
       }
 
