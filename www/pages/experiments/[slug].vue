@@ -389,7 +389,8 @@ onBeforeUnmount(() => {
             </div>
             <div class='work-footer-divider'></div>
             <template v-if='!isMobile'>
-              <div class='work-footer-scroll'>
+              <NuxtLink :to='`/experiments/${data.home?.selectedExperiments[isNext].projectSlug.current}`'
+                class='work-footer-scroll'>
                 <span class='anima-fade'>
                   <p v-if='!isMobile' class='work-footer-scroll-heading'>Scroll to next project</p>
                   <p v-else class='work-footer-scroll-heading'>To next project</p>
@@ -441,7 +442,7 @@ onBeforeUnmount(() => {
                     </template>
                   </div>
                 </span>
-              </div>
+              </NuxtLink>
             </template>
             <template v-else>
               <NuxtLink :to='`/experiments/${data.home?.selectedExperiments[isNext].projectSlug.current}`'
@@ -508,7 +509,6 @@ onBeforeUnmount(() => {
                     </template>
                   </div>
                 </span>
-
               </NuxtLink>
             </template>
           </div>

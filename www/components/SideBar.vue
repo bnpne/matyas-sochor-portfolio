@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import Lenis from '@studio-freight/lenis'
+import Lenis from 'lenis'
 import R from '~/utils/R'
 import gsap from 'gsap'
 
@@ -306,7 +306,7 @@ onMounted(() => {
     &-email {
       @include small-type();
       color: rgba(30, 30, 30, .5);
-      //padding-bottom: desktop-vw(5px);
+      padding-bottom: desktop-vw(5px);
       transition: color 300ms ease-out;
 
       &::after {

@@ -75,11 +75,13 @@ const { activeProject } = storeToRefs(store)
         gap: mobile-vw(8px);
       }
 
-      &:hover {
-        color: $black75;
+      @include desktop() {
+        &:hover {
+          color: $black75;
 
-        &>svg {
-          color: currentColor;
+          &>svg {
+            color: currentColor;
+          }
         }
       }
 
@@ -122,8 +124,10 @@ const { activeProject } = storeToRefs(store)
       opacity: .5;
     }
 
-    &:hover {
-      opacity: 1 !important;
+    @include desktop() {
+      &:hover {
+        opacity: 1 !important;
+      }
     }
 
     &-heading {

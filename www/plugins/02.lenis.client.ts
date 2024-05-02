@@ -2,7 +2,7 @@
   Lenis and Gsap config
 */
 
-import Lenis from '@studio-freight/lenis'
+import Lenis from 'lenis'
 import R from '~/utils/R'
 
 import gsap from 'gsap'
