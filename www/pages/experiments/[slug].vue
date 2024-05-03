@@ -234,7 +234,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
 
-    app.$lenis.on('scroll', (e) => {
+    app.$lenis.on('wheel', (e) => {
       lenisProgress.value = e.progress
     })
 
