@@ -234,13 +234,13 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
 
-    app.$lenis.on('wheel', (e) => {
+    app.$lenis.on('scroll', (e) => {
       lenisProgress.value = e.progress
     })
 
     let t = 0
     if (!isMobile) {
-      window.addEventListener('scroll', (e) => {
+      window.addEventListener('wheel', (e) => {
         if (lenisProgress.value === 1) {
           if (t < 100) {
 

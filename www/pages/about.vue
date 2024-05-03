@@ -53,13 +53,13 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     await nextTick()
 
-    let t = gsap.utils.toArray('.temp-bio')[0]
-    console.log(t)
-    cleanBio.value = t.innerHTML.replace(/<\/?[^>]+(>|$)/g, "")
-    let length = cleanBio.value.split('').length
-    let median = Math.floor(length / 2) - 30
-    trunc.value = cleanBio.value.slice(0, median)
-    console.log(trunc.value)
+    if (isMobile) {
+      let t = gsap.utils.toArray('.temp-bio')[0]
+      cleanBio.value = t.innerHTML.replace(/<\/?[^>]+(>|$)/g, "")
+      let length = cleanBio.value.split('').length
+      let median = Math.floor(length / 2) - 30
+      trunc.value = cleanBio.value.slice(0, median)
+    }
 
     // console.log(cleanBio.value, splt)
 

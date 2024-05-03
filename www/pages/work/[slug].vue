@@ -163,9 +163,8 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     }
 
-    app.$lenis.on('wheel', (e) => {
+    app.$lenis.on('scroll', (e) => {
       lenisProgress.value = e.progress
-      updateCursorPosition(cp[0], e.scroll)
     })
 
     if (Array.isArray(toRaw(video.value))) {
@@ -251,7 +250,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     let t = 0
     if (!isMobile) {
-      window.addEventListener('scroll', (e) => {
+      window.addEventListener('wheel', (e) => {
         if (lenisProgress.value === 1) {
           if (t < 100) {
 
