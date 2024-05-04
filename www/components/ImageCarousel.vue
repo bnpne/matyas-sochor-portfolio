@@ -25,20 +25,18 @@ onMounted(() => {
       //   console.log(s, e)
       // })
       let timeout
-      swiperContainer.value.addEventListener('drag', e => {
-        console.log('here')
-      })
-      swiperContainer.value.addEventListener('mouseenter', () => {
-        setTimeout(() => {
-          cp[0].style.opacity = 1
-        }, 500)
-      })
       swiperContainer.value.addEventListener('mousemove', (e) => {
-        cp[0].style.opacity = 1
+        setTimeout(() => {
+
+          cp[0].style.opacity = 1
+        }, 250)
         setCursorPosition(swiperContainer.value, e, cp[0])
       })
       swiperContainer.value.addEventListener('mouseleave', () => {
-        cp[0].style.opacity = 0
+        setTimeout(() => {
+
+          cp[0].style.opacity = 0
+        }, 251)
       })
     }
   }

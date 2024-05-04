@@ -177,7 +177,7 @@ onBeforeUnmount(() => {
               </template>
             </div>
             <div v-if='isMobile' class='about-avatar'>
-              <ul class='about-avatar-list anima-fade'>
+              <ul class='about-avatar-list '>
                 <li>
                   <NuxtLink to='/archive'>
                     Website
