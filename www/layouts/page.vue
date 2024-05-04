@@ -391,7 +391,7 @@ onMounted(() => {
 
     &-container {
       position: fixed;
-      z-index: 5;
+      z-index: 999;
       right: desktop-vw(24px);
       top: desktop-vw(82px);
       display: flex;
