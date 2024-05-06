@@ -9,31 +9,38 @@ const time = computed(() => {
   return k
 })
 
-defineProps(['post'])
-const store = useStore()
-const { socialPostLikes } = storeToRefs(store)
+const props = defineProps(['post'])
 const heart = ref()
 const miniHeartRed = ref()
 const miniHeartGray = ref()
+const postLikes = reactive({ value: null })
 
 const like = ref(null)
 let postLiked = false
+const sanity = useSanity()
 
 // Set random number for social post
 const number = Math.floor(Math.random() * (3000 - 1000 + 1) + 1000)
 
+
 // like the post
 const likePost = () => {
   if (!postLiked) {
-    store.incrementPostLikes()
+    postLikes.value += 1
     // gsap.to('.heart', { keyframes: [{ y: '-10%', rotate: 20, opacity: 1, duration: .6 }, { y: '0%', rotate: 0, opacity: 0, delay: .25, duration: 1 }], ease: 'heart' })
+    sanity.client.patch('home').inc({ 'socialPost.likeCount': 1 }).commit().then((l) => {
+      console.log('Like Count ++')
+    })
 
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-gray', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
     tl.fromTo('.mini-heart-red', { scale: 1.4 }, { scale: 1, duration: .5, ease: 'bounce' })
 
   } else {
-    store.decrementPostLikes()
+    postLikes.value -= 1
+    sanity.client.patch('home').dec({ 'socialPost.likeCount': 1 }).commit().then((l) => {
+      console.log('Like Count --')
+    })
     // gsap.set('.heart', { opacity: 0, rotate: 0, y: '220%' })
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
     tl.fromTo('.mini-heart-red', { scale: 1 }, { scale: 1.4, duration: .2, onComplete: toggleLike() })
@@ -54,7 +61,7 @@ const toggleLike = () => {
 }
 
 onMounted(() => {
-  store.setSocialPostLikeNumber(number)
+  postLikes.value = props.post.likeCount
 
   setInterval(() => {
     d.value = new Date()
@@ -85,7 +92,7 @@ onMounted(() => {
               fill="#F02F2F" stroke="#F02F2F" stroke-width="1.2" />
           </svg>
         </div>
-        <span>{{ socialPostLikes }}</span>
+        <span>{{ postLikes.value }}</span>
       </div>
       <!-- todo  -->
       <div class='sidebar-post-footer-location'>
