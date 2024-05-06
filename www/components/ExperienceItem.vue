@@ -21,7 +21,11 @@ const { isMobile } = useDevice()
           <div class='experience-list-section-info-line-right'>
             <p v-if='!isMobile'>{{ info.jobRole }}</p>
             <p v-if='!isMobile'>{{ info.jobLocation }}</p>
-            <p>{{ info.jobStartDate.split('-')[0] }} - Current</p>
+            <div class='experience-list-section-info-line-right-current'>
+              <p>{{ info.jobStartDate.split('-')[0] }}</p>
+              <p v-if='!info.currentJob'> &nbsp;- {{ info.jobEndDate.split('-')[0] }}</p>
+              <p v-else>&nbsp;- Current</p>
+            </div>
           </div>
         </div>
       </ScrollFadeIn>
@@ -85,6 +89,10 @@ const { isMobile } = useDevice()
 
         @include mobile() {
           gap: mobile-vw(40px);
+        }
+
+        &-current {
+          display: flex;
         }
       }
     }

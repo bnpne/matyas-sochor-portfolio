@@ -633,6 +633,7 @@ onBeforeUnmount(() => {
         @include mobile() {
           gap: mobile-vw(6px);
           line-height: mobile-vw(14px);
+          white-space: nowrap;
         }
 
         &-link {
@@ -761,6 +762,7 @@ onBeforeUnmount(() => {
       margin-top: desktop-vw(68px);
 
       @include mobile() {
+        @include large-heading();
         margin-top: mobile-vw(68px);
         width: 100%;
       }
@@ -774,7 +776,7 @@ onBeforeUnmount(() => {
       padding: desktop-vw(12px) desktop-vw(25px);
 
       @include mobile() {
-        margin-bottom: mobile-vw(76px);
+        margin-bottom: mobile-vw(26px);
         padding: mobile-vw(12px) mobile-vw(25px);
       }
     }
@@ -784,7 +786,7 @@ onBeforeUnmount(() => {
       margin-bottom: desktop-vw(96px);
 
       @include mobile() {
-        margin-bottom: mobile-vw(96px);
+        margin-bottom: mobile-vw(26px);
       }
     }
 
@@ -797,7 +799,7 @@ onBeforeUnmount(() => {
       padding: 0 desktop-vw(60px);
 
       @include mobile() {
-        gap: mobile-vw(24px);
+        gap: mobile-vw(16px);
         padding: 0 mobile-vw(60px);
       }
 
@@ -891,8 +893,8 @@ onBeforeUnmount(() => {
         overflow: hidden;
 
         @include mobile() {
-          top: calc(100% - mobile-vw(74px));
           //width: calc(100% - mobile-vw(10px));
+          top: calc(100% - mobile-vw(120px));
         }
 
         img {
