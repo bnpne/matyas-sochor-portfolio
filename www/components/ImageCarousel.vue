@@ -4,6 +4,7 @@ defineProps(['images', 'containerClass', 'slideClass'])
 const app = useNuxtApp()
 const swiperContainer = ref(null)
 const { isMobile, isSafari } = useDevice()
+const sw = ref(null)
 
 let setCursorPosition = function (s, e, cp) {
   let bounds = s.getBoundingClientRect()
@@ -25,18 +26,21 @@ onMounted(() => {
       //   console.log(s, e)
       // })
       let timeout
-      swiperContainer.value.addEventListener('mousemove', (e) => {
+      // swiperContainer.value.addEventListener('pointermove', (e) => {
+      //   console.log(e)
+      // })
+      swiperContainer.value.addEventListener('pointermove', (e) => {
         setTimeout(() => {
 
           cp[0].style.opacity = 1
-        }, 250)
+        }, 100)
         setCursorPosition(swiperContainer.value, e, cp[0])
       })
-      swiperContainer.value.addEventListener('mouseleave', () => {
+      swiperContainer.value.addEventListener('pointerleave', () => {
         setTimeout(() => {
 
           cp[0].style.opacity = 0
-        }, 251)
+        }, 100)
       })
     }
   }
@@ -56,7 +60,7 @@ onMounted(() => {
             fill="#000" />
         </svg>
       </div>
-      <SwiperSlide :class='slideClass' v-for='image in images'>
+      <SwiperSlide ref='sw' :class='slideClass' v-for='image in images'>
         <SanityImage class='swiper-image' :asset-id='image.asset?._ref' auto='format' w='2000' fit='clip' />
       </SwiperSlide>
     </Swiper>
