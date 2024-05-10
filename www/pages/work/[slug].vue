@@ -464,7 +464,7 @@ onBeforeUnmount(() => {
               <NuxtLink :to='`/work/${data.home?.selectedProjects[isNext].projectSlug.current}`'
                 class='work-footer-scroll'>
                 <span class='anima-fade'>
-                  <p class='work-footer-scroll-heading'>To next project</p>
+                  <p class='work-footer-scroll-heading'>Click to next project</p>
                 </span>
                 <span class='anima-fade'>
                   <h2 class='work-footer-scroll-next'>{{ data.home?.selectedProjects[isNext]?.projectTitle }}</h2>
@@ -857,8 +857,8 @@ onBeforeUnmount(() => {
 
         @include mobile() {
           text-align: center;
-          font-size: mobile-vw(56px);
-          line-height: mobile-vw(67px);
+          font-size: mobile-vw(32px);
+          line-height: mobile-vw(36px);
         }
       }
 
@@ -872,7 +872,7 @@ onBeforeUnmount(() => {
         @include mobile() {
           height: mobile-vw(44px);
           width: mobile-vw(44px);
-          margin-bottom: mobile-vw(144px);
+          margin-bottom: mobile-vw(114px);
         }
 
         &-base {

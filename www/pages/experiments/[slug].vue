@@ -453,7 +453,7 @@ onBeforeUnmount(() => {
               <NuxtLink :to='`/experiments/${data.home?.selectedExperiments[isNext].projectSlug.current}`'
                 class='work-footer-scroll'>
                 <span class='anima-fade'>
-                  <p class='work-footer-scroll-heading'>To next experiment</p>
+                  <p class='work-footer-scroll-heading'>Click to next experiment</p>
                 </span>
                 <span class='anima-fade'>
                   <h2 class='work-footer-scroll-next'>{{ data.home?.selectedExperiments[isNext]?.projectTitle }}</h2>
@@ -815,8 +815,8 @@ onBeforeUnmount(() => {
 
         @include mobile() {
           text-align: center;
-          font-size: mobile-vw(56px);
-          line-height: mobile-vw(67px);
+          font-size: mobile-vw(32px);
+          line-height: mobile-vw(36px);
         }
       }
 
@@ -830,7 +830,7 @@ onBeforeUnmount(() => {
         @include mobile() {
           height: mobile-vw(44px);
           width: mobile-vw(44px);
-          margin-bottom: mobile-vw(144px);
+          margin-bottom: mobile-vw(114px);
         }
 
         &-base {
