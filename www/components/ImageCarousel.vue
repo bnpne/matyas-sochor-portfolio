@@ -22,13 +22,7 @@ onMounted(() => {
   if (!isMobile && !isSafari) {
     let cp = gsap.utils.toArray('.cursor-carousel-object')
     if (swiperContainer.value) {
-      // swiperContainer.value.on('swiperMove', (s, e) => {
-      //   console.log(s, e)
-      // })
       let timeout
-      // swiperContainer.value.addEventListener('pointermove', (e) => {
-      //   console.log(e)
-      // })
       swiperContainer.value.addEventListener('pointermove', (e) => {
         setTimeout(() => {
 

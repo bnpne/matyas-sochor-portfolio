@@ -13,9 +13,10 @@ const toggler = ref()
 const toggle = ref()
 const isOpen = ref(false)
 const toggleIsOpen = reactive({ isOpen: false })
-const route = useRoute()
 const { isMobile, isDesktop } = useDevice()
 const device = useDevice()
+const hide = ref(false)
+const route = useRoute()
 
 const openToggle = () => {
   if (toggleIsOpen.isOpen) {
@@ -58,6 +59,7 @@ onMounted(() => {
       lenis.raf(time)
     }, 0)
   }
+
 })
 </script>
 
@@ -161,6 +163,15 @@ onMounted(() => {
 <style lang='scss'>
 .sidebar {
   max-width: desktop-vw(372px);
+
+  &.hidden {
+    display: none;
+  }
+
+  @include mobile() {
+    max-width: 100%;
+  }
+
   display: block;
 
   @include desktop() {

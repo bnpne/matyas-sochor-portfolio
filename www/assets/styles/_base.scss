@@ -16,7 +16,7 @@ body {
   z-index: 1;
 
   @include mobile() {
-    flex: 1;
+    flex: 0 0 100%;
   }
 }
 

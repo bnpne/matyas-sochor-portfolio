@@ -5,12 +5,10 @@ const { isMobile } = useDevice()
 
 <template>
   <main id='main'>
-    <template v-if='isMobile'>
-      <SideBar v-if='route.path === "/"' />
-    </template>
-    <template v-else>
-      <SideBar />
-    </template>
+    <!-- <template v-if='isMobile'> -->
+    <!--   <SideBar v-if='route.path === "/"' /> -->
+    <!-- </template> -->
+    <SideBar />
     <slot />
   </main>
 </template>

@@ -189,7 +189,7 @@ const openDropdown = () => {
       position: relative;
 
       &.open {
-        opacity: .5;
+        //opacity: .5;
       }
 
       @include mobile() {
