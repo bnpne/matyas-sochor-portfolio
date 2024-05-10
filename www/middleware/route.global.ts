@@ -26,7 +26,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (
       to.path === '/' ||
       to.path === '/about' ||
-      to.path === '/archive' ||
+      to.path === '/feed' ||
       (toSplt.includes('work') && !fromSplt.includes('work')) ||
       (toSplt.includes('experiments') && !fromSplt.includes('experiments')) ||
       (toSplt.includes('experiments') && fromSplt.includes('work')) ||

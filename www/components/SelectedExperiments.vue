@@ -10,7 +10,7 @@ const { activeProject } = storeToRefs(store)
   <div v-if='experiments' class='sidebar-experiments pre-anima'>
     <div class='sidebar-experiments-heading'>
       <div>Selected Experiments</div>
-      <nuxt-link :to='{ path: "/archive", query: { filter: "Experiments;", project: "", experiment: "" } }'
+      <nuxt-link :to='{ path: "/feed", query: { filter: "Experiments;", project: "", experiment: "" } }'
         class='sidebar-experiments-heading-work'>
         <span>All Experiments</span>
         <svg viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,11 +76,14 @@ const { activeProject } = storeToRefs(store)
       }
 
       @include desktop() {
-        &:hover {
-          color: $black75;
 
-          &>svg {
-            color: currentColor;
+        @include hover() {
+          &:hover {
+            color: $black75;
+
+            &>svg {
+              color: currentColor;
+            }
           }
         }
       }
@@ -101,9 +104,11 @@ const { activeProject } = storeToRefs(store)
   }
 
   @include desktop() {
-    &:hover {
-      &>.sidebar-experiments-card {
-        opacity: .5;
+    @include hover() {
+      &:hover {
+        &>.sidebar-experiments-card {
+          opacity: .5;
+        }
       }
     }
   }
@@ -126,8 +131,10 @@ const { activeProject } = storeToRefs(store)
     }
 
     @include desktop() {
-      &:hover {
-        opacity: 1 !important;
+      @include hover() {
+        &:hover {
+          opacity: 1 !important;
+        }
       }
     }
 

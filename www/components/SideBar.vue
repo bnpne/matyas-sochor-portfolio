@@ -132,7 +132,7 @@ onMounted(() => {
             <div ref='toggle' v-if='isMobile' class='sidebar-toggle-menu'>
               <div class='sidebar-toggle-menu-links'>
                 <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-                <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+                <NuxtLink @click='openToggle' to='/feed'>Feed</NuxtLink>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ onMounted(() => {
         <div class='sidebar-avatar-gradient'></div>
       </div>
       <div v-if='data' ref='container' class='sidebar-container'>
-        <template v-if='route.path !== "/archive"'>
+        <template v-if='route.path !== "/feed"'>
           <SocialPost v-if='data.home.socialPost' :post='data.home.socialPost' />
           <SelectedProjects v-if='data.home.selectedProjects' :projects='data.home.selectedProjects' />
           <SelectedExperiments v-if='data.home.selectedExperiments' :experiments='data.home.selectedExperiments'

@@ -15,6 +15,7 @@ const toggleIsOpen = reactive({ isOpen: false })
 const toggler = ref()
 const toggle = ref()
 const dropdown = ref()
+const emailDropdown = ref()
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
@@ -44,9 +45,11 @@ const openDropdown = () => {
   if (!isOpen) {
     isOpen = true
     dropdown.value.classList.toggle('active')
+    emailDropdown.value.classList.toggle('active')
   } else {
     isOpen = false
     dropdown.value.classList.toggle('active')
+    emailDropdown.value.classList.toggle('active')
   }
 }
 
@@ -98,7 +101,7 @@ onMounted(() => {
   <div id='page' class='work-layout'>
     <template v-if='!isMobile'>
       <nav class='work-layout-nav' :class='{ "about-nav": route.path === "/about" }'>
-        <NuxtLink to='/archive' class='work-layout-nav-archive'>Archive</NuxtLink>
+        <NuxtLink to='/feed' class='work-layout-nav-archive'>Feed</NuxtLink>
         <div v-if='!notificationActive.isActive' @click='toggleNotification' class='work-layout-nav-notifications'>{{
       notifications.list.length }}</div>
         <div v-else @click='toggleNotification' class='work-layout-nav-notifications-active'>
@@ -122,9 +125,9 @@ onMounted(() => {
             </NuxtLink>
             <div class='work-layout-avatar-info-email'>
               <p v-if='avatar.value.name' class='work-layout-avatar-info-email-text'>{{ avatar.value.name }}</p>
-              <div @click='openDropdown' v-if='avatar.value.emailForm' class='work-layout-avatar-info-email-link'
-                target='_blank'>
-                {{ avatar.value.emailForm?.emailText }} +
+              <div @click='openDropdown' v-if='avatar.value.emailForm' ref='emailDropdown'
+                class='work-layout-avatar-info-email-link' target='_blank'>
+                {{ avatar.value.emailForm?.emailText }}
               </div>
               <div ref='dropdown' v-if='links' class='work-layout-link-dropdown'>
                 <NuxtLink v-for='link in links.linkArray' :to='link.linkURL' class='work-layout-link-dropdown-link'>
@@ -160,7 +163,7 @@ onMounted(() => {
             <div ref='toggle' class='work-layout-toggle-menu'>
               <div class='work-layout-toggle-menu-links'>
                 <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-                <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+                <NuxtLink @click='openToggle' to='/feed'>Feed</NuxtLink>
               </div>
             </div>
           </div>
@@ -276,6 +279,27 @@ onMounted(() => {
 
         &-link {
           color: rgba(30, 30, 30, .5);
+          position: relative;
+
+          &::after {
+            content: '+';
+            font-size: desktop-vw(16px);
+            position: absolute;
+            top: 0;
+            left: calc(100% + 6px);
+            color: rgba(30, 30, 30, .5);
+            transition: transform 300ms ease-out;
+
+            @include mobile() {
+              font-size: mobile-vw(16px);
+            }
+          }
+
+          &.active {
+            &::after {
+              transform: rotate(45deg);
+            }
+          }
         }
       }
     }
@@ -465,6 +489,7 @@ onMounted(() => {
     visibility: hidden;
     transition: visibility 0s, opacity 300ms ease-out;
 
+
     @include mobile() {
       left: 0;
       font-size: mobile-vw(12px);
@@ -474,10 +499,9 @@ onMounted(() => {
     }
 
     &.active {
-      //display: flex;
-
       opacity: 1;
       visibility: visible;
+
     }
 
     &-link:hover {

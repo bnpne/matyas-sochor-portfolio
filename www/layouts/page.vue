@@ -103,7 +103,7 @@ onMounted(() => {
     <!-- DESKTOP -->
     <template v-if='!isMobile'>
       <nav class='page-layout-nav' :class='{ "about-nav": route.path === "/about" }'>
-        <NuxtLink to='/archive' class='page-layout-nav-archive'>Archive</NuxtLink>
+        <NuxtLink to='/feed' class='page-layout-nav-archive'>Feed</NuxtLink>
         <div v-if='!notificationActive.isActive' @click='toggleNotification' class='page-layout-nav-notifications'>{{
       notifications.list.length }}</div>
         <div v-else @click='toggleNotification' class='page-layout-nav-notifications-active'>
@@ -167,7 +167,7 @@ onMounted(() => {
             <div ref='toggle' class='page-layout-toggle-menu'>
               <div class='page-layout-toggle-menu-links'>
                 <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-                <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+                <NuxtLink @click='openToggle' to='/feed'>Feed</NuxtLink>
               </div>
             </div>
           </div>

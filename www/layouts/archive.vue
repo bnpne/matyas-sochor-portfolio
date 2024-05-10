@@ -11,6 +11,7 @@ const toggler = ref()
 const toggle = ref()
 let isOpen = false
 const toggleIsOpen = reactive({ isOpen: false })
+const emailDropdown = ref()
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
@@ -39,9 +40,11 @@ const openDropdown = () => {
   if (!isOpen) {
     isOpen = true
     dropdown.value.classList.toggle('active')
+    emailDropdown.value.classList.toggle('active')
   } else {
     isOpen = false
     dropdown.value.classList.toggle('active')
+    emailDropdown.value.classList.toggle('active')
   }
 }
 </script>
@@ -62,9 +65,9 @@ const openDropdown = () => {
             </NuxtLink>
             <div class='archive-layout-avatar-info-email'>
               <p v-if='avatar.name' class='archive-layout-avatar-info-email-text'>{{ avatar.name }}</p>
-              <div @click='openDropdown' v-if='avatar.emailForm' class='archive-layout-avatar-info-email-link'
-                target='_blank'>
-                {{ avatar.emailForm?.emailText }} +
+              <div @click='openDropdown' ref='emailDropdown' v-if='avatar.emailForm'
+                class='archive-layout-avatar-info-email-link' target='_blank'>
+                {{ avatar.emailForm?.emailText }}
               </div>
               <div ref='dropdown' v-if='links' class='archive-layout-link-dropdown'>
                 <NuxtLink v-for='link in links.linkArray' :to='link.linkURL' class='archive-layout-link-dropdown-link'>
@@ -101,7 +104,7 @@ const openDropdown = () => {
             <div ref='toggle' class='archive-layout-toggle-menu'>
               <div class='archive-layout-toggle-menu-links'>
                 <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-                <NuxtLink @click='openToggle' to='/archive'>Archive</NuxtLink>
+                <NuxtLink @click='openToggle' to='/feed'>Feed</NuxtLink>
               </div>
             </div>
           </div>
@@ -215,6 +218,27 @@ const openDropdown = () => {
 
         &-link {
           color: rgba(30, 30, 30, .5);
+          position: relative;
+
+          &::after {
+            content: '+';
+            font-size: desktop-vw(16px);
+            position: absolute;
+            top: 0;
+            left: calc(100% + 6px);
+            color: rgba(30, 30, 30, .5);
+            transition: transform 300ms ease-out;
+
+            @include mobile() {
+              font-size: mobile-vw(16px);
+            }
+          }
+
+          &.active {
+            &::after {
+              transform: rotate(45deg);
+            }
+          }
         }
       }
     }
@@ -223,34 +247,42 @@ const openDropdown = () => {
   &-link-dropdown {
     position: absolute;
     top: calc(100% + 6px);
+    z-index: 4;
     @include rounded();
     background: $black;
-    color: $white;
+    color: $white50;
+    width: desktop-vw(200px);
     padding: desktop-vw(12px);
+    //display: none;
     display: flex;
     flex-direction: column;
     gap: desktop-vw(6px);
     @include small-type();
     font-size: desktop-vw(12px);
-    pointer-events: none;
     opacity: 0;
     z-index: 4;
+    //transition: all 500ms ease-out;
+    visibility: hidden;
+    transition: visibility 0s, opacity 300ms ease-out;
+
 
     @include mobile() {
+      left: 0;
       font-size: mobile-vw(12px);
       padding: mobile-vw(12px);
       gap: mobile-vw(6px);
+      width: mobile-vw(200px);
     }
 
     &.active {
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
+
     }
 
-    &-link {
-      &:hover {
-        color: $white50;
-      }
+    &-link:hover {
+      transition: color 300ms ease-out;
+      color: $white;
     }
   }
 

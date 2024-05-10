@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   devtools: {enabled: false},
   pages: true,
   routeRules: {
-    '/archive': {prerender: true},
+    '/feed': {prerender: true},
     '/work/**': {prerender: true},
     '/experiments/**': {prerender: true},
   },

@@ -19,7 +19,7 @@ const resetFilter = async (event) => {
 
   store.clearActiveShowFilters()
   await navigateTo({
-    path: '/archive',
+    path: '/feed',
   })
   reset.value = false
 }

@@ -131,21 +131,21 @@ onBeforeUnmount(() => {
           <div v-if='!isMobile' class='about-avatar'>
             <ul class='about-avatar-list anima-fade'>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/archive'>
+                <NuxtLink class='about-avatar-list-link' to='/feed'>
                   Website
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/archive'>Identity</NuxtLink>
+                <NuxtLink class='about-avatar-list-link' to='/feed'>Identity</NuxtLink>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/archive'>Branding</NuxtLink>
+                <NuxtLink class='about-avatar-list-link' to='/feed'>Branding</NuxtLink>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/archive'>Motion</NuxtLink>
+                <NuxtLink class='about-avatar-list-link' to='/feed'>Motion</NuxtLink>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/archive'>Print</NuxtLink>
+                <NuxtLink class='about-avatar-list-link' to='/feed'>Print</NuxtLink>
               </li>
             </ul>
             <div v-if='data?.about.bioImage' class='about-avatar-image'>
@@ -179,21 +179,21 @@ onBeforeUnmount(() => {
             <div v-if='isMobile' class='about-avatar'>
               <ul class='about-avatar-list '>
                 <li>
-                  <NuxtLink to='/archive'>
+                  <NuxtLink to='/feed'>
                     Website
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Identity</NuxtLink>
+                  <NuxtLink to='/feed'>Identity</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Branding</NuxtLink>
+                  <NuxtLink to='/feed'>Branding</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Motion</NuxtLink>
+                  <NuxtLink to='/feed'>Motion</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to='/archive'>Print</NuxtLink>
+                  <NuxtLink to='/feed'>Print</NuxtLink>
                 </li>
               </ul>
               <div v-if='data?.about.bioImage' class='about-avatar-image'>

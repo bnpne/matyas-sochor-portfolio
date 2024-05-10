@@ -51,7 +51,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
     // Set Head
     useHead({
-      title: 'Archive | Matyas Sochor'
+      title: 'Feed | Matyas Sochor'
     })
 
     // Set Grid
@@ -105,7 +105,7 @@ watch(activeFilters.value, async () => {
     })
 
     await navigateTo({
-      path: '/archive',
+      path: '/feed',
       query: {
         filter: s,
         project: j,
@@ -115,7 +115,7 @@ watch(activeFilters.value, async () => {
     })
   } else {
     await navigateTo({
-      path: '/archive',
+      path: '/feed',
       replace: true
     })
   }
