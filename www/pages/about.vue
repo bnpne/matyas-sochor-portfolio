@@ -36,6 +36,7 @@ const loading = ref(true)
 const cleanBio = reactive({ value: null })
 const trunc = reactive({ value: null })
 const readMore = ref(false)
+const video = ref(null)
 // const query = groq`*[_type == 'about'][0]`
 // const linkQuery = groq`*[_type == 'links'][0].linkArray`
 // const { data: about } = useSanityQuery(query)
@@ -52,6 +53,11 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
     await nextTick()
+
+    if (video.value) {
+      video.value.currentTime = 0
+      video.value.load()
+    }
 
     if (isMobile) {
       let t = gsap.utils.toArray('.temp-bio')[0]
