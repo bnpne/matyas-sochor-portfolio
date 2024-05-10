@@ -15,6 +15,8 @@ const miniHeartRed = ref()
 const miniHeartGray = ref()
 const postLikes = reactive({ value: null })
 
+const data = useData()
+const { isLiked } = storeToRefs()
 const like = ref(null)
 let postLiked = false
 const sanity = useSanity()
@@ -30,6 +32,7 @@ const likePost = () => {
     // gsap.to('.heart', { keyframes: [{ y: '-10%', rotate: 20, opacity: 1, duration: .6 }, { y: '0%', rotate: 0, opacity: 0, delay: .25, duration: 1 }], ease: 'heart' })
     sanity.client.patch('home').inc({ 'socialPost.likeCount': 1 }).commit().then((l) => {
       console.log('Like Count ++')
+      data.likePost()
     })
 
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })
@@ -40,6 +43,7 @@ const likePost = () => {
     postLikes.value -= 1
     sanity.client.patch('home').dec({ 'socialPost.likeCount': 1 }).commit().then((l) => {
       console.log('Like Count --')
+      data.likePost()
     })
     // gsap.set('.heart', { opacity: 0, rotate: 0, y: '220%' })
     let tl = gsap.timeline({ defaults: { ease: 'heart', duration: .3, } })

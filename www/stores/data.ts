@@ -3,6 +3,7 @@ export const useData = defineStore('data', {
     data: null,
     isFetched: false,
     preloaderActive: true,
+    isLiked: false,
   }),
   actions: {
     addData(d: any) {
@@ -12,6 +13,9 @@ export const useData = defineStore('data', {
       this.preloaderActive === true
         ? (this.preloaderActive = false)
         : (this.preloaderActive = true)
+    },
+    likePost() {
+      this.isLiked === true ? (this.isLiked = false) : (this.isLiked = true)
     },
     async fetchData() {
       try {

@@ -556,6 +556,12 @@ onBeforeUnmount(() => {
         min-height: desktop-vw(800px);
       }
 
+      &>video {
+        @include image-default();
+        object-fit: cover;
+        min-height: desktop-vw(800px);
+      }
+
       &-overlay {
         position: absolute;
         height: 100%;
