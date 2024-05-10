@@ -144,14 +144,14 @@ watch([() => store.isFetched, () => loading.value], async () => {
           setTimeout(() => {
 
             cp[0].style.opacity = 1
-          }, 250)
+          }, 100)
           // cp[0].style.opacity = 1
           setCursorPosition(workContainer.value, e, cp[0])
         })
         workContainer.value.addEventListener('mouseleave', () => {
           setTimeout(() => {
             cp[0].style.opacity = 0
-          }, 251)
+          }, 100)
         })
       }
     }
@@ -276,7 +276,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // Revert gsap context
-  ScrollTrigger.killAll()
+  // ScrollTrigger.killAll()
 })
 </script>
 

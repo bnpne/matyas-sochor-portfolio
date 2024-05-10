@@ -93,6 +93,13 @@ const { isMobile } = useDevice()
 
         &-current {
           display: flex;
+          min-width: desktop-vw(100px);
+          justify-content: flex-end;
+
+          @include mobile() {
+            min-width: mobile-vw(100px);
+            justify-content: flex-end;
+          }
         }
       }
     }

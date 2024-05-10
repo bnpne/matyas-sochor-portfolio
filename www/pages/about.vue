@@ -119,7 +119,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // Revert gsap context
-  ScrollTrigger.killAll()
+  // ScrollTrigger.killAll()
 })
 </script>
 
@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
               </li>
             </ul>
             <div v-if='data?.about.bioImage' class='about-avatar-image'>
-              <span class='anima-scale'>
+              <span class='anima-fade'>
                 <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000' fit='clip' />
               </span>
             </div>

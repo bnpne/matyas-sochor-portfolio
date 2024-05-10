@@ -44,7 +44,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class='swiper-w' ref='swiperContainer'>
+  <div class='swiper-w anima-fade' ref='swiperContainer'>
     <Swiper class='swiper-container anima-scale' :modules='[SwiperFreeMode]' :class='containerClass' v-if='images'
       :slides-per-view='"auto"' :space-between='10' :centered-slides='false' :free-mode='true'
       :slide-class='slideClass'>
