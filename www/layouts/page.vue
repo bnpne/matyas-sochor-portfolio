@@ -23,8 +23,6 @@ let notificationActive: { isActive: boolean } = reactive({ isActive: false })
 let notificationsLink: { list: any[] } = reactive({ list: [] })
 
 const toggleNotification = () => {
-  noti.isNotified()
-  console.log(notified.value)
   notificationActive.isActive =
     notificationActive.isActive === true ?
       notificationActive.isActive = false :
@@ -89,6 +87,8 @@ onMounted(() => {
   if (notified.value === false) {
     setTimeout(() => {
       toggleNotification()
+      noti.isNotified()
+      console.log(notified.value)
     }, 5000)
   }
 
