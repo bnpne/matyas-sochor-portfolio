@@ -16,7 +16,10 @@ onMounted(() => {
   })
   app.hook('app:suspense:resolve', () => {
     store.$subscribe((s, m) => {
-      if (m.isFetched) {
+      if (m.isFetched && !m.preloaded) {
+        tl.eventCallback('onComplete', () => {
+          store.isPreloaded()
+        })
         tl.to('.pl-overlay', { x: '100%', duration: 3 })
           .from('.pl-text', { y: '100%', opacity: 0, duration: 1, stagger: .15 }, '>-1.7')
           .to('.pl', { y: '-100%', duration: 1.2, ease: 'circ.inOut' })
