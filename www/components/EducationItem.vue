@@ -15,7 +15,8 @@ defineProps(['data'])
     <div class='list-section-info'>
       <ScrollFadeIn>
         <div v-for='info in data' class='list-section-info-line'>
-          <p>{{ info.school }}</p>
+          <p v-if='!info.schoolLink'>{{ info.school }}</p>
+          <NuxtLink v-else :to='info.schoolLink' target='_blank'>{{ info.school }}</NuxtLink>
           <div class='list-section-info-line-right'>
             <p>{{ info.schoolLocation }}</p>
             <p v-if='!info.currentlyAttending'>{{ info.schoolDate.split('-')[0] }}</p>

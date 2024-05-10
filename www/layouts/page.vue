@@ -15,16 +15,20 @@ const toggleIsOpen = reactive({ isOpen: false })
 const toggler = ref()
 const toggle = ref()
 const dropdown = ref()
+const isNotified = ref(false)
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
 let notificationsLink: { list: any[] } = reactive({ list: [] })
 
 const toggleNotification = () => {
-  notificationActive.isActive =
-    notificationActive.isActive === true ?
-      notificationActive.isActive = false :
-      notificationActive.isActive = true
+  if (isNotified.value === false) {
+    isNotified.value = true
+    notificationActive.isActive =
+      notificationActive.isActive === true ?
+        notificationActive.isActive = false :
+        notificationActive.isActive = true
+  }
 }
 
 const openToggle = () => {

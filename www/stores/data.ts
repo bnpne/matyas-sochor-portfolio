@@ -4,10 +4,14 @@ export const useData = defineStore('data', {
     isFetched: false,
     preloaderActive: true,
     isLiked: false,
+    notified: false,
   }),
   actions: {
     addData(d: any) {
       this.data = d
+    },
+    isNotified() {
+      this.notified === true ? (this.notified = false) : (this.notified = true)
     },
     togglePreloader() {
       this.preloaderActive === true
