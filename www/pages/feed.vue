@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
     z-index: 6;
     display: none;
     flex-direction: column;
-    padding: mobile-vw(76px) mobile-vw(20px);
+    padding: mobile-vw(96px) mobile-vw(20px);
     gap: mobile-vw(20px);
 
     &.open {

@@ -247,9 +247,12 @@
   width: auto;
   padding: desktop-vw(10px) desktop-vw(14px);
   border-radius: desktop-vw(26px);
-  transition: background ease-out 300ms;
-  transition: color ease-out 300ms;
-  transition: border ease-out 300ms;
+  transition:
+    background ease-out 300ms,
+    color ease-out 300ms,
+    border ease-out 300ms;
+  // transition: color ease-out 300ms;
+  // transition: border ease-out 300ms;
   border: 1px $black10 solid;
   background: transparent;
   color: $black;

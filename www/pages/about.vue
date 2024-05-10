@@ -131,21 +131,39 @@ onBeforeUnmount(() => {
           <div v-if='!isMobile' class='about-avatar'>
             <ul class='about-avatar-list anima-fade'>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/feed'>
+                <nuxt-link
+                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                  class='about-avatar-list-link'>
                   Website
-                </NuxtLink>
+                </nuxt-link>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/feed'>Identity</NuxtLink>
+                <nuxt-link
+                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                  class='about-avatar-list-link'>
+                  Identity
+                </nuxt-link>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/feed'>Branding</NuxtLink>
+                <nuxt-link
+                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                  class='about-avatar-list-link'>
+                  Branding
+                </nuxt-link>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/feed'>Motion</NuxtLink>
+                <nuxt-link
+                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                  class='about-avatar-list-link'>
+                  Motion
+                </nuxt-link>
               </li>
               <li>
-                <NuxtLink class='about-avatar-list-link' to='/feed'>Print</NuxtLink>
+                <nuxt-link
+                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                  class='about-avatar-list-link'>
+                  Print
+                </nuxt-link>
               </li>
             </ul>
             <div v-if='data?.about.bioImage' class='about-avatar-image'>
@@ -177,25 +195,62 @@ onBeforeUnmount(() => {
               </template>
             </div>
             <div v-if='isMobile' class='about-avatar'>
-              <ul class='about-avatar-list '>
+              <ul class='about-avatar-list anima-fade'>
                 <li>
-                  <NuxtLink to='/feed'>
+                  <nuxt-link
+                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                    class='about-avatar-list-link'>
                     Website
-                  </NuxtLink>
+                  </nuxt-link>
                 </li>
                 <li>
-                  <NuxtLink to='/feed'>Identity</NuxtLink>
+                  <nuxt-link
+                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                    class='about-avatar-list-link'>
+                    Identity
+                  </nuxt-link>
                 </li>
                 <li>
-                  <NuxtLink to='/feed'>Branding</NuxtLink>
+                  <nuxt-link
+                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                    class='about-avatar-list-link'>
+                    Branding
+                  </nuxt-link>
                 </li>
                 <li>
-                  <NuxtLink to='/feed'>Motion</NuxtLink>
+                  <nuxt-link
+                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                    class='about-avatar-list-link'>
+                    Motion
+                  </nuxt-link>
                 </li>
                 <li>
-                  <NuxtLink to='/feed'>Print</NuxtLink>
+                  <nuxt-link
+                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
+                    class='about-avatar-list-link'>
+                    Print
+                  </nuxt-link>
                 </li>
               </ul>
+              <!-- <ul class='about-avatar-list '> -->
+              <!--   <li> -->
+              <!--     <NuxtLink to='/feed'> -->
+              <!--       Website -->
+              <!--     </NuxtLink> -->
+              <!--   </li> -->
+              <!--   <li> -->
+              <!--     <NuxtLink to='/feed'>Identity</NuxtLink> -->
+              <!--   </li> -->
+              <!--   <li> -->
+              <!--     <NuxtLink to='/feed'>Branding</NuxtLink> -->
+              <!--   </li> -->
+              <!--   <li> -->
+              <!--     <NuxtLink to='/feed'>Motion</NuxtLink> -->
+              <!--   </li> -->
+              <!--   <li> -->
+              <!--     <NuxtLink to='/feed'>Print</NuxtLink> -->
+              <!--   </li> -->
+              <!-- </ul> -->
               <div v-if='data?.about.bioImage' class='about-avatar-image'>
                 <span class='anima-scale'>
                   <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000'
@@ -491,14 +546,14 @@ onBeforeUnmount(() => {
       position: relative;
       @include rounded();
       overflow: hidden;
-      min-height: 100vh;
+      min-height: desktop-vw(800px);
 
       @include mobile() {}
 
       &>img {
         @include image-default();
         object-fit: cover;
-        min-height: 100vh;
+        min-height: desktop-vw(800px);
       }
 
       &-overlay {

@@ -74,7 +74,9 @@ onMounted(() => {
               <SanityImage :asset-id="data.home.avatar?.asset?._ref" auto='format' w='300' />
             </NuxtLink>
             <div class='sidebar-avatar-info-email'>
-              <p v-if='data.home.name' class='sidebar-avatar-info-email-text'>{{ data.home.name }}</p>
+              <NuxtLink to="/" v-if='data.home.name' class='sidebar-avatar-info-email-text'>
+                {{ data.home.name }}
+              </NuxtLink>
               <!-- DROPDOWN -->
               <template v-if='!isMobile'>
                 <div @mouseover='dropdownOver' @mouseleave='dropdownLeave' class='sidebar-dropdown'>
