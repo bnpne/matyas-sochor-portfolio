@@ -384,6 +384,7 @@ onMounted(() => {
     background: $white;
     max-width: desktop-vw(300px);
     box-shadow: 0px 2px 12px 0px #0000001F;
+    pointer-events: all;
 
     // for Animation
     transform: translateX(150%);
@@ -397,6 +398,7 @@ onMounted(() => {
     }
 
     &-container {
+      pointer-events: none;
       position: fixed;
       z-index: 999;
       right: desktop-vw(24px);
