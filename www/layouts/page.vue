@@ -8,6 +8,8 @@ const { isMobile } = useDevice()
 const avatar = reactive({ value: null })
 const links = ref(null)
 const store = useData()
+const noti = useNotified()
+const { notified } = storeToRefs(noti)
 const { data: storeData } = storeToRefs(store)
 const loading = ref(true)
 let isOpen = false
@@ -15,20 +17,18 @@ const toggleIsOpen = reactive({ isOpen: false })
 const toggler = ref()
 const toggle = ref()
 const dropdown = ref()
-const isNotified = ref(false)
 
 let notifications: { list: any[] } = reactive({ list: [] })
 let notificationActive: { isActive: boolean } = reactive({ isActive: false })
 let notificationsLink: { list: any[] } = reactive({ list: [] })
 
 const toggleNotification = () => {
-  if (isNotified.value === false) {
-    isNotified.value = true
-    notificationActive.isActive =
-      notificationActive.isActive === true ?
-        notificationActive.isActive = false :
-        notificationActive.isActive = true
-  }
+  noti.isNotified()
+  console.log(notified.value)
+  notificationActive.isActive =
+    notificationActive.isActive === true ?
+      notificationActive.isActive = false :
+      notificationActive.isActive = true
 }
 
 const openToggle = () => {
@@ -85,9 +85,12 @@ onMounted(() => {
     }
   })
 
-  setTimeout(() => {
-    toggleNotification()
-  }, 5000)
+  console.log(notified.value)
+  if (notified.value === false) {
+    setTimeout(() => {
+      toggleNotification()
+    }, 5000)
+  }
 
   if (data) {
     toRaw(data.value)?.forEach((n: any) => {
