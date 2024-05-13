@@ -228,6 +228,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(10px);
+    overflow-x: hidden;
   }
 
   &-project {

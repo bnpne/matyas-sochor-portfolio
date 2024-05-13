@@ -551,6 +551,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     gap: desktop-vw(10px);
+    position: relative;
 
     @include mobile() {
       overflow: hidden;

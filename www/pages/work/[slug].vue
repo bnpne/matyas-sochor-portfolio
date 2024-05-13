@@ -279,8 +279,8 @@ watch([() => store.isFetched, () => loading.value], async () => {
 
 onMounted(() => {
   loading.value = false
+  app.$scrollStart()
   if (app.$lenis.isStopped) {
-    // app.$scrollStart()
   }
 })
 
