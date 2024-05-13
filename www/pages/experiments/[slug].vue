@@ -765,6 +765,8 @@ onBeforeUnmount(() => {
         @include large-heading();
         margin-top: mobile-vw(68px);
         width: 100%;
+        font-size: mobile-vw(20px);
+        line-height: mobile-vw(32px);
       }
     }
 
