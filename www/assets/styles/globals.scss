@@ -5,9 +5,8 @@
 @import 'scroll.scss';
 @import 'base.scss';
 
-html,
-body {
-  // overscroll-behavior: none;
+html {
+  overscroll-behavior: none;
 }
 
 body {
