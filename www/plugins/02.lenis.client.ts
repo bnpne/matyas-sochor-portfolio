@@ -19,7 +19,16 @@ export default defineNuxtPlugin(() => {
 
   const scroll = useScroll()
 
-  const lenis = new Lenis({lerp: 0.2})
+  const lenis = new Lenis({
+    lerp: 0.2,
+    gestureOrientation: 'vertical',
+    orientation: 'vertical',
+    wrapper: window,
+    content: document.body,
+    eventsTarget: window,
+  })
+
+  // console.log(lenis.emitter)
 
   // @ts-ignore
   R.add(time => {

@@ -53,6 +53,7 @@ watch([() => store.isFetched, () => loading.value], async () => {
     })
 
     await nextTick()
+    app.$scrollStart()
 
     if (video.value) {
       video.value.currentTime = 0
