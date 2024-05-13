@@ -17,6 +17,7 @@ const { isMobile, isDesktop } = useDevice()
 const device = useDevice()
 const hide = ref(false)
 const route = useRoute()
+const mobileDropdown = ref()
 
 const openToggle = () => {
   if (toggleIsOpen.isOpen) {
@@ -42,8 +43,10 @@ const dropdownLeave = () => {
 const mobileDropdownToggle = () => {
   if (!isOpen.value) {
     isOpen.value = true
+    mobileDropdown.value.classList.toggle('active')
   } else {
     isOpen.value = false
+    mobileDropdown.value.classList.toggle('active')
   }
 }
 
@@ -94,7 +97,7 @@ onMounted(() => {
               </template>
               <template v-else-if='isMobile'>
                 <div @click='mobileDropdownToggle' class='sidebar-dropdown'>
-                  <div v-if='data.home.emailForm' class='sidebar-dropdown-email'>
+                  <div v-if='data.home.emailForm' ref='mobileDropdown' class='sidebar-dropdown-email'>
                     {{ data.home.emailForm?.emailText }}
                   </div>
                   <div ref='dropdown' v-if='data.links.linkArray' class='sidebar-dropdown-content'
