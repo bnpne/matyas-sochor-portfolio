@@ -199,7 +199,7 @@ onMounted(() => {
   overflow-x: hidden;
 
   @include mobile {
-    padding: mobile-vw(6px);
+    padding: mobile-vw(6px) mobile-vw(6px) 0;
     padding-top: mobile-vw(86px);
   }
 
