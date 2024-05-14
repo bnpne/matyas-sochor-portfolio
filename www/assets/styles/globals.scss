@@ -9,12 +9,13 @@
 //   overscroll-behavior: none;
 // }
 html {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   height: 100%;
 }
 
 body {
-  overflow: auto;
+  overflow: scroll;
   min-height: 100vh;
 }
 

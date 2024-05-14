@@ -14,7 +14,6 @@ body {
   min-height: 100vh;
   position: relative;
   z-index: 1;
-  box-sizing: border-box;
   // overscroll-behavior: none;
 
   @include mobile() {
