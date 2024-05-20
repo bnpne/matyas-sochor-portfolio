@@ -85,7 +85,12 @@ defineProps(['data'])
 
         @include mobile() {
           width: auto;
+          gap: mobile-vw(10px);
         }
+      }
+
+      @include mobile() {
+        gap: mobile-vw(14px);
       }
     }
   }

@@ -555,18 +555,31 @@ onBeforeUnmount(() => {
       overflow: hidden;
       min-height: desktop-vw(800px);
 
-      @include mobile() {}
+      @include mobile() {
+        height: 100%;
+        min-height: mobile-vw(600px);
+      }
 
       &>img {
         @include image-default();
         object-fit: cover;
         min-height: desktop-vw(800px);
+
+        @include mobile() {
+          height: 100%;
+          min-height: mobile-vw(600px);
+        }
       }
 
       &>video {
         @include image-default();
         object-fit: cover;
         min-height: desktop-vw(800px);
+
+        @include mobile() {
+          height: 100%;
+          min-height: mobile-vw(600px);
+        }
       }
 
       &-overlay {
