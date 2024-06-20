@@ -67,6 +67,9 @@ watch([() => store.isFetched, () => loading.value], async () => {
     if (video.value) {
       toRaw(video.value).forEach(v => {
         v.currentTime = 0
+        v.autoplay = true
+        v.playsinline = true
+        console.log(v)
         v.load()
       })
     }
@@ -159,7 +162,12 @@ onBeforeUnmount(() => {
             <template v-else-if="project.projectCaseImage?.projectCaseSelection === 'video'">
               <SanityFile :asset-id="project.projectCaseImage?.video.asset?._ref">
                 <template #default="{ src }">
-                  <video ref='video' class='s' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                  <video ref='video' :data-src='src' class='s' autoplay='true' playsinline='true'
+                    crossorigin="anonymous" loop='true' muted>
+                    <source :src='src'>
+                    </source>
+                  </video>
+
                 </template>
               </SanityFile>
             </template>
@@ -171,20 +179,23 @@ onBeforeUnmount(() => {
               </p>
               <p v-if='project.projectDetails?.awards'>{{ project.projectDetails?.awards.length }} Awards</p>
               <p v-else>
-                <span>{{ project.projectDetails?.agencies[0] }}</span>
-                <span v-if='project.projectDetails?.agencies.length > 1'>
-                  +{{ project.projectDetails?.agencies.length - 1 }}
-                </span>
+                <template v-if='project.projectDetails?.agencies'>
+
+                  <span v-if='project.projectDetails?.agencies'>{{ project.projectDetails?.agencies[0] }}</span>
+                  <span v-if='project.projectDetails?.agencies.length > 1'>
+                    +{{ project.projectDetails?.agencies.length - 1 }}
+                  </span>
+                </template>
               </p>
             </div>
             <div class='home-project-details-snippet'>
               <div class='home-project-details-snippet-mask'>
                 <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
-            project.projectSnippet
-          }}</p>
+                  project.projectSnippet
+                }}</p>
                 <p ref='snippets' v-if='project.projectSnippet' class='home-project-details-snippet-text'>{{
-            project.projectSnippet
-          }}</p>
+                  project.projectSnippet
+                }}</p>
               </div>
             </div>
           </div>

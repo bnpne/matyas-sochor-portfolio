@@ -9,7 +9,7 @@
     "preview": "nuxt preview"
   },
   "dependencies": {
-    "@nuxtjs/sanity": "^1.8.3",
+    "@nuxtjs/sanity": "^1.11.3",
     "@pinia/nuxt": "^0.5.1",
     "@portabletext/vue": "^1.0.11",
     "@sanity/client": "^6.15.1",
