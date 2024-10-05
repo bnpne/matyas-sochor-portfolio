@@ -9,7 +9,7 @@ export default defineType({
       title: 'Project Title',
       name: 'projectTitle',
       type: 'string',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Project Slug',
@@ -17,7 +17,7 @@ export default defineType({
       type: 'slug',
       description:
         'The slug is the url extension. Please hyphenate and leave no spaces. For example "pebble-life" will appear as "example.com/pebble-life"',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Project Type',
@@ -31,22 +31,21 @@ export default defineType({
         ],
       },
       initialValue: 'selectedProject',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Project Snippet',
       name: 'projectSnippet',
-      description:
-        'This snippet appears on the home page in its respective card',
+      description: 'This snippet appears on the home page in its respective card',
       type: 'string',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Project Card Image',
       name: 'projectCardImage',
       description: 'Image that appears on the card on the nav sidebar',
       type: 'image',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       // title: 'Project Case Image',
@@ -59,7 +58,7 @@ export default defineType({
       type: 'object',
       fields: [
         defineField({
-          title: 'Image or Video',
+          title: 'Image, Video, or Embed (Vimeo)',
           type: 'string',
           name: 'projectCaseSelection',
           options: {
@@ -67,6 +66,7 @@ export default defineType({
             list: [
               {title: 'Image', value: 'image'},
               {title: 'Video', value: 'video'},
+              {title: 'Vimeo', value: 'vimeo'},
             ],
           },
         }),
@@ -82,21 +82,27 @@ export default defineType({
           name: 'video',
           hidden: ({parent}) => parent?.projectCaseSelection !== 'video',
         }),
+        defineField({
+          title: 'Vimeo',
+          type: 'url',
+          description: 'Vimeo Url',
+          name: 'vimeo',
+          hidden: ({parent}) => parent?.projectCaseSelection !== 'vimeo',
+        }),
       ],
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Project Detail Image',
       name: 'projectDetailImage',
       type: 'image',
-      description:
-        'The image that appears on the project detail hero, rather than the home page.',
+      description: 'The image that appears on the project detail hero, rather than the home page.',
     }),
     defineField({
       title: 'Project Filters',
       name: 'projectFilters',
       type: 'filters',
-      validation: rule => rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Notifications',

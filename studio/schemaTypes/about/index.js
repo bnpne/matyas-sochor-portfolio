@@ -41,7 +41,7 @@ export default defineType({
                   title: 'School',
                   name: 'school',
                   type: 'string',
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'School Link',
@@ -52,21 +52,20 @@ export default defineType({
                   title: 'School Location',
                   name: 'schoolLocation',
                   type: 'string',
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Currently Attending',
                   name: 'currentlyAttending',
                   type: 'boolean',
                   initialValue: false,
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'School Date',
                   name: 'schoolDate',
                   type: 'date',
-                  hidden: ({parent, value}) =>
-                    !value && parent?.currentlyAttending,
+                  hidden: ({parent, value}) => !value && parent?.currentlyAttending,
                   options: {
                     dateFormat: 'YYYY',
                   },
@@ -89,7 +88,7 @@ export default defineType({
                   title: 'Job',
                   name: 'job',
                   type: 'string',
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Job Link',
@@ -113,14 +112,14 @@ export default defineType({
                   options: {
                     dateFormat: 'YYYY',
                   },
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Current Job',
                   name: 'currentJob',
                   type: 'boolean',
                   initialValue: false,
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Job End Date',
@@ -150,7 +149,7 @@ export default defineType({
                   title: 'Award',
                   name: 'award',
                   type: 'string',
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Award Link',
@@ -164,7 +163,7 @@ export default defineType({
                   options: {
                     dateFormat: 'YYYY',
                   },
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
               ],
             }),
@@ -179,7 +178,7 @@ export default defineType({
               title: 'Software',
               name: 'software',
               type: 'string',
-              validation: rule => rule.required(),
+              validation: (rule) => rule.required(),
             }),
           ],
         }),
@@ -197,7 +196,7 @@ export default defineType({
                   title: 'Project Title',
                   name: 'projectTitle',
                   type: 'string',
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Project Link',
@@ -211,7 +210,7 @@ export default defineType({
                   options: {
                     list: ['Project', 'Collaboration'],
                   },
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
                 defineField({
                   title: 'Project Date',
@@ -220,7 +219,7 @@ export default defineType({
                   options: {
                     dateFormat: 'YYYY',
                   },
-                  validation: rule => rule.required(),
+                  validation: (rule) => rule.required(),
                 }),
               ],
             }),
@@ -234,7 +233,7 @@ export default defineType({
       type: 'object',
       fields: [
         defineField({
-          title: 'Image or Video',
+          title: 'Image, Video, or Embed (Vimeo)',
           type: 'string',
           name: 'footerImageSelection',
           options: {
@@ -242,6 +241,7 @@ export default defineType({
             list: [
               {title: 'Image', value: 'image'},
               {title: 'Video', value: 'video'},
+              {title: 'Vimeo', value: 'vimeo'},
             ],
           },
         }),
@@ -256,6 +256,13 @@ export default defineType({
           type: 'file',
           name: 'video',
           hidden: ({parent}) => parent?.footerImageSelection !== 'video',
+        }),
+        defineField({
+          title: 'Vimeo',
+          type: 'url',
+          description: 'Vimeo Url',
+          name: 'vimeo',
+          hidden: ({parent}) => parent?.footerImageSelection !== 'vimeo',
         }),
       ],
     }),
