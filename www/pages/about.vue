@@ -1,240 +1,360 @@
-<script setup lang='ts'>
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+<script setup lang="ts">
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 definePageMeta({
   pageTransition: {
     css: false,
-    name: 'about',
-    mode: 'out-in',
+    name: "about",
+    mode: "out-in",
     onEnter(el, done) {
-      const app = useNuxtApp()
+      const app = useNuxtApp();
 
       const tl = gsap.timeline({
-        defaults: { duration: 1, ease: 'circ.out' },
+        defaults: { duration: 1, ease: "circ.out" },
         onComplete: () => {
-          app.$scrollStart()
-          done()
-        }
-      })
+          app.$scrollStart();
+          done();
+        },
+      });
 
-      tl.to('.t-o', { opacity: 0, duration: .75, delay: .25, ease: 'circ.out', onComplete: app.$scrollToTop() })
+      tl.to(".t-o", {
+        opacity: 0,
+        duration: 0.75,
+        delay: 0.25,
+        ease: "circ.out",
+        onComplete: app.$scrollToTop(),
+      });
     },
     onLeave(el, done) {
-      const app = useNuxtApp()
-      app.$scrollStop()
-      gsap.to('.t-o', { opacity: 1, duration: .75, ease: 'circ.out', onComplete: () => { done() } })
+      const app = useNuxtApp();
+      app.$scrollStop();
+      gsap.to(".t-o", {
+        opacity: 1,
+        duration: 0.75,
+        ease: "circ.out",
+        onComplete: () => {
+          done();
+        },
+      });
     },
   },
-})
+});
 
-const app = useNuxtApp()
-const { isMobile } = useDevice()
-const store = useData()
-const { data } = storeToRefs(store)
-const loading = ref(true)
-const cleanBio = reactive({ value: null })
-const trunc = reactive({ value: null })
-const readMore = ref(false)
-const video = ref(null)
+const app = useNuxtApp();
+const { isMobile } = useDevice();
+const store = useData();
+const { data } = storeToRefs(store);
+const loading = ref(true);
+const cleanBio = reactive({ value: null });
+const trunc = reactive({ value: null });
+const readMore = ref(false);
+const video = ref(null);
 // const query = groq`*[_type == 'about'][0]`
 // const linkQuery = groq`*[_type == 'links'][0].linkArray`
 // const { data: about } = useSanityQuery(query)
 // const { data: links } = useSanityQuery(linkQuery)
 
 const read = () => {
-  readMore.value ? readMore.value = false : readMore.value = true
-}
+  readMore.value ? (readMore.value = false) : (readMore.value = true);
+};
 
 watch([() => store.isFetched, () => loading.value], async () => {
   if (!loading || store.isFetched) {
     useHead({
-      title: 'About | Matyas Sochor'
-    })
+      title: "About | Matyas Sochor",
+    });
 
-    await nextTick()
-    app.$scrollStart()
+    await nextTick();
+    app.$scrollStart();
 
     if (video.value) {
-      video.value.currentTime = 0
-      video.value.load()
+      video.value.currentTime = 0;
+      video.value.load();
     }
 
     if (isMobile) {
-      let t = gsap.utils.toArray('.temp-bio')[0]
-      cleanBio.value = t.innerHTML.replace(/<\/?[^>]+(>|$)/g, "")
-      let length = cleanBio.value.split('').length
-      let median = Math.floor(length / 2) - 30
-      trunc.value = cleanBio.value.slice(0, median)
+      let t = gsap.utils.toArray(".temp-bio")[0];
+      cleanBio.value = t.innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+      let length = cleanBio.value.split("").length;
+      let median = Math.floor(length / 2) - 30;
+      trunc.value = cleanBio.value.slice(0, median);
     }
 
     // console.log(cleanBio.value, splt)
 
-    ScrollTrigger.refresh(true)
+    ScrollTrigger.refresh(true);
     /// Fade In
-    let animaFade = gsap.utils.toArray('.anima-fade')
-    animaFade.forEach(f => {
+    let animaFade = gsap.utils.toArray(".anima-fade");
+    animaFade.forEach((f) => {
       gsap.from(f.children, {
         opacity: 0,
-        y: '80%',
+        y: "80%",
         duration: 1,
-        ease: 'circ.out',
-        stagger: .17,
+        ease: "circ.out",
+        stagger: 0.17,
         scrollTrigger: {
           trigger: f,
-          start: 'top 95%',
-        }
-      })
-    })
+          start: "top 95%",
+        },
+      });
+    });
 
     /// Scale
-    let animaScale = gsap.utils.toArray('.anima-scale')
-    animaScale.forEach(s => {
-      let img = gsap.utils.toArray('.a', s)
+    let animaScale = gsap.utils.toArray(".anima-scale");
+    animaScale.forEach((s) => {
+      let img = gsap.utils.toArray(".a", s);
       gsap.from(img, {
         scale: 1.1,
-        ease: 'circ.out',
-        stagger: .17,
+        ease: "circ.out",
+        stagger: 0.17,
         duration: 1.5,
         scrollTrigger: {
           trigger: s,
-          start: 'top 95%',
-        }
-      })
-    })
+          start: "top 95%",
+        },
+      });
+    });
 
     /// Divider
-    let animaDivider = gsap.utils.toArray('.anima-divider')
-    animaDivider.forEach(d => {
+    let animaDivider = gsap.utils.toArray(".anima-divider");
+    animaDivider.forEach((d) => {
       gsap.from(d.children, {
-        width: '0%',
-        ease: 'circ.out',
-        stagger: .17,
+        width: "0%",
+        ease: "circ.out",
+        stagger: 0.17,
         duration: 1.5,
         scrollTrigger: {
           trigger: d,
-          start: 'top 95%',
-        }
-      })
-    })
+          start: "top 95%",
+        },
+      });
+    });
   }
-})
+});
 
 onMounted(() => {
-  loading.value = false
-})
+  loading.value = false;
+});
 
 onBeforeUnmount(() => {
   // Revert gsap context
   // ScrollTrigger.killAll()
-})
+});
 </script>
 
 <template>
-  <div class='about' id='page'>
-    <NuxtLayout name='page'>
-      <div v-if='data' class='about-container'>
-        <div class='about-container-flex'>
-          <div v-if='!isMobile' class='about-avatar'>
-            <ul class='about-avatar-list anima-fade'>
+  <div class="about" id="page">
+    <NuxtLayout name="page">
+      <div v-if="data" class="about-container">
+        <div class="about-container-flex">
+          <div v-if="!isMobile" class="about-avatar">
+            <ul class="about-avatar-list anima-fade">
               <li>
                 <nuxt-link
-                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                  class='about-avatar-list-link'>
+                  :to="{
+                    path: '/feed',
+                    query: {
+                      filter: 'Projects;Experiments;',
+                      project: '',
+                      experiment: '',
+                    },
+                  }"
+                  class="about-avatar-list-link"
+                >
                   Website
                 </nuxt-link>
               </li>
               <li>
                 <nuxt-link
-                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                  class='about-avatar-list-link'>
+                  :to="{
+                    path: '/feed',
+                    query: {
+                      filter: 'Projects;Experiments;',
+                      project: '',
+                      experiment: '',
+                    },
+                  }"
+                  class="about-avatar-list-link"
+                >
                   Identity
                 </nuxt-link>
               </li>
               <li>
                 <nuxt-link
-                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                  class='about-avatar-list-link'>
+                  :to="{
+                    path: '/feed',
+                    query: {
+                      filter: 'Projects;Experiments;',
+                      project: '',
+                      experiment: '',
+                    },
+                  }"
+                  class="about-avatar-list-link"
+                >
                   Branding
                 </nuxt-link>
               </li>
               <li>
                 <nuxt-link
-                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                  class='about-avatar-list-link'>
+                  :to="{
+                    path: '/feed',
+                    query: {
+                      filter: 'Projects;Experiments;',
+                      project: '',
+                      experiment: '',
+                    },
+                  }"
+                  class="about-avatar-list-link"
+                >
                   Motion
                 </nuxt-link>
               </li>
               <li>
                 <nuxt-link
-                  :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                  class='about-avatar-list-link'>
+                  :to="{
+                    path: '/feed',
+                    query: {
+                      filter: 'Projects;Experiments;',
+                      project: '',
+                      experiment: '',
+                    },
+                  }"
+                  class="about-avatar-list-link"
+                >
                   Print
                 </nuxt-link>
               </li>
             </ul>
-            <div v-if='data?.about.bioImage' class='about-avatar-image'>
-              <span class='anima-fade'>
-                <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000' fit='clip' />
+            <div v-if="data?.about.bioImage" class="about-avatar-image">
+              <span class="anima-fade">
+                <SanityImage
+                  class="a"
+                  :asset-id="data?.about.bioImage.asset?._ref"
+                  auto="format"
+                  w="2000"
+                  fit="clip"
+                />
               </span>
             </div>
           </div>
-          <div class='about-info'>
-            <div v-if='data?.about.bio' class='about-info-bio anima-fade'>
-              <div class='temp-bio'>
-                <SanityContent :blocks='data?.about.bio' />
+          <div class="about-info">
+            <div v-if="data?.about.bio" class="about-info-bio anima-fade">
+              <div class="temp-bio">
+                <SanityContent :blocks="data?.about.bio" />
               </div>
-              <template v-if='!isMobile'>
-                <SanityContent v-if='!cleanBio.value' :blocks='data?.about.bio' />
+              <template v-if="!isMobile">
+                <SanityContent
+                  v-if="!cleanBio.value"
+                  :blocks="data?.about.bio"
+                />
               </template>
               <template v-else>
-                <template v-if='!trunc.value'>
-                  <SanityContent class='bio-main' :blocks='data?.about.bio' />
+                <template v-if="!trunc.value">
+                  <SanityContent class="bio-main" :blocks="data?.about.bio" />
                 </template>
                 <template v-else>
-                  <SanityContent class='bio-main' v-if='readMore' :blocks='data?.about.bio' />
-                  <p v-if='!readMore' class='about-info-bio-trunc'>{{ trunc.value }}</p>
-                  <div class='about-info-bio-readMore'>
-                    <p @click='read' v-if='!readMore' class='about-info-bio-readMore-el'>Read More</p>
-                    <p @click='read' v-if='readMore' class='about-info-bio-readMore-el active'>Read Less</p>
+                  <SanityContent
+                    class="bio-main"
+                    v-if="readMore"
+                    :blocks="data?.about.bio"
+                  />
+                  <p v-if="!readMore" class="about-info-bio-trunc">
+                    {{ trunc.value }}
+                  </p>
+                  <div class="about-info-bio-readMore">
+                    <p
+                      @click="read"
+                      v-if="!readMore"
+                      class="about-info-bio-readMore-el"
+                    >
+                      Read More
+                    </p>
+                    <p
+                      @click="read"
+                      v-if="readMore"
+                      class="about-info-bio-readMore-el active"
+                    >
+                      Read Less
+                    </p>
                   </div>
                 </template>
               </template>
             </div>
-            <div v-if='isMobile' class='about-avatar'>
-              <ul class='about-avatar-list anima-fade'>
+            <div v-if="isMobile" class="about-avatar">
+              <ul class="about-avatar-list anima-fade">
                 <li>
                   <nuxt-link
-                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                    class='about-avatar-list-link'>
+                    :to="{
+                      path: '/feed',
+                      query: {
+                        filter: 'Projects;Experiments;',
+                        project: '',
+                        experiment: '',
+                      },
+                    }"
+                    class="about-avatar-list-link"
+                  >
                     Website
                   </nuxt-link>
                 </li>
                 <li>
                   <nuxt-link
-                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                    class='about-avatar-list-link'>
+                    :to="{
+                      path: '/feed',
+                      query: {
+                        filter: 'Projects;Experiments;',
+                        project: '',
+                        experiment: '',
+                      },
+                    }"
+                    class="about-avatar-list-link"
+                  >
                     Identity
                   </nuxt-link>
                 </li>
                 <li>
                   <nuxt-link
-                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                    class='about-avatar-list-link'>
+                    :to="{
+                      path: '/feed',
+                      query: {
+                        filter: 'Projects;Experiments;',
+                        project: '',
+                        experiment: '',
+                      },
+                    }"
+                    class="about-avatar-list-link"
+                  >
                     Branding
                   </nuxt-link>
                 </li>
                 <li>
                   <nuxt-link
-                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                    class='about-avatar-list-link'>
+                    :to="{
+                      path: '/feed',
+                      query: {
+                        filter: 'Projects;Experiments;',
+                        project: '',
+                        experiment: '',
+                      },
+                    }"
+                    class="about-avatar-list-link"
+                  >
                     Motion
                   </nuxt-link>
                 </li>
                 <li>
                   <nuxt-link
-                    :to='{ path: "/feed", query: { filter: "Projects;Experiments;", project: "", experiment: "" } }'
-                    class='about-avatar-list-link'>
+                    :to="{
+                      path: '/feed',
+                      query: {
+                        filter: 'Projects;Experiments;',
+                        project: '',
+                        experiment: '',
+                      },
+                    }"
+                    class="about-avatar-list-link"
+                  >
                     Print
                   </nuxt-link>
                 </li>
@@ -258,61 +378,117 @@ onBeforeUnmount(() => {
               <!--     <NuxtLink to='/feed'>Print</NuxtLink> -->
               <!--   </li> -->
               <!-- </ul> -->
-              <div v-if='data?.about.bioImage' class='about-avatar-image'>
-                <span class='anima-scale'>
-                  <SanityImage class='a' :asset-id='data?.about.bioImage.asset?._ref' auto='format' w='2000'
-                    fit='clip' />
+              <div v-if="data?.about.bioImage" class="about-avatar-image">
+                <span class="anima-scale">
+                  <SanityImage
+                    class="a"
+                    :asset-id="data?.about.bioImage.asset?._ref"
+                    auto="format"
+                    w="2000"
+                    fit="clip"
+                  />
                 </span>
               </div>
             </div>
-            <template v-if='!isMobile'>
-              <ImageCarousel v-if='data?.about.imageCarousel' containerClass='about-info-carousel'
-                slideClass='about-info-carousel-image' :images='data?.about.imageCarousel' />
+            <template v-if="!isMobile">
+              <ImageCarousel
+                v-if="data?.about.imageCarousel"
+                containerClass="about-info-carousel"
+                slideClass="about-info-carousel-image"
+                :images="data?.about.imageCarousel"
+              />
             </template>
-            <div v-if='data?.about.resume' class='about-info-resume'>
-              <EducationItem v-if='data?.about.resume.educationList' :data='data?.about.resume.educationList' />
-              <ExperienceItem v-if='data?.about.resume.experienceList' :data='data?.about.resume.experienceList' />
-              <RecognitionItem v-if='data?.about.resume.recognitionList' :data='data?.about.resume.recognitionList' />
-              <SoftwareItem v-if='data?.about.resume.softwareList' :data='data?.about.resume.softwareList' />
-              <SelectedProjectsItem v-if='data?.about.resume.selectedAndCollaborations'
-                :data='data?.about.resume.selectedAndCollaborations' />
+            <div v-if="data?.about.resume" class="about-info-resume">
+              <EducationItem
+                v-if="data?.about.resume.educationList"
+                :data="data?.about.resume.educationList"
+              />
+              <ExperienceItem
+                v-if="data?.about.resume.experienceList"
+                :data="data?.about.resume.experienceList"
+              />
+              <RecognitionItem
+                v-if="data?.about.resume.recognitionList"
+                :data="data?.about.resume.recognitionList"
+              />
+              <SoftwareItem
+                v-if="data?.about.resume.softwareList"
+                :data="data?.about.resume.softwareList"
+              />
+              <SelectedProjectsItem
+                v-if="data?.about.resume.selectedAndCollaborations"
+                :data="data?.about.resume.selectedAndCollaborations"
+              />
             </div>
           </div>
         </div>
-        <div class='about-footer'>
-          <div v-if='data?.about.footerImage' class='about-footer-image anima-scale'>
-            <div class='about-footer-image-overlay'></div>
-            <SanityImage class='a' v-if='data?.about?.footerImage?.image'
-              :asset-id="data?.about?.footerImage?.image.asset?._ref" auto="format" w='2000' fit='clip' />
+        <div class="about-footer">
+          <div
+            v-if="data?.about.footerImage"
+            class="about-footer-image anima-scale"
+          >
+            <div class="about-footer-image-overlay"></div>
+            <SanityImage
+              class="a"
+              v-if="data?.about?.footerImage?.image"
+              :asset-id="data?.about?.footerImage?.image.asset?._ref"
+              auto="format"
+              w="2000"
+              fit="clip"
+            />
             <!-- todo fix video -->
-            <SanityFile v-else-if='data?.about?.footerImage?.video'
-              :asset-id="data?.about?.footerImage?.video.asset?._ref">
+            <SanityFile
+              v-else-if="data?.about?.footerImage?.video"
+              :asset-id="data?.about?.footerImage?.video.asset?._ref"
+            >
               <template #default="{ src }">
-                <video ref='video' class='a' autoplay='true' playsinline='true' loop='true' muted :src='src'></video>
+                <video
+                  ref="video"
+                  class="a"
+                  autoplay="true"
+                  playsinline="true"
+                  loop="true"
+                  muted
+                  :src="src"
+                ></video>
               </template>
             </SanityFile>
-            <div class='about-footer-image-text'>
+            <div class="about-footer-image-text">
               <p>Let's create something extraordinary together.</p>
-              <NuxtLink class='about-footer-image-text-button' to='mailto:matyas@sochor.xyz' target='_blank'>Let's
-                Chat
+              <NuxtLink
+                class="about-footer-image-text-button"
+                to="mailto:matyas@sochor.xyz"
+                target="_blank"
+                >Let's Chat
               </NuxtLink>
             </div>
           </div>
-          <div class='about-footer-links'>
-            <div class='about-footer-link'>
-              <NuxtLink to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
+          <div class="about-footer-links">
+            <div class="about-footer-link">
+              <NuxtLink to="mailto:matyas@sochor.xyz"
+                >matyas@sochor.xyz</NuxtLink
+              >
             </div>
-            <div v-if='data.links' class='about-footer-linkList'>
-              <NuxtLink class='about-footer-linkList-el' target='_blank' v-for='link in data.links?.linkArray'
-                :to='link.linkURL'>
+            <div v-if="data.links" class="about-footer-linkList">
+              <NuxtLink
+                class="about-footer-linkList-el"
+                target="_blank"
+                v-for="link in data.links?.linkArray"
+                :to="link.pdf ? link.pdf.asset.url : link.linkURL"
+              >
                 {{ link.linkText }}
               </NuxtLink>
-              <NuxtLink class='about-footer-linkList-el lets-chat' to='mailto:matyas@sochor.xyz'>
+              <NuxtLink
+                class="about-footer-linkList-el lets-chat"
+                to="mailto:matyas@sochor.xyz"
+              >
                 Let's Chat
               </NuxtLink>
             </div>
-            <div class='about-footer-copyright'>
-              <NuxtLink v-if='isMobile' to='mailto:matyas@sochor.xyz'>matyas@sochor.xyz</NuxtLink>
+            <div class="about-footer-copyright">
+              <NuxtLink v-if="isMobile" to="mailto:matyas@sochor.xyz"
+                >matyas@sochor.xyz</NuxtLink
+              >
               <p>©Matyas Sochor 2024</p>
             </div>
           </div>
@@ -322,7 +498,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style lang='scss'>
+<style lang="scss">
 .temp-bio {
   display: none;
   visibility: hidden;
@@ -390,7 +566,6 @@ onBeforeUnmount(() => {
           color: $black75;
         }
       }
-
     }
 
     &-image {
@@ -403,12 +578,12 @@ onBeforeUnmount(() => {
         top: 0;
       }
 
-      &>span {
+      & > span {
         display: flex;
         flex-direction: column;
       }
 
-      &>img {
+      & > img {
         flex-grow: 1;
         vertical-align: top;
         @include image-default();
@@ -463,7 +638,7 @@ onBeforeUnmount(() => {
         text-overflow: ellipsis;
 
         &::after {
-          content: '...'
+          content: "...";
         }
       }
 
@@ -472,7 +647,6 @@ onBeforeUnmount(() => {
         @include small-type();
         color: $black50;
 
-
         &-el {
           width: auto;
           display: flex;
@@ -480,12 +654,12 @@ onBeforeUnmount(() => {
           position: relative;
 
           &::after {
-            content: '+';
+            content: "+";
             position: absolute;
             top: 0;
             font-size: mobile-vw(13px);
             left: calc(100% + 6px);
-            color: rgba(30, 30, 30, .5);
+            color: rgba(30, 30, 30, 0.5);
             transition: transform 300ms ease-out;
 
             @include mobile() {
@@ -500,7 +674,6 @@ onBeforeUnmount(() => {
           }
         }
       }
-
     }
 
     &-carousel {
@@ -515,7 +688,7 @@ onBeforeUnmount(() => {
         display: inline-block;
         max-width: desktop-vw(848px);
 
-        &>img {
+        & > img {
           @include image-default();
           // object-fit: contain;
           max-height: desktop-vw(560px);
@@ -560,7 +733,7 @@ onBeforeUnmount(() => {
         min-height: mobile-vw(600px);
       }
 
-      &>img {
+      & > img {
         @include image-default();
         object-fit: cover;
         min-height: desktop-vw(800px);
@@ -571,7 +744,7 @@ onBeforeUnmount(() => {
         }
       }
 
-      &>video {
+      & > video {
         @include image-default();
         object-fit: cover;
         min-height: desktop-vw(800px);
@@ -586,8 +759,20 @@ onBeforeUnmount(() => {
         position: absolute;
         height: 100%;
         width: 100%;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%),
-          linear-gradient(180deg, rgba(0, 0, 0, 0.3) 16.69%, rgba(0, 0, 0, 0) 50.43%, rgba(0, 0, 0, 0) 77.51%, rgba(0, 0, 0, 0.44) 99.58%);
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.3) 16.69%,
+            rgba(0, 0, 0, 0) 50.43%,
+            rgba(0, 0, 0, 0) 77.51%,
+            rgba(0, 0, 0, 0.44) 99.58%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.3) 16.69%,
+            rgba(0, 0, 0, 0) 50.43%,
+            rgba(0, 0, 0, 0) 77.51%,
+            rgba(0, 0, 0, 0.44) 99.58%
+          );
       }
 
       &-text {
@@ -604,16 +789,15 @@ onBeforeUnmount(() => {
           left: mobile-vw(14px);
           max-width: mobile-vw(300px);
           gap: mobile-vw(20px);
-
         }
 
-        &>p {
+        & > p {
           @include medium-type();
           line-height: desktop-vw(40px);
           color: $white;
         }
 
-        &>a {
+        & > a {
           display: inline-block;
           @include button-default-white();
           width: fit-content;
@@ -652,7 +836,7 @@ onBeforeUnmount(() => {
         display: none;
       }
 
-      &>a {
+      & > a {
         &:hover {
           color: $black75;
         }
@@ -670,7 +854,7 @@ onBeforeUnmount(() => {
         max-width: none;
       }
 
-      &>a {
+      & > a {
         &:hover {
           color: $black75;
         }
@@ -679,7 +863,7 @@ onBeforeUnmount(() => {
       &-el {
         &:not(:last-child, &.lets-chat) {
           &::after {
-            content: url('~/assets/svg/link-dot.svg');
+            content: url("~/assets/svg/link-dot.svg");
             margin-left: desktop-vw(5px);
             margin-right: desktop-vw(8px);
             vertical-align: top;
@@ -696,7 +880,7 @@ onBeforeUnmount(() => {
 
         &.lets-chat {
           &::after {
-            content: url('~/assets/svg/link-arrow-gray.svg');
+            content: url("~/assets/svg/link-arrow-gray.svg");
             color: $black50;
             width: desktop-vw(8px);
             height: desktop-vw(8px);
@@ -730,7 +914,7 @@ onBeforeUnmount(() => {
       justify-content: flex-end;
 
       @include mobile() {
-        &>a {
+        & > a {
           color: $black;
         }
 
@@ -739,7 +923,6 @@ onBeforeUnmount(() => {
         align-items: flex-end;
         justify-content: flex-end;
       }
-
     }
   }
 }

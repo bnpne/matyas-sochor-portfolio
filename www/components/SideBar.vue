@@ -1,131 +1,226 @@
-<script setup lang='ts'>
-import Lenis from 'lenis'
-import R from '~/utils/R'
-import gsap from 'gsap'
+<script setup lang="ts">
+import Lenis from "lenis";
+import R from "~/utils/R";
+import gsap from "gsap";
 
-const store = useData()
-const { data } = storeToRefs(store)
+const store = useData();
+const { data } = storeToRefs(store);
 
-const wrapper = ref()
-const container = ref()
-const dropdown = ref()
-const toggler = ref()
-const toggle = ref()
-const isOpen = ref(false)
-const toggleIsOpen = reactive({ isOpen: false })
-const { isMobile, isDesktop } = useDevice()
-const device = useDevice()
-const hide = ref(false)
-const route = useRoute()
-const mobileDropdown = ref()
+const wrapper = ref();
+const container = ref();
+const dropdown = ref();
+const toggler = ref();
+const toggle = ref();
+const isOpen = ref(false);
+const toggleIsOpen = reactive({ isOpen: false });
+const { isMobile, isDesktop } = useDevice();
+const device = useDevice();
+const hide = ref(false);
+const route = useRoute();
+const mobileDropdown = ref();
 
 const openToggle = () => {
   if (toggleIsOpen.isOpen) {
-    toggleIsOpen.isOpen = false
-    toggler.value.classList.toggle('open')
-    toggle.value.classList.toggle('open')
+    toggleIsOpen.isOpen = false;
+    toggler.value.classList.toggle("open");
+    toggle.value.classList.toggle("open");
+  } else {
+    toggleIsOpen.isOpen = true;
+    toggler.value.classList.toggle("open");
+    toggle.value.classList.toggle("open");
   }
-  else {
-    toggleIsOpen.isOpen = true
-    toggler.value.classList.toggle('open')
-    toggle.value.classList.toggle('open')
-  }
-}
+};
 
 const dropdownOver = () => {
-  isOpen.value = true
-}
+  isOpen.value = true;
+};
 
 const dropdownLeave = () => {
-  isOpen.value = false
-}
+  isOpen.value = false;
+};
 
 const mobileDropdownToggle = () => {
   if (!isOpen.value) {
-    isOpen.value = true
-    mobileDropdown.value.classList.toggle('active')
+    isOpen.value = true;
+    mobileDropdown.value.classList.toggle("active");
   } else {
-    isOpen.value = false
-    mobileDropdown.value.classList.toggle('active')
+    isOpen.value = false;
+    mobileDropdown.value.classList.toggle("active");
   }
-}
+};
+
+watch(
+  () => data.value,
+  () => {
+    console.log(data.value);
+  }
+);
 
 onMounted(() => {
   if (!isMobile) {
     const lenis = new Lenis({
       wrapper: wrapper.value!,
-      content: container.value!
-    })
+      content: container.value!,
+    });
 
     // @ts-ignore
-    R.add(time => {
-      lenis.raf(time)
-    }, 0)
+    R.add((time) => {
+      lenis.raf(time);
+    }, 0);
   }
-
-})
+});
 </script>
 
 <template>
-  <section ref="wrapper" class='sidebar'>
+  <section ref="wrapper" class="sidebar">
     <ClientOnly>
-      <div v-if='isMobile' class='sidebar-overlay' :class='{ open: toggleIsOpen.isOpen }'></div>
-      <div v-if='data' class='sidebar-avatar'>
-        <div class='sidebar-avatar-container'>
-          <div class='sidebar-avatar-info' :class='{ open: toggleIsOpen.isOpen }'>
-            <NuxtLink to='/' v-if='data.home.avatar' class='sidebar-avatar-info-img'>
-              <SanityImage :asset-id="data.home.avatar?.asset?._ref" auto='format' w='300' />
+      <div
+        v-if="isMobile"
+        class="sidebar-overlay"
+        :class="{ open: toggleIsOpen.isOpen }"
+      ></div>
+      <div v-if="data" class="sidebar-avatar">
+        <div class="sidebar-avatar-container">
+          <div
+            class="sidebar-avatar-info"
+            :class="{ open: toggleIsOpen.isOpen }"
+          >
+            <NuxtLink
+              to="/"
+              v-if="data.home.avatar"
+              class="sidebar-avatar-info-img"
+            >
+              <SanityImage
+                :asset-id="data.home.avatar?.asset?._ref"
+                auto="format"
+                w="300"
+              />
             </NuxtLink>
-            <div class='sidebar-avatar-info-email'>
-              <NuxtLink to="/" v-if='data.home.name' class='sidebar-avatar-info-email-text'>
+            <div class="sidebar-avatar-info-email">
+              <NuxtLink
+                to="/"
+                v-if="data.home.name"
+                class="sidebar-avatar-info-email-text"
+              >
                 {{ data.home.name }}
               </NuxtLink>
               <!-- DROPDOWN -->
-              <template v-if='!isMobile'>
-                <div @mouseover='dropdownOver' @mouseleave='dropdownLeave' class='sidebar-dropdown'>
-                  <div v-if='data.home.emailForm' class='sidebar-dropdown-email' :class='{ active: isOpen }'>
+              <template v-if="!isMobile">
+                <div
+                  @mouseover="dropdownOver"
+                  @mouseleave="dropdownLeave"
+                  class="sidebar-dropdown"
+                >
+                  <div
+                    v-if="data.home.emailForm"
+                    class="sidebar-dropdown-email"
+                    :class="{ active: isOpen }"
+                  >
                     {{ data.home.emailForm?.emailText }}
                   </div>
-                  <div ref='dropdown' v-if='data.links.linkArray' class='sidebar-dropdown-content'
-                    :class='{ active: isOpen }'>
-                    <NuxtLink v-for=' link in data.links.linkArray' :to='link.linkURL' target='_blank'
-                      class='sidebar-dropdown-link'>
-                      {{ link.linkText }}
-                    </NuxtLink>
+                  <div
+                    ref="dropdown"
+                    v-if="data.links.linkArray"
+                    class="sidebar-dropdown-content"
+                    :class="{ active: isOpen }"
+                  >
+                    <template v-for="link in data.links.linkArray">
+                      <NuxtLink
+                        :to="link.pdf ? link.pdf.asset.url : link.linkURL"
+                        target="_blank"
+                        class="sidebar-dropdown-link"
+                      >
+                        {{ link.linkText }}
+                      </NuxtLink>
+                    </template>
                   </div>
                 </div>
               </template>
-              <template v-else-if='isMobile'>
-                <div @click='mobileDropdownToggle' class='sidebar-dropdown'>
-                  <div v-if='data.home.emailForm' ref='mobileDropdown' class='sidebar-dropdown-email'>
+              <template v-else-if="isMobile">
+                <div @click="mobileDropdownToggle" class="sidebar-dropdown">
+                  <div
+                    v-if="data.home.emailForm"
+                    ref="mobileDropdown"
+                    class="sidebar-dropdown-email"
+                  >
                     {{ data.home.emailForm?.emailText }}
                   </div>
-                  <div ref='dropdown' v-if='data.links.linkArray' class='sidebar-dropdown-content'
-                    :class='{ active: isOpen }'>
-                    <NuxtLink v-for=' link in data.links.linkArray' :to='link.linkURL' class='sidebar-dropdown-link'>
-                      {{ link.linkText }}
-                    </NuxtLink>
+                  <div
+                    ref="dropdown"
+                    v-if="data.links.linkArray"
+                    class="sidebar-dropdown-content"
+                    :class="{ active: isOpen }"
+                  >
+                    <template v-for="link in data.links.linkArray">
+                      <NuxtLink
+                        :to="link.pdf ? link.pdf.asset.url : link.linkURL"
+                        :target="link.pdf ? '_blank' : ''"
+                        class="sidebar-dropdown-link"
+                      >
+                        {{ link.linkText }}
+                      </NuxtLink>
+                    </template>
                   </div>
                 </div>
               </template>
               <!-- DROPDOWN -->
             </div>
           </div>
-          <div class='sidebar-avatar-about'>
-            <NuxtLink v-if='isDesktop' to="/about" class='btn btn-third'>About Me</NuxtLink>
-            <div ref='toggler' @click='openToggle' v-else class='sidebar-toggle'>
-              <svg v-if='!toggleIsOpen.isOpen' viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.142578" y="0.25" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                <rect x="0.142578" y="3.46387" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
-                <rect x="0.142578" y="6.67871" width="12.8571" height="1.07143" fill="#1E1E1E" fill-opacity="0.75" />
+          <div class="sidebar-avatar-about">
+            <NuxtLink v-if="isDesktop" to="/about" class="btn btn-third"
+              >About Me</NuxtLink
+            >
+            <div
+              ref="toggler"
+              @click="openToggle"
+              v-else
+              class="sidebar-toggle"
+            >
+              <svg
+                v-if="!toggleIsOpen.isOpen"
+                viewBox="0 0 13 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="0.142578"
+                  y="0.25"
+                  width="12.8571"
+                  height="1.07143"
+                  fill="#1E1E1E"
+                  fill-opacity="0.75"
+                />
+                <rect
+                  x="0.142578"
+                  y="3.46387"
+                  width="12.8571"
+                  height="1.07143"
+                  fill="#1E1E1E"
+                  fill-opacity="0.75"
+                />
+                <rect
+                  x="0.142578"
+                  y="6.67871"
+                  width="12.8571"
+                  height="1.07143"
+                  fill="#1E1E1E"
+                  fill-opacity="0.75"
+                />
               </svg>
-              <svg v-else viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                v-else
+                viewBox="0 0 10 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M8.29395 9.39174L5.00056 6.09835L1.70717 9.39174L0.609376 8.29394L3.90276 5.00056L0.609375 1.70717L1.70717 0.609375L5.00056 3.90276L8.29394 0.609375L9.39174 1.70717L6.09835 5.00056L9.39174 8.29395L8.29395 9.39174Z"
-                  fill="white" />
+                  fill="white"
+                />
                 <path
                   d="M8.29395 9.39174L5.00056 6.09835L1.70717 9.39174L0.609376 8.29394L3.90276 5.00056L0.609375 1.70717L1.70717 0.609375L5.00056 3.90276L8.29394 0.609375L9.39174 1.70717L6.09835 5.00056L9.39174 8.29395L8.29395 9.39174Z"
-                  fill="white" />
+                  fill="white"
+                />
               </svg>
               <!-- <svg v-else viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg"> -->
               <!--   <path -->
@@ -136,22 +231,31 @@ onMounted(() => {
               <!--     fill="white" /> -->
               <!-- </svg> -->
             </div>
-            <div ref='toggle' v-if='isMobile' class='sidebar-toggle-menu'>
-              <div class='sidebar-toggle-menu-links'>
-                <NuxtLink @click='openToggle' to='/about'>About Me</NuxtLink>
-                <NuxtLink @click='openToggle' to='/feed'>Feed</NuxtLink>
+            <div ref="toggle" v-if="isMobile" class="sidebar-toggle-menu">
+              <div class="sidebar-toggle-menu-links">
+                <NuxtLink @click="openToggle" to="/about">About Me</NuxtLink>
+                <NuxtLink @click="openToggle" to="/feed">Feed</NuxtLink>
               </div>
             </div>
           </div>
         </div>
-        <div class='sidebar-avatar-gradient'></div>
+        <div class="sidebar-avatar-gradient"></div>
       </div>
-      <div v-if='data' ref='container' class='sidebar-container'>
-        <template v-if='route.path !== "/feed"'>
-          <SocialPost v-if='data.home.socialPost' :post='data.home.socialPost' />
-          <SelectedProjects v-if='data.home.selectedProjects' :projects='data.home.selectedProjects' />
-          <SelectedExperiments v-if='data.home.selectedExperiments' :experiments='data.home.selectedExperiments'
-            :indexStart='data.home.selectedProjects.length' />
+      <div v-if="data" ref="container" class="sidebar-container">
+        <template v-if="route.path !== '/feed'">
+          <SocialPost
+            v-if="data.home.socialPost"
+            :post="data.home.socialPost"
+          />
+          <SelectedProjects
+            v-if="data.home.selectedProjects"
+            :projects="data.home.selectedProjects"
+          />
+          <SelectedExperiments
+            v-if="data.home.selectedExperiments"
+            :experiments="data.home.selectedExperiments"
+            :indexStart="data.home.selectedProjects.length"
+          />
         </template>
         <template v-else>
           <ClientOnly>
@@ -165,7 +269,7 @@ onMounted(() => {
   </section>
 </template>
 
-<style lang='scss'>
+<style lang="scss">
 .sidebar {
   max-width: desktop-vw(372px);
 
@@ -239,9 +343,8 @@ onMounted(() => {
     &-about {
       @include small-type();
 
-      &>a {
+      & > a {
         transition: all 300ms ease-out;
-
       }
     }
 
@@ -262,7 +365,11 @@ onMounted(() => {
     &-gradient {
       height: desktop-vw(24px);
       width: 100%;
-      background: linear-gradient(180deg, #FFFFFF 32.76%, rgba(115, 115, 115, 0) 100%);
+      background: linear-gradient(
+        180deg,
+        #ffffff 32.76%,
+        rgba(115, 115, 115, 0) 100%
+      );
 
       @include mobile() {
         height: mobile-vw(24px);
@@ -276,7 +383,7 @@ onMounted(() => {
       position: relative;
 
       &.open {
-        opacity: .5;
+        opacity: 0.5;
       }
 
       @include mobile() {
@@ -294,7 +401,7 @@ onMounted(() => {
         transition: opacity 300ms ease-out;
 
         &:hover {
-          opacity: .5;
+          opacity: 0.5;
         }
 
         @include mobile() {
@@ -321,17 +428,17 @@ onMounted(() => {
 
     &-email {
       @include small-type();
-      color: rgba(30, 30, 30, .5);
+      color: rgba(30, 30, 30, 0.5);
       padding-bottom: desktop-vw(5px);
       transition: color 300ms ease-out;
 
       &::after {
-        content: '+';
+        content: "+";
         font-size: desktop-vw(16px);
         position: absolute;
         top: 0;
         left: calc(100% + 6px);
-        color: rgba(30, 30, 30, .5);
+        color: rgba(30, 30, 30, 0.5);
         transition: transform 300ms ease-out;
 
         @include mobile() {
@@ -399,14 +506,14 @@ onMounted(() => {
     height: mobile-vw(40px);
     width: mobile-vw(40px);
     border-radius: mobile-vw(100px);
-    background: #F0F1F1;
+    background: #f0f1f1;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     z-index: 5;
 
-    &>svg {
+    & > svg {
       height: mobile-vw(8px);
       width: mobile-vw(12px);
     }
@@ -417,7 +524,6 @@ onMounted(() => {
 
     &-hamburger {
       margin: 0 mobile-vw(12px);
-
     }
 
     &-index {
@@ -444,7 +550,7 @@ onMounted(() => {
       flex-direction: column;
       justify-content: flex-start;
       padding: mobile-vw(12px);
-      box-shadow: 0px 2px 12px 0px #0000001F;
+      box-shadow: 0px 2px 12px 0px #0000001f;
       position: absolute;
       top: mobile-vw(72px);
       right: mobile-vw(20px);
