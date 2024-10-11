@@ -16,6 +16,17 @@ onMounted(() => {
     let options = {
       playsinline: true,
       play_button_position: "center",
+      controls: true,
+      share: false,
+      airplay: false,
+      interactive_markers: false,
+      pip: false,
+      transcirpt: false,
+      byline: false,
+      vimeo_logo: false,
+      gesture: "media",
+      title: false,
+      transparent: false,
     };
     embed.value = new Player(vimeo.value, options);
   }
@@ -99,22 +110,29 @@ onMounted(() => {
       position: relative;
 
       iframe {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100vw;
-        height: 100vh;
-        transform: translate(-50%, -50%);
-
-        @media (min-aspect-ratio: 16/9) {
-          // /* height = 100 * (9 / 16) = 56.25 */
-          height: 56.25vw;
-        }
-        @media (max-aspect-ratio: 16/9) {
-          // /* width = 100 / (9 / 16) = 177.777777 */
-          width: 177.78vh;
-        }
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: fit-content;
       }
+
+      // iframe {
+      //   position: absolute;
+      //   top: 50%;
+      //   left: 50%;
+      //   width: 100vw;
+      //   height: 100vh;
+      //   transform: translate(-50%, -50%);
+
+      //   @media (min-aspect-ratio: 16/9) {
+      //     // /* height = 100 * (9 / 16) = 56.25 */
+      //     height: 56.25vw;
+      //   }
+      //   @media (max-aspect-ratio: 16/9) {
+      //     // /* width = 100 / (9 / 16) = 177.777777 */
+      //     width: 177.78vh;
+      //   }
+      // }
     }
   }
 }

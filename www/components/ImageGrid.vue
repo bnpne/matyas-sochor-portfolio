@@ -1,18 +1,29 @@
-<script setup lang='ts'>
-defineProps(['data'])
+<script setup lang="ts">
+const props = defineProps(["data"]);
+console.log(props);
 </script>
 
-<template v-if='data'>
-  <span class='anima-scale'>
-    <section class='section-image-grid'>
-      <div v-for="image in data.gridImage" class='section-image-grid-image' :class='{ "with-border": image.addBorder }'>
-        <SanityImage class='a' :asset-id="image.image.asset?._ref" auto="format" w='2000' fit='clip' />
+<template v-if="data">
+  <span class="anima-scale">
+    <section class="section-image-grid">
+      <div
+        v-for="image in props.data.gridImage"
+        class="section-image-grid-image"
+        :class="{ 'with-border': image.addBorder }"
+      >
+        <SanityImage
+          class="a"
+          :asset-id="image.image?.asset?._ref"
+          auto="format"
+          w="2000"
+          fit="clip"
+        />
       </div>
     </section>
   </span>
 </template>
 
-<style lang='scss'>
+<style lang="scss">
 .section-image-grid {
   display: flex;
   flex-direction: row;
@@ -37,7 +48,7 @@ defineProps(['data'])
       flex: 1;
     }
 
-    &>img {
+    & > img {
       height: 100%;
       width: 100%;
       vertical-align: top;
